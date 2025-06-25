@@ -29,7 +29,7 @@ export class HomeComponent implements OnInit {
   generating = signal(false);
   copying = signal(false);
   copied = signal(false);
-  
+
   showToast = signal(false);
   toastType = signal<'success' | 'error' | 'warning' | 'info'>('info');
   toastMessage = signal('');
@@ -50,14 +50,14 @@ export class HomeComponent implements OnInit {
 
   async generateAlias() {
     this.generating.set(true);
-    
+
     try {
       // Simulate API delay for better UX
       await new Promise(resolve => setTimeout(resolve, 500));
-      
+
       const newAlias = this.aliasService.generateRandomAlias();
       this.currentAlias.set(newAlias);
-      
+
       this.showToastMessage('success', 'New email address generated!');
     } catch (error) {
       this.showToastMessage('error', 'Failed to generate email address');
@@ -71,14 +71,14 @@ export class HomeComponent implements OnInit {
     if (!alias) return;
 
     this.copying.set(true);
-    
+
     try {
       const success = await this.clipboardService.copyToClipboard(alias);
-      
+
       if (success) {
         this.copied.set(true);
         this.showToastMessage('success', 'Email address copied to clipboard!');
-        
+
         // Reset copied state after 2 seconds
         setTimeout(() => {
           this.copied.set(false);
@@ -94,11 +94,8 @@ export class HomeComponent implements OnInit {
   }
 
   viewInbox() {
-    const alias = this.currentAlias();
-    if (alias) {
-      const aliasName = this.aliasService.extractAliasFromEmail(alias);
-      this.router.navigate([aliasName]);
-    }
+    const aliasName = this.aliasService.extractAliasFromEmail(this.currentAlias()!);
+    window.location.href = `/${aliasName}`;
   }
 
   toggleTheme() {
@@ -109,7 +106,7 @@ export class HomeComponent implements OnInit {
     this.toastType.set(type);
     this.toastMessage.set(message);
     this.showToast.set(true);
-    
+
     // Auto-hide after 5 seconds
     setTimeout(() => {
       this.hideToast();

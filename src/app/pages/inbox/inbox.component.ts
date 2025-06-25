@@ -66,7 +66,7 @@ export class InboxComponent implements OnInit, OnDestroy {
         this.aliasService.setCurrentAlias(this.fullAlias());
         this.startPolling();
       } else {
-        this.router.navigate(['/']);
+        window.location.href = `/`;
       }
     });
   }
@@ -78,7 +78,7 @@ export class InboxComponent implements OnInit, OnDestroy {
 
   private startPolling() {
     this.loadMails(true);
-    
+
     // Start polling every 5 seconds
     timer(this.POLL_INTERVAL, this.POLL_INTERVAL)
       .pipe(
@@ -92,20 +92,20 @@ export class InboxComponent implements OnInit, OnDestroy {
       .subscribe(response => {
         const newMails = response.mails || [];
         const currentMails = this.mails();
-        
+
         // Check for new mails
         const newMailIds = new Set(newMails.map(m => m.id));
         const currentMailIds = new Set(currentMails.map(m => m.id));
-        
+
         const hasNewMails = newMails.some(mail => !currentMailIds.has(mail.id));
-        
+
         if (hasNewMails) {
           this.showToastMessage('info', 'New email received!');
         }
-        
+
         this.mails.set(newMails);
         this.lastUpdated.set(new Date());
-        
+
         if (response.expiresAt) {
           this.expiresAt.set(response.expiresAt);
         }
@@ -124,11 +124,11 @@ export class InboxComponent implements OnInit, OnDestroy {
         next: (response) => {
           this.mails.set(response.mails || []);
           this.lastUpdated.set(new Date());
-          
+
           if (response.expiresAt) {
             this.expiresAt.set(response.expiresAt);
           }
-          
+
           this.loading.set(false);
         },
         error: (error) => {
@@ -141,7 +141,7 @@ export class InboxComponent implements OnInit, OnDestroy {
 
   refreshMails() {
     this.refreshing.set(true);
-    
+
     this.apiService.getMails(this.alias())
       .pipe(takeUntil(this.destroy$))
       .subscribe({
@@ -169,7 +169,7 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   goHome() {
-    this.router.navigate(['/']);
+    window.location.href = `/`;
   }
 
   toggleTheme() {
@@ -184,7 +184,7 @@ export class InboxComponent implements OnInit, OnDestroy {
     this.toastType.set(type);
     this.toastMessage.set(message);
     this.showToast.set(true);
-    
+
     // Auto-hide after 5 seconds
     setTimeout(() => {
       this.hideToast();
