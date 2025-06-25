@@ -5,9 +5,10 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:ssr": "ng build --configuration production",
+    "serve:ssr": "node dist/minutemail-desktop/server/server.mjs",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "serve:ssr:minutemail-desktop": "node dist/minutemail-desktop/server/server.mjs"
+    "test": "ng test"
   },
   "private": true,
   "dependencies": {

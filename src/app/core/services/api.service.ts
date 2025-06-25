@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { isPlatformBrowser } from '@angular/common';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
@@ -11,12 +12,27 @@ import { Mail, MailResponse } from '../models/mail.model';
 export class ApiService {
   private readonly baseUrl = environment.apiBase;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
 
   getMails(alias: string): Observable<MailResponse> {
     const url = `${this.baseUrl}/mails/${alias}`;
     
-    return this.http.get<any>(url).pipe(
+    // Add headers for server-side requests
+    const options = {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        // Add User-Agent for server-side requests
+        ...(isPlatformBrowser(this.platformId) ? {} : {
+          'User-Agent': 'MinuteMail-Desktop/1.0'
+        })
+      }
+    };
+    
+    return this.http.get<any>(url, options).pipe(
       map(response => {
         // Handle null or undefined response
         if (!response) {
@@ -45,13 +61,26 @@ export class ApiService {
 
   deleteMail(alias: string, mailId: string): Observable<void> {
     const url = `${this.baseUrl}/mails/${alias}/${mailId}`;
-    return this.http.delete<void>(url).pipe(
+    
+    const options = {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        ...(isPlatformBrowser(this.platformId) ? {} : {
+          'User-Agent': 'MinuteMail-Desktop/1.0'
+        })
+      }
+    };
+    
+    return this.http.delete<void>(url, options).pipe(
       catchError(this.handleError)
     );
   }
 
-  private handleError(error: HttpErrorResponse): Observable<never> {
+  private handleError = (error: HttpErrorResponse): Observable<never> => {
     let errorMessage = 'An error occurred';
+    
+    console.error('API Error:', error);
     
     if (error.error instanceof ErrorEvent) {
       // Client-side error
@@ -60,7 +89,9 @@ export class ApiService {
       // Server-side error
       switch (error.status) {
         case 0:
-          errorMessage = 'Unable to connect to the server. Please check your internet connection.';
+          errorMessage = isPlatformBrowser(this.platformId) 
+            ? 'Unable to connect to the server. Please check your internet connection.'
+            : 'Server connection failed during SSR';
           break;
         case 404:
           errorMessage = 'Inbox not found or expired';
