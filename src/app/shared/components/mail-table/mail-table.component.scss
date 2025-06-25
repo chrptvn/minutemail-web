@@ -1,0 +1,71 @@
+/* Mail table specific styles */
+.mail-table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.mail-row {
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.mail-row:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dark .mail-row:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.mail-row::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--primary-color);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.mail-row:hover::before {
+  opacity: 1;
+}
+
+.delete-button {
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+.mail-row:hover .delete-button {
+  opacity: 1;
+}
+
+.empty-state {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.05) 0%, rgba(36, 200, 219, 0.02) 100%);
+}
+
+.loading-state {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.1) 0%, rgba(36, 200, 219, 0.05) 100%);
+}
+
+@media (max-width: 768px) {
+  .mail-table th,
+  .mail-table td {
+    padding: 0.75rem 0.5rem;
+  }
+  
+  .mail-table th {
+    font-size: 0.75rem;
+  }
+  
+  .mail-table td {
+    font-size: 0.875rem;
+  }
+  
+  .truncate {
+    max-width: 120px;
+  }
+}

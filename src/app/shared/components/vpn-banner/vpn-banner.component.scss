@@ -1,0 +1,53 @@
+/* VPN banner specific styles */
+.vpn-banner {
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.vpn-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  pointer-events: none;
+}
+
+.vpn-cta {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.vpn-cta:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.shield-icon {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+@media (max-width: 640px) {
+  .vpn-banner {
+    padding: 1rem;
+  }
+  
+  .vpn-banner h3 {
+    font-size: 1rem;
+  }
+  
+  .vpn-banner p {
+    font-size: 0.875rem;
+  }
+  
+  .vpn-cta {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+}

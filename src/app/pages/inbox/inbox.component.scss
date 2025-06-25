@@ -1,0 +1,41 @@
+/* Inbox component specific styles */
+.inbox-header {
+  backdrop-filter: blur(8px);
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+.dark .inbox-header {
+  background-color: rgba(13, 17, 23, 0.95);
+}
+
+.inbox-stats {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.05) 0%, rgba(36, 200, 219, 0.02) 100%);
+}
+
+.error-state {
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.refresh-button {
+  transition: transform 0.2s ease-in-out;
+}
+
+.refresh-button:hover {
+  transform: rotate(90deg);
+}
+
+@media (max-width: 768px) {
+  .inbox-header h1 {
+    font-size: 1rem;
+  }
+  
+  .inbox-actions {
+    gap: 0.5rem;
+  }
+}

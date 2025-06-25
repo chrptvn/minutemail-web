@@ -1,0 +1,26 @@
+/* Home component specific styles */
+.hero-section {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.1) 0%, rgba(36, 200, 219, 0.05) 100%);
+}
+
+.feature-card {
+  transition: transform 0.2s ease-in-out;
+}
+
+.feature-card:hover {
+  transform: translateY(-2px);
+}
+
+.feature-icon {
+  background: linear-gradient(135deg, var(--primary-color) 0%, rgba(36, 200, 219, 0.8) 100%);
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .hero-description {
+    font-size: 1.125rem;
+  }
+}

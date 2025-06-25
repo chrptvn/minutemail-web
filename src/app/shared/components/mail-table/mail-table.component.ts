@@ -9,82 +9,8 @@ import { Mail } from '../../../core/models/mail.model';
   selector: 'app-mail-table',
   standalone: true,
   imports: [CommonModule, TablerIconComponent, ButtonComponent, SpinnerComponent],
-  template: `
-    <div class="bg-white dark:bg-dark-900 rounded-lg border border-gray-200 dark:border-dark-700 overflow-hidden">
-      @if (loading && mails.length === 0) {
-        <div class="p-8 text-center">
-          <app-spinner size="lg" text="Loading messages..." center></app-spinner>
-        </div>
-      } @else if (mails.length === 0) {
-        <div class="p-8 text-center space-y-4">
-          <div class="w-16 h-16 mx-auto bg-gray-100 dark:bg-dark-800 rounded-full flex items-center justify-center">
-            <app-icon name="mail" [size]="32" class="text-gray-400"></app-icon>
-          </div>
-          <div>
-            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">No messages yet</h3>
-            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-              Messages sent to your temporary email will appear here
-            </p>
-          </div>
-        </div>
-      } @else {
-        <div class="overflow-x-auto">
-          <table class="min-w-full divide-y divide-gray-200 dark:divide-dark-700">
-            <thead class="bg-gray-50 dark:bg-dark-800">
-              <tr>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  From
-                </th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Subject
-                </th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Received
-                </th>
-                <th scope="col" class="relative px-6 py-3">
-                  <span class="sr-only">Actions</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody class="bg-white dark:bg-dark-900 divide-y divide-gray-200 dark:divide-dark-700">
-              @for (mail of mails; track mail.id) {
-                <tr 
-                  class="hover:bg-gray-50 dark:hover:bg-dark-800 cursor-pointer transition-colors duration-150"
-                  (click)="onMailClick.emit(mail)"
-                  [attr.aria-label]="'Email from ' + mail.from + ' with subject ' + mail.subject"
-                >
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm font-medium text-gray-900 dark:text-gray-100 truncate max-w-xs">
-                      {{ mail.from }}
-                    </div>
-                  </td>
-                  <td class="px-6 py-4">
-                    <div class="text-sm text-gray-900 dark:text-gray-100 truncate max-w-md">
-                      {{ mail.subject || '(No subject)' }}
-                    </div>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                    {{ formatDate(mail.received_at) }}
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <app-button
-                      variant="ghost"
-                      size="sm"
-                      (onClick)="onDeleteClick($event, mail)"
-                      ariaLabel="Delete email"
-                      class="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
-                    >
-                      <app-icon name="trash" [size]="16"></app-icon>
-                    </app-button>
-                  </td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        </div>
-      }
-    </div>
-  `
+  templateUrl: './mail-table.component.html',
+  styleUrl: './mail-table.component.scss'
 })
 export class MailTableComponent {
   @Input() mails: Mail[] = [];
