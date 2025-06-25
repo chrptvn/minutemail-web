@@ -94,8 +94,8 @@ import { CountdownComponent } from '../ui/countdown.component';
   `
 })
 export class AddressCardComponent {
-  @Input() alias?: string;
-  @Input() expiresAt?: string;
+  @Input() alias?: string | undefined;
+  @Input() expiresAt?: string | null | undefined;
   @Input() generating = false;
   @Input() copying = false;
   @Input() copied = false;

@@ -20,15 +20,15 @@ export class ApiService {
       map(response => {
         // Handle different response formats
         if (Array.isArray(response)) {
-          return { mails: response };
+          return { mails: response, expiresAt: undefined };
         }
         
         if (response.mails) {
-          return response;
+          return { mails: response.mails, expiresAt: response.expiresAt };
         }
         
         // Fallback for unexpected format
-        return { mails: [] };
+        return { mails: [], expiresAt: undefined };
       }),
       catchError(this.handleError)
     );

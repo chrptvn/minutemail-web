@@ -181,7 +181,7 @@ export class InboxComponent implements OnInit, OnDestroy {
   loading = signal(false);
   refreshing = signal(false);
   error = signal<string | null>(null);
-  expiresAt = signal<string | null>(null);
+  expiresAt = signal<string | undefined | null>(undefined);
   lastUpdated = signal<Date>(new Date());
 
   showToast = signal(false);
@@ -228,7 +228,7 @@ export class InboxComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
         catchError(error => {
           console.error('Polling error:', error);
-          return of({ mails: [] });
+          return of({ mails: [], expiresAt: undefined });
         })
       )
       .subscribe(response => {

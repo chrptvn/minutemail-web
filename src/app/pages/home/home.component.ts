@@ -136,7 +136,7 @@ import { ToastComponent } from '../../shared/components/ui/toast.component';
   `
 })
 export class HomeComponent implements OnInit {
-  currentAlias = signal<string | null>(null);
+  currentAlias = signal<string | undefined>(undefined);
   generating = signal(false);
   copying = signal(false);
   copied = signal(false);

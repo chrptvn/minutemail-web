@@ -20,7 +20,7 @@ import { TablerIconComponent } from '../icons/tabler-icons.component';
   `
 })
 export class CountdownComponent implements OnInit, OnDestroy {
-  @Input() expiresAt?: string;
+  @Input() expiresAt?: string | null | undefined;
   @Input() defaultMinutes = 60;
 
   timeLeft = signal(0);
