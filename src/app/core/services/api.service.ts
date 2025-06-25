@@ -18,13 +18,22 @@ export class ApiService {
     
     return this.http.get<any>(url).pipe(
       map(response => {
+        // Handle null or undefined response
+        if (!response) {
+          return { mails: [], expiresAt: undefined };
+        }
+        
         // Handle different response formats
         if (Array.isArray(response)) {
           return { mails: response, expiresAt: undefined };
         }
         
-        if (response.mails) {
-          return { mails: response.mails, expiresAt: response.expiresAt };
+        // Handle object response with mails property
+        if (response && typeof response === 'object') {
+          return { 
+            mails: response.mails || [], 
+            expiresAt: response.expiresAt || undefined 
+          };
         }
         
         // Fallback for unexpected format
@@ -50,6 +59,9 @@ export class ApiService {
     } else {
       // Server-side error
       switch (error.status) {
+        case 0:
+          errorMessage = 'Unable to connect to the server. Please check your internet connection.';
+          break;
         case 404:
           errorMessage = 'Inbox not found or expired';
           break;
@@ -60,7 +72,7 @@ export class ApiService {
           errorMessage = 'Server error. Please try again later.';
           break;
         default:
-          errorMessage = `Error ${error.status}: ${error.message}`;
+          errorMessage = `Error ${error.status}: ${error.message || 'Unknown error'}`;
       }
     }
     
