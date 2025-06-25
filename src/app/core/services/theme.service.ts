@@ -9,7 +9,21 @@ export class ThemeService {
   isDarkMode = signal(this.getInitialTheme());
 
   constructor() {
+    // Apply theme immediately on service creation
     this.applyTheme();
+    
+    // Listen for system theme changes
+    if (typeof window !== 'undefined') {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      mediaQuery.addEventListener('change', (e) => {
+        // Only update if no user preference is saved
+        const saved = localStorage.getItem(this.STORAGE_KEY);
+        if (saved === null) {
+          this.isDarkMode.set(e.matches);
+          this.applyTheme();
+        }
+      });
+    }
   }
 
   toggleTheme(): void {
@@ -28,18 +42,22 @@ export class ThemeService {
       return saved === 'dark';
     }
 
-    // Default to dark mode or system preference
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    // Default to dark mode (as specified in requirements)
+    return true;
   }
 
   private applyTheme(): void {
     if (typeof document === 'undefined') return;
 
     const html = document.documentElement;
+    const body = document.body;
+    
     if (this.isDarkMode()) {
       html.classList.add('dark');
+      body.classList.add('dark');
     } else {
       html.classList.remove('dark');
+      body.classList.remove('dark');
     }
   }
 

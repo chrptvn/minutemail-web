@@ -27,6 +27,9 @@
 
 html {
   scroll-behavior: smooth;
+  /* Ensure consistent background */
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
 
 body {
@@ -35,6 +38,14 @@ body {
   background-color: var(--background-color);
   color: var(--text-color);
   transition: background-color 0.3s ease, color 0.3s ease;
+  /* Prevent flash of unstyled content */
+  min-height: 100vh;
+}
+
+/* Ensure app root takes full height */
+app-root {
+  display: block;
+  min-height: 100vh;
 }
 
 /* Reduced motion support */
@@ -111,4 +122,24 @@ body {
 @keyframes slideIn {
   from { transform: translateX(100%); }
   to { transform: translateX(0); }
+}
+
+/* Ensure proper text contrast in all states */
+.text-contrast {
+  color: var(--text-color) !important;
+}
+
+.bg-contrast {
+  background-color: var(--background-color) !important;
+}
+
+/* Force proper styling for critical elements */
+.email-display {
+  background-color: var(--surface-color) !important;
+  color: var(--text-color) !important;
+  border-color: var(--border-color) !important;
+}
+
+.email-display code {
+  color: var(--text-color) !important;
 }

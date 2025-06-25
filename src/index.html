@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
   <meta charset="utf-8">
   <title>MinuteMail.co - Temporary Email Address</title>
@@ -35,8 +35,86 @@
   
   <!-- Preload critical resources -->
   <link rel="preconnect" href="https://minutemail.co">
+  
+  <!-- Inline critical CSS for theme initialization -->
+  <style>
+    /* Prevent flash of unstyled content */
+    html.dark {
+      background-color: #0d1117;
+      color: #e6edf3;
+    }
+    
+    html:not(.dark) {
+      background-color: #ffffff;
+      color: #1e293b;
+    }
+    
+    body {
+      margin: 0;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    
+    /* Loading state */
+    .loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+    
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(36, 200, 219, 0.3);
+      border-top: 3px solid #24c8db;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* Hide loading screen when app is ready */
+    app-root:not(:empty) + .loading-screen {
+      display: none;
+    }
+  </style>
 </head>
 <body class="dark">
   <app-root></app-root>
+  
+  <!-- Loading screen fallback -->
+  <div class="loading-screen">
+    <div class="loading-spinner"></div>
+  </div>
+  
+  <!-- Theme initialization script -->
+  <script>
+    // Immediately apply saved theme or default to dark
+    (function() {
+      const savedTheme = localStorage.getItem('minutemail_theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const shouldUseDark = savedTheme ? savedTheme === 'dark' : true; // Default to dark mode
+      
+      const html = document.documentElement;
+      const body = document.body;
+      
+      if (shouldUseDark) {
+        html.classList.add('dark');
+        body.classList.add('dark');
+      } else {
+        html.classList.remove('dark');
+        body.classList.remove('dark');
+      }
+    })();
+  </script>
 </body>
 </html>
