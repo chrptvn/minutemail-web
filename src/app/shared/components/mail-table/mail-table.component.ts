@@ -17,7 +17,6 @@ export class MailTableComponent {
   @Input() loading = false;
 
   @Output() onMailClick = new EventEmitter<Mail>();
-  @Output() onDeleteClick = new EventEmitter<{ event: Event; mail: Mail }>();
 
   formatDate(dateString: string): string {
     const date = new Date(dateString);
@@ -32,10 +31,5 @@ export class MailTableComponent {
     } else {
       return date.toLocaleDateString();
     }
-  }
-
-  onDeleteClick(event: Event, mail: Mail): void {
-    event.stopPropagation();
-    this.onDeleteClick.emit({ event, mail });
   }
 }

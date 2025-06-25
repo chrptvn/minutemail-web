@@ -168,28 +168,6 @@ export class InboxComponent implements OnInit, OnDestroy {
     this.selectedMail.set(undefined);
   }
 
-  deleteMail(mail: Mail) {
-    // For now, just show a placeholder message since the delete API might not be ready
-    this.showToastMessage('info', 'Delete functionality will be available soon');
-    
-    // Uncomment when delete API is ready:
-    /*
-    this.apiService.deleteMail(this.alias(), mail.id)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: () => {
-          const updatedMails = this.mails().filter(m => m.id !== mail.id);
-          this.mails.set(updatedMails);
-          this.showToastMessage('success', 'Email deleted');
-          this.closeMail();
-        },
-        error: (error) => {
-          this.showToastMessage('error', 'Failed to delete email');
-        }
-      });
-    */
-  }
-
   goHome() {
     this.router.navigate(['/']);
   }

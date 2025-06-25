@@ -34,15 +34,6 @@
   opacity: 1;
 }
 
-.delete-button {
-  opacity: 0;
-  transition: all 0.2s ease;
-}
-
-.mail-row:hover .delete-button {
-  opacity: 1;
-}
-
 .empty-state {
   background: linear-gradient(135deg, rgba(36, 200, 219, 0.05) 0%, rgba(36, 200, 219, 0.02) 100%);
 }

@@ -115,7 +115,6 @@
           [mails]="mails()"
           [loading]="loading() && mails().length === 0"
           (onMailClick)="openMail($event)"
-          (onDeleteClick)="deleteMail($event.mail)"
         ></app-mail-table>
       </div>
     }
@@ -126,7 +125,6 @@
     [mail]="selectedMail()"
     [isOpen]="isMailViewerOpen()"
     (onClose)="closeMail()"
-    (onDelete)="deleteMail($event)"
   ></app-mail-viewer>
 
   <!-- Toast Notifications -->

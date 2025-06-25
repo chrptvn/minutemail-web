@@ -17,7 +17,6 @@ export class MailViewerComponent {
   @Input() isOpen = false;
 
   @Output() onClose = new EventEmitter<void>();
-  @Output() onDelete = new EventEmitter<Mail>();
 
   constructor(private sanitizer: DomSanitizer) {}
 
