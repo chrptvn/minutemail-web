@@ -1,0 +1,8 @@
+{
+  "/api/*": {
+    "target": "https://minutemail.co",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}
