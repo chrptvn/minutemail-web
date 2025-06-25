@@ -1,14 +1,13 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TablerIconComponent } from '../icons/tabler-icons.component';
-import { ButtonComponent } from '../ui/button.component';
 import { SpinnerComponent } from '../ui/spinner.component';
 import { Mail } from '../../../core/models/mail.model';
 
 @Component({
   selector: 'app-mail-table',
   standalone: true,
-  imports: [CommonModule, TablerIconComponent, ButtonComponent, SpinnerComponent],
+  imports: [CommonModule, TablerIconComponent, SpinnerComponent],
   templateUrl: './mail-table.component.html',
   styleUrl: './mail-table.component.scss'
 })
