@@ -1,3 +1,4 @@
+<!-- src/app/components/address-card/address-card.component.html -->
 <app-card customClass="animate-fade-in">
   <div class="text-center space-y-4">
     <div class="space-y-2">
@@ -10,9 +11,9 @@
     </div>
 
     @if (alias) {
-      <div class="bg-gray-50 dark:bg-dark-800 rounded-lg p-4 border-2 border-dashed border-gray-300 dark:border-dark-600">
+      <div class="email-display rounded-lg p-4">
         <div class="flex items-center justify-between">
-          <code class="text-sm font-mono text-gray-900 dark:text-gray-100 break-all">
+          <code class="text-sm font-mono break-all text-gray-900 dark:text-gray-100">
             {{ alias }}
           </code>
           <app-button
@@ -21,7 +22,7 @@
             [loading]="copying"
             (onClick)="onCopy.emit()"
             ariaLabel="Copy email address"
-            class="ml-2 flex-shrink-0"
+            class="ml-2 flex-shrink-0 copy-button"
           >
             @if (copied) {
               <app-icon name="check" [size]="16" class="text-green-500"></app-icon>
@@ -46,6 +47,7 @@
           [loading]="generating"
           (onClick)="onGenerate.emit()"
           ariaLabel="Generate new email address"
+          class="generate-button"
         >
           <app-icon name="mail" [size]="20" class="mr-2"></app-icon>
           Generate Email Address
@@ -54,7 +56,7 @@
     }
 
     @if (alias) {
-      <div class="flex justify-center space-x-3">
+      <div class="flex justify-center action-buttons">
         <app-button
           variant="secondary"
           size="sm"
@@ -65,7 +67,6 @@
           <app-icon name="refresh" [size]="16" class="mr-2"></app-icon>
           New Address
         </app-button>
-        
         <app-button
           variant="primary"
           size="sm"

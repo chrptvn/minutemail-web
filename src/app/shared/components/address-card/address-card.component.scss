@@ -1,8 +1,10 @@
+/* src/app/components/address-card/address-card.component.scss */
 /* Address card specific styles */
 .email-display {
   background: linear-gradient(135deg, rgba(36, 200, 219, 0.1) 0%, rgba(36, 200, 219, 0.05) 100%);
   border: 2px dashed rgba(36, 200, 219, 0.3);
   transition: all 0.3s ease;
+  padding: 0.5em;
 }
 
 .email-display:hover {
@@ -38,11 +40,9 @@
     flex-direction: column;
     gap: 0.5rem;
   }
-  
   .email-display {
     padding: 0.75rem;
   }
-  
   .email-display code {
     font-size: 0.75rem;
   }
