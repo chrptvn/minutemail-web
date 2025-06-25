@@ -30,12 +30,56 @@
   transform: rotate(90deg);
 }
 
+/* Email address copy button styles */
+.email-copy-button {
+  transition: all 0.2s ease;
+  opacity: 0.7;
+}
+
+.email-copy-button:hover {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.email-copy-button.copied {
+  opacity: 1;
+}
+
+/* Email address container */
+.email-address-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.email-address-container h1 {
+  margin: 0;
+  line-height: 1.2;
+}
+
 @media (max-width: 768px) {
   .inbox-header h1 {
-    font-size: 1rem;
+    font-size: 0.875rem;
   }
   
   .inbox-actions {
     gap: 0.5rem;
+  }
+  
+  .email-address-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+  
+  .email-copy-button {
+    align-self: flex-end;
+  }
+}
+
+@media (max-width: 640px) {
+  .email-address-container h1 {
+    font-size: 0.75rem;
+    word-break: break-all;
   }
 }

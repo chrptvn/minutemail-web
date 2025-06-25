@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { timer, Subject, switchMap, takeUntil, catchError, of } from 'rxjs';
 import { ApiService } from '../../core/services/api.service';
 import { AliasService } from '../../core/services/alias.service';
+import { ClipboardService } from '../../core/services/clipboard.service';
 import { ThemeService } from '../../core/services/theme.service';
 import { Mail } from '../../core/models/mail.model';
 import { MailTableComponent } from '../../shared/components/mail-table/mail-table.component';
@@ -41,6 +42,10 @@ export class InboxComponent implements OnInit, OnDestroy {
   error = signal<string | null>(null);
   expiresAt = signal<string | undefined | null>(undefined);
   lastUpdated = signal<Date>(new Date());
+  
+  // Copy functionality
+  copying = signal(false);
+  copied = signal(false);
 
   showToast = signal(false);
   toastType = signal<'success' | 'error' | 'warning' | 'info'>('info');
@@ -54,6 +59,7 @@ export class InboxComponent implements OnInit, OnDestroy {
     private router: Router,
     private apiService: ApiService,
     private aliasService: AliasService,
+    private clipboardService: ClipboardService,
     public themeService: ThemeService
   ) {}
 
@@ -156,6 +162,33 @@ export class InboxComponent implements OnInit, OnDestroy {
           this.showToastMessage('error', 'Failed to refresh inbox');
         }
       });
+  }
+
+  async copyEmailAddress() {
+    const email = this.fullAlias();
+    if (!email) return;
+
+    this.copying.set(true);
+
+    try {
+      const success = await this.clipboardService.copyToClipboard(email);
+
+      if (success) {
+        this.copied.set(true);
+        this.showToastMessage('success', 'Email address copied to clipboard!');
+
+        // Reset copied state after 2 seconds
+        setTimeout(() => {
+          this.copied.set(false);
+        }, 2000);
+      } else {
+        this.showToastMessage('error', 'Failed to copy to clipboard');
+      }
+    } catch (error) {
+      this.showToastMessage('error', 'Failed to copy to clipboard');
+    } finally {
+      this.copying.set(false);
+    }
   }
 
   openMail(mail: Mail) {
