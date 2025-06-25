@@ -1,0 +1,112 @@
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { TablerIconComponent } from '../icons/tabler-icons.component';
+import { ButtonComponent } from '../ui/button.component';
+import { Mail } from '../../../core/models/mail.model';
+
+@Component({
+  selector: 'app-mail-viewer',
+  standalone: true,
+  imports: [CommonModule, TablerIconComponent, ButtonComponent],
+  template: `
+    @if (isOpen && mail) {
+      <div class="fixed inset-0 z-50 overflow-hidden" [attr.aria-labelledby]="'mail-title-' + mail.id">
+        <!-- Backdrop -->
+        <div 
+          class="absolute inset-0 bg-black bg-opacity-50 transition-opacity duration-300"
+          (click)="onClose.emit()"
+          aria-hidden="true"
+        ></div>
+        
+        <!-- Drawer -->
+        <div class="absolute right-0 top-0 h-full w-full max-w-2xl bg-white dark:bg-dark-900 shadow-xl animate-slide-in">
+          <div class="flex h-full flex-col">
+            <!-- Header -->
+            <div class="border-b border-gray-200 dark:border-dark-700 px-6 py-4">
+              <div class="flex items-center justify-between">
+                <h2 [id]="'mail-title-' + mail.id" class="text-lg font-semibold text-gray-900 dark:text-gray-100 truncate">
+                  {{ mail.subject || '(No subject)' }}
+                </h2>
+                <app-button
+                  variant="ghost"
+                  size="sm"
+                  (onClick)="onClose.emit()"
+                  ariaLabel="Close email viewer"
+                >
+                  <app-icon name="x" [size]="20"></app-icon>
+                </app-button>
+              </div>
+              
+              <div class="mt-2 space-y-1">
+                <div class="flex items-center text-sm">
+                  <span class="font-medium text-gray-700 dark:text-gray-300 mr-2">From:</span>
+                  <span class="text-gray-900 dark:text-gray-100">{{ mail.from }}</span>
+                </div>
+                <div class="flex items-center text-sm">
+                  <span class="font-medium text-gray-700 dark:text-gray-300 mr-2">Received:</span>
+                  <span class="text-gray-600 dark:text-gray-400">{{ formatDate(mail.received_at) }}</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Content -->
+            <div class="flex-1 overflow-y-auto p-6">
+              <div class="prose prose-sm max-w-none dark:prose-invert">
+                @if (isHtmlContent(mail.body)) {
+                  <div [innerHTML]="getSanitizedHtml(mail.body)"></div>
+                } @else {
+                  <pre class="whitespace-pre-wrap font-sans text-sm text-gray-900 dark:text-gray-100">{{ mail.body }}</pre>
+                }
+              </div>
+            </div>
+            
+            <!-- Footer -->
+            <div class="border-t border-gray-200 dark:border-dark-700 px-6 py-4">
+              <div class="flex justify-between">
+                <app-button
+                  variant="danger"
+                  size="sm"
+                  (onClick)="onDelete.emit(mail)"
+                  ariaLabel="Delete this email"
+                >
+                  <app-icon name="trash" [size]="16" class="mr-2"></app-icon>
+                  Delete
+                </app-button>
+                
+                <app-button
+                  variant="secondary"
+                  size="sm"
+                  (onClick)="onClose.emit()"
+                >
+                  Close
+                </app-button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  `
+})
+export class MailViewerComponent {
+  @Input() mail?: Mail;
+  @Input() isOpen = false;
+
+  @Output() onClose = new EventEmitter<void>();
+  @Output() onDelete = new EventEmitter<Mail>();
+
+  constructor(private sanitizer: DomSanitizer) {}
+
+  formatDate(dateString: string): string {
+    return new Date(dateString).toLocaleString();
+  }
+
+  isHtmlContent(content: string): boolean {
+    return /<[a-z][\s\S]*>/i.test(content);
+  }
+
+  getSanitizedHtml(html: string): SafeHtml {
+    return this.sanitizer.sanitize(1, html) || '';
+  }
+}

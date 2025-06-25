@@ -1,12 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { ThemeService } from './core/services/theme.service';
 
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.scss'
+  template: '<router-outlet />',
+  standalone: true
 })
-export class App {
-  protected title = 'minutemail-desktop';
+export class App implements OnInit {
+  constructor(private themeService: ThemeService) {}
+
+  ngOnInit() {
+    // Theme service will initialize automatically
+  }
 }
