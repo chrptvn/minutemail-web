@@ -9,7 +9,7 @@
             size="sm"
             (onClick)="goHome()"
             ariaLabel="Go back to home"
-            class="hover:bg-gray-100 dark:hover:bg-dark-800"
+            class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-800"
           >
             <app-icon name="arrow-left" [size]="20"></app-icon>
           </app-button>
@@ -52,7 +52,7 @@
             [loading]="refreshing()"
             (onClick)="refreshMails()"
             ariaLabel="Refresh inbox"
-            class="hover:bg-gray-100 dark:hover:bg-dark-800"
+            class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-800"
           >
             <app-icon name="refresh" [size]="20"></app-icon>
           </app-button>
@@ -62,7 +62,7 @@
             size="sm"
             (onClick)="toggleTheme()"
             [ariaLabel]="themeService.isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
-            class="hover:bg-gray-100 dark:hover:bg-dark-800"
+            class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-800"
           >
             @if (themeService.isDarkMode()) {
               <app-icon name="sun" [size]="20"></app-icon>
@@ -76,7 +76,7 @@
   </header>
 
   <!-- Main Content -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     @if (error()) {
       <div class="max-w-2xl mx-auto">
         <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-8 text-center shadow-sm">

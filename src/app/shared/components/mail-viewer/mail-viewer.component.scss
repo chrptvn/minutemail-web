@@ -7,6 +7,7 @@
 .mail-viewer-drawer {
   box-shadow: -10px 0 25px rgba(0, 0, 0, 0.1);
   animation: slideInRight 0.3s ease-out;
+  max-width: 48rem; /* Limit to 3xl instead of full width */
 }
 
 .dark .mail-viewer-drawer {
@@ -22,19 +23,65 @@
   border-radius: 0.5rem;
   padding: 1rem;
   border-left: 3px solid var(--primary-color);
+  color: var(--text-color) !important;
+}
+
+.dark .mail-content pre {
+  background: rgba(36, 200, 219, 0.1);
+  color: #e5e7eb !important;
 }
 
 .mail-header {
   background: linear-gradient(135deg, rgba(36, 200, 219, 0.05) 0%, rgba(36, 200, 219, 0.02) 100%);
+  background-color: white !important;
+}
+
+.dark .mail-header {
+  background-color: #161b22 !important;
 }
 
 .mail-footer {
   background: rgba(249, 250, 251, 0.8);
   backdrop-filter: blur(8px);
+  background-color: white !important;
 }
 
 .dark .mail-footer {
   background: rgba(22, 27, 34, 0.8);
+  background-color: #161b22 !important;
+}
+
+/* Force proper text colors in mail viewer */
+.mail-viewer-drawer h2 {
+  color: #1f2937 !important;
+}
+
+.dark .mail-viewer-drawer h2 {
+  color: #e5e7eb !important;
+}
+
+.mail-viewer-drawer .text-gray-700 {
+  color: #374151 !important;
+}
+
+.dark .mail-viewer-drawer .text-gray-300 {
+  color: #d1d5db !important;
+}
+
+.mail-viewer-drawer .text-gray-900 {
+  color: #111827 !important;
+}
+
+.dark .mail-viewer-drawer .text-gray-100 {
+  color: #f3f4f6 !important;
+}
+
+.mail-viewer-drawer .text-gray-600 {
+  color: #4b5563 !important;
+}
+
+.dark .mail-viewer-drawer .text-gray-400 {
+  color: #9ca3af !important;
 }
 
 @keyframes fadeIn {

@@ -8,10 +8,10 @@
     ></div>
     
     <!-- Drawer -->
-    <div class="absolute right-0 top-0 h-full w-full max-w-2xl bg-white dark:bg-dark-900 shadow-xl animate-slide-in">
+    <div class="absolute right-0 top-0 h-full w-full max-w-3xl bg-white dark:bg-dark-900 shadow-xl animate-slide-in">
       <div class="flex h-full flex-col">
         <!-- Header -->
-        <div class="border-b border-gray-200 dark:border-dark-700 px-6 py-4">
+        <div class="border-b border-gray-200 dark:border-dark-700 px-6 py-4 bg-white dark:bg-dark-900">
           <div class="flex items-center justify-between">
             <h2 [id]="'mail-title-' + mail.id" class="text-lg font-semibold text-gray-900 dark:text-gray-100 truncate">
               {{ mail.subject || '(No subject)' }}
@@ -21,36 +21,37 @@
               size="sm"
               (onClick)="onClose.emit()"
               ariaLabel="Close email viewer"
+              class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-800"
             >
               <app-icon name="x" [size]="20"></app-icon>
             </app-button>
           </div>
           
-          <div class="mt-2 space-y-1">
+          <div class="mt-3 space-y-2">
             <div class="flex items-center text-sm">
-              <span class="font-medium text-gray-700 dark:text-gray-300 mr-2">From:</span>
-              <span class="text-gray-900 dark:text-gray-100">{{ mail.from }}</span>
+              <span class="font-medium text-gray-700 dark:text-gray-300 mr-2 min-w-0 w-16">From:</span>
+              <span class="text-gray-900 dark:text-gray-100 truncate">{{ mail.from }}</span>
             </div>
             <div class="flex items-center text-sm">
-              <span class="font-medium text-gray-700 dark:text-gray-300 mr-2">Received:</span>
+              <span class="font-medium text-gray-700 dark:text-gray-300 mr-2 min-w-0 w-16">Received:</span>
               <span class="text-gray-600 dark:text-gray-400">{{ formatDate(mail.received_at) }}</span>
             </div>
           </div>
         </div>
         
         <!-- Content -->
-        <div class="flex-1 overflow-y-auto p-6">
+        <div class="flex-1 overflow-y-auto p-6 bg-white dark:bg-dark-900">
           <div class="prose prose-sm max-w-none dark:prose-invert">
             @if (isHtmlContent(mail.body)) {
-              <div [innerHTML]="getSanitizedHtml(mail.body)"></div>
+              <div [innerHTML]="getSanitizedHtml(mail.body)" class="text-gray-900 dark:text-gray-100"></div>
             } @else {
-              <pre class="whitespace-pre-wrap font-sans text-sm text-gray-900 dark:text-gray-100">{{ mail.body }}</pre>
+              <pre class="whitespace-pre-wrap font-sans text-sm text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-dark-800 p-4 rounded-lg border border-gray-200 dark:border-dark-700">{{ mail.body }}</pre>
             }
           </div>
         </div>
         
         <!-- Footer -->
-        <div class="border-t border-gray-200 dark:border-dark-700 px-6 py-4">
+        <div class="border-t border-gray-200 dark:border-dark-700 px-6 py-4 bg-white dark:bg-dark-900">
           <div class="flex justify-end">
             <app-button
               variant="secondary"
