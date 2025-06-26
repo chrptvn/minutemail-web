@@ -1,7 +1,7 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
-import { Observable, throwError } from 'rxjs';
+import {Observable, of, throwError} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { Mail, MailResponse } from '../models/mail.model';
@@ -19,16 +19,27 @@ export class ApiService {
 
   getMails(alias: string): Observable<MailResponse> {
     const url = `${this.baseUrl}/mails/${alias}`;
-
-    return this.http
-      .get<Mail[]>(url)
-      .pipe(
-        map(mails => ({
-          mails,
-          expiresAt: undefined
-        })),
-        catchError(this.handleError)
-      );
+    return of({
+      mails: [
+        {
+          id: '1',
+          from: 'chrptvn@gmail.com',
+          subject: 'Test Email',
+          body: 'This is a test email body.',
+          received_at: '2024-05-01T12:00:00Z'
+        } as Mail,
+      ],
+      expiresAt: '2026-06-01T00:00:00Z'
+    })
+    // return this.http
+    //   .get<Mail[]>(url)
+    //   .pipe(
+    //     map(mails => ({
+    //       mails,
+    //       expiresAt: undefined
+    //     })),
+    //     catchError(this.handleError)
+    //   );
   }
 
   private handleError = (error: HttpErrorResponse): Observable<never> => {

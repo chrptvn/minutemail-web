@@ -1,5 +1,5 @@
-import { Component, Input, OnInit, OnDestroy, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, isPlatformBrowser} from '@angular/common';
+import { Component, Input, OnInit, OnDestroy, signal, Inject, PLATFORM_ID } from '@angular/core';
 import { TablerIconComponent } from '../icons/tabler-icons.component';
 
 @Component({
@@ -20,15 +20,22 @@ import { TablerIconComponent } from '../icons/tabler-icons.component';
   `
 })
 export class CountdownComponent implements OnInit, OnDestroy {
-  @Input() expiresAt?: string | null | undefined;
+  @Input() expiresAt?: string | null;
   @Input() defaultMinutes = 60;
 
   timeLeft = signal(0);
-  private intervalId?: number;
+  private intervalId?: any;
+
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
   ngOnInit() {
     this.calculateTimeLeft();
-    this.startCountdown();
+
+    if (isPlatformBrowser(this.platformId)) {
+      this.intervalId = setInterval(() => {
+        this.calculateTimeLeft();
+      }, 1000);
+    }
   }
 
   ngOnDestroy() {
@@ -38,19 +45,14 @@ export class CountdownComponent implements OnInit, OnDestroy {
   }
 
   private calculateTimeLeft() {
-    const now = new Date().getTime();
-    let targetTime: number;
+    const now = Date.now();
+    const target = this.expiresAt
+      ? new Date(this.expiresAt).getTime()
+      : now + this.defaultMinutes * 60_000;
 
-    if (this.expiresAt) {
-      targetTime = new Date(this.expiresAt).getTime();
-    } else {
-      // Default to 60 minutes from now
-      targetTime = now + (this.defaultMinutes * 60 * 1000);
-    }
-
-    const difference = targetTime - now;
-    this.timeLeft.set(Math.max(0, difference));
+    this.timeLeft.set(Math.max(0, target - now));
   }
+
 
   private startCountdown() {
     this.intervalId = window.setInterval(() => {

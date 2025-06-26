@@ -45,12 +45,12 @@
 }
 
 /* Table header improvements */
-thead th {
+.mail-table thead th {
   background: linear-gradient(135deg, rgba(249, 250, 251, 1) 0%, rgba(243, 244, 246, 1) 100%);
   border-bottom: 2px solid rgba(36, 200, 219, 0.1);
 }
 
-.dark thead th {
+.dark .mail-table thead th {
   background: linear-gradient(135deg, rgba(22, 27, 34, 1) 0%, rgba(13, 17, 23, 1) 100%);
   border-bottom: 2px solid rgba(36, 200, 219, 0.2);
 }
@@ -61,19 +61,19 @@ thead th {
   .mail-table td {
     padding: 1rem 0.75rem;
   }
-  
+
   .mail-table th {
     font-size: 0.75rem;
   }
-  
+
   .mail-table td {
     font-size: 0.875rem;
   }
-  
+
   .truncate {
     max-width: 120px;
   }
-  
+
   .sender-avatar {
     width: 2rem;
     height: 2rem;
@@ -85,7 +85,7 @@ thead th {
   .mail-table td:nth-child(3) {
     display: none;
   }
-  
+
   .mail-table th,
   .mail-table td {
     padding: 0.75rem 0.5rem;
