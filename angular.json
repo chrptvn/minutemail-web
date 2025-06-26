@@ -66,8 +66,7 @@
               "buildTarget": "minutemail-desktop:build:production"
             },
             "development": {
-              "buildTarget": "minutemail-desktop:build:development",
-              "proxyConfig": "proxy.conf.json"
+              "buildTarget": "minutemail-desktop:build:development"
             }
           },
           "defaultConfiguration": "development"

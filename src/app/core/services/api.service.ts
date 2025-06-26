@@ -19,69 +19,23 @@ export class ApiService {
 
   getMails(alias: string): Observable<MailResponse> {
     const url = `${this.baseUrl}/mails/${alias}`;
-    
-    // Add headers for server-side requests
-    const options = {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        // Add User-Agent for server-side requests
-        ...(isPlatformBrowser(this.platformId) ? {} : {
-          'User-Agent': 'MinuteMail-Desktop/1.0'
-        })
-      }
-    };
-    
-    return this.http.get<any>(url, options).pipe(
-      map(response => {
-        // Handle null or undefined response
-        if (!response) {
-          return { mails: [], expiresAt: undefined };
-        }
-        
-        // Handle different response formats
-        if (Array.isArray(response)) {
-          return { mails: response, expiresAt: undefined };
-        }
-        
-        // Handle object response with mails property
-        if (response && typeof response === 'object') {
-          return { 
-            mails: response.mails || [], 
-            expiresAt: response.expiresAt || undefined 
-          };
-        }
-        
-        // Fallback for unexpected format
-        return { mails: [], expiresAt: undefined };
-      }),
-      catchError(this.handleError)
-    );
-  }
 
-  deleteMail(alias: string, mailId: string): Observable<void> {
-    const url = `${this.baseUrl}/mails/${alias}/${mailId}`;
-    
-    const options = {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        ...(isPlatformBrowser(this.platformId) ? {} : {
-          'User-Agent': 'MinuteMail-Desktop/1.0'
-        })
-      }
-    };
-    
-    return this.http.delete<void>(url, options).pipe(
-      catchError(this.handleError)
-    );
+    return this.http
+      .get<Mail[]>(url)
+      .pipe(
+        map(mails => ({
+          mails,
+          expiresAt: undefined
+        })),
+        catchError(this.handleError)
+      );
   }
 
   private handleError = (error: HttpErrorResponse): Observable<never> => {
     let errorMessage = 'An error occurred';
-    
+
     console.error('API Error:', error);
-    
+
     if (error.error instanceof ErrorEvent) {
       // Client-side error
       errorMessage = error.error.message;
@@ -89,7 +43,7 @@ export class ApiService {
       // Server-side error
       switch (error.status) {
         case 0:
-          errorMessage = isPlatformBrowser(this.platformId) 
+          errorMessage = isPlatformBrowser(this.platformId)
             ? 'Unable to connect to the server. Please check your internet connection.'
             : 'Server connection failed during SSR';
           break;
@@ -106,7 +60,7 @@ export class ApiService {
           errorMessage = `Error ${error.status}: ${error.message || 'Unknown error'}`;
       }
     }
-    
+
     return throwError(() => new Error(errorMessage));
   }
 }

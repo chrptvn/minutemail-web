@@ -42,7 +42,7 @@ export class InboxComponent implements OnInit, OnDestroy {
   error = signal<string | null>(null);
   expiresAt = signal<string | undefined | null>(undefined);
   lastUpdated = signal<Date>(new Date());
-  
+
   // Copy functionality
   copying = signal(false);
   copied = signal(false);
@@ -70,7 +70,8 @@ export class InboxComponent implements OnInit, OnDestroy {
         this.alias.set(alias);
         this.fullAlias.set(`${alias}@minutemail.co`);
         this.aliasService.setCurrentAlias(this.fullAlias());
-        this.startPolling();
+        this.loadMails(false)
+        // this.startPolling();
       } else {
         window.location.href = `/`;
       }
@@ -146,22 +147,7 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   refreshMails() {
-    this.refreshing.set(true);
-
-    this.apiService.getMails(this.alias())
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (response) => {
-          this.mails.set(response.mails || []);
-          this.lastUpdated.set(new Date());
-          this.refreshing.set(false);
-          this.showToastMessage('success', 'Inbox refreshed');
-        },
-        error: (error) => {
-          this.refreshing.set(false);
-          this.showToastMessage('error', 'Failed to refresh inbox');
-        }
-      });
+    window.location.reload();
   }
 
   async copyEmailAddress() {
@@ -175,7 +161,6 @@ export class InboxComponent implements OnInit, OnDestroy {
 
       if (success) {
         this.copied.set(true);
-        this.showToastMessage('success', 'Email address copied to clipboard!');
 
         // Reset copied state after 2 seconds
         setTimeout(() => {

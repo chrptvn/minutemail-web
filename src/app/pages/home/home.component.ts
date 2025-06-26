@@ -77,7 +77,6 @@ export class HomeComponent implements OnInit {
 
       if (success) {
         this.copied.set(true);
-        this.showToastMessage('success', 'Email address copied to clipboard!');
 
         // Reset copied state after 2 seconds
         setTimeout(() => {
