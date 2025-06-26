@@ -1,4 +1,5 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -7,13 +8,16 @@ export class ThemeService {
   private readonly STORAGE_KEY = 'minutemail_theme';
   
   isDarkMode = signal(this.getInitialTheme());
+  private isBrowser: boolean;
 
-  constructor() {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+    
     // Apply theme immediately on service creation
     this.applyTheme();
     
-    // Listen for system theme changes
-    if (typeof window !== 'undefined') {
+    // Listen for system theme changes only in browser
+    if (this.isBrowser) {
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
       mediaQuery.addEventListener('change', (e) => {
         // Only update if no user preference is saved
@@ -33,7 +37,7 @@ export class ThemeService {
   }
 
   private getInitialTheme(): boolean {
-    if (typeof window === 'undefined') {
+    if (!this.isBrowser) {
       return true; // Default to dark mode for SSR
     }
 
@@ -47,22 +51,25 @@ export class ThemeService {
   }
 
   private applyTheme(): void {
-    if (typeof document === 'undefined') return;
+    if (!this.isBrowser) return;
 
-    const html = document.documentElement;
-    const body = document.body;
-    
-    if (this.isDarkMode()) {
-      html.classList.add('dark');
-      body.classList.add('dark');
-    } else {
-      html.classList.remove('dark');
-      body.classList.remove('dark');
-    }
+    // Use requestAnimationFrame to ensure DOM is ready
+    requestAnimationFrame(() => {
+      const html = document.documentElement;
+      const body = document.body;
+      
+      if (this.isDarkMode()) {
+        html.classList.add('dark');
+        body.classList.add('dark');
+      } else {
+        html.classList.remove('dark');
+        body.classList.remove('dark');
+      }
+    });
   }
 
   private saveTheme(): void {
-    if (typeof window === 'undefined') return;
+    if (!this.isBrowser) return;
     
     localStorage.setItem(this.STORAGE_KEY, this.isDarkMode() ? 'dark' : 'light');
   }

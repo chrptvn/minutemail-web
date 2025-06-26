@@ -1,62 +1,71 @@
-@if (isOpen && mail) {
-  <div class="fixed inset-0 z-50 overflow-hidden" [attr.aria-labelledby]="'mail-title-' + mail.id">
+@if (isOpen && mail && isBrowser) {
+  <div class="fixed inset-0 z-50 overflow-hidden mail-viewer-overlay" [attr.aria-labelledby]="'mail-title-' + mail.id">
     <!-- Backdrop -->
     <div 
-      class="absolute inset-0 bg-black bg-opacity-50 transition-opacity duration-300"
-      (click)="onClose.emit()"
+      class="absolute inset-0 bg-black bg-opacity-50 transition-opacity duration-300 mail-viewer-backdrop"
+      (click)="closeModal()"
       aria-hidden="true"
     ></div>
     
-    <!-- Drawer - Limited to 2xl width (32rem = 512px) -->
-    <div class="absolute right-0 top-0 h-full w-full max-w-2xl bg-white dark:bg-dark-900 shadow-xl animate-slide-in">
+    <!-- Drawer - Properly constrained -->
+    <div class="absolute right-0 top-0 h-full w-full max-w-2xl bg-white dark:bg-dark-900 shadow-2xl mail-viewer-drawer">
       <div class="flex h-full flex-col">
-        <!-- Header -->
-        <div class="border-b border-gray-200 dark:border-dark-700 px-6 py-4 bg-white dark:bg-dark-900">
+        <!-- Header - Fixed -->
+        <div class="flex-shrink-0 border-b border-gray-200 dark:border-dark-700 px-6 py-4 bg-white dark:bg-dark-900">
           <div class="flex items-center justify-between">
-            <h2 [id]="'mail-title-' + mail.id" class="text-lg font-semibold text-gray-900 dark:text-gray-100 truncate">
+            <h2 [id]="'mail-title-' + mail.id" class="text-lg font-semibold text-gray-900 dark:text-gray-100 truncate pr-4">
               {{ mail.subject || '(No subject)' }}
             </h2>
             <app-button
               variant="ghost"
               size="sm"
-              (onClick)="onClose.emit()"
+              (onClick)="closeModal()"
               ariaLabel="Close email viewer"
+              class="flex-shrink-0"
             >
               <app-icon name="x" [size]="20" class="text-gray-700 dark:text-gray-300"></app-icon>
             </app-button>
           </div>
           
           <div class="mt-3 space-y-2">
-            <div class="flex items-center text-sm">
-              <span class="font-medium text-gray-700 dark:text-gray-300 mr-2 min-w-0 w-16">From:</span>
-              <span class="text-gray-900 dark:text-gray-100 truncate">{{ mail.from }}</span>
+            <div class="flex items-start text-sm">
+              <span class="font-medium text-gray-700 dark:text-gray-300 mr-3 flex-shrink-0 w-20">From:</span>
+              <span class="text-gray-900 dark:text-gray-100 break-all">{{ mail.from }}</span>
             </div>
             <div class="flex items-center text-sm">
-              <span class="font-medium text-gray-700 dark:text-gray-300 mr-2 min-w-0 w-16">Received:</span>
+              <span class="font-medium text-gray-700 dark:text-gray-300 mr-3 flex-shrink-0 w-20">Received:</span>
               <span class="text-gray-600 dark:text-gray-400">{{ formatDate(mail.received_at) }}</span>
             </div>
           </div>
         </div>
         
-        <!-- Content -->
-        <div class="flex-1 overflow-y-auto p-6 bg-white dark:bg-dark-900">
-          <div class="prose prose-sm max-w-none dark:prose-invert">
-            @if (isHtmlContent(mail.body)) {
-              <div [innerHTML]="getSanitizedHtml(mail.body)" class="text-gray-900 dark:text-gray-100"></div>
-            } @else {
-              <pre class="whitespace-pre-wrap font-sans text-sm text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-dark-800 p-4 rounded-lg border border-gray-200 dark:border-dark-700">{{ mail.body }}</pre>
-            }
+        <!-- Content - Scrollable -->
+        <div class="flex-1 overflow-y-auto bg-gray-50 dark:bg-dark-950">
+          <div class="p-6">
+            <div class="bg-white dark:bg-dark-900 rounded-lg border border-gray-200 dark:border-dark-700 p-6">
+              @if (isHtmlContent(mail.body)) {
+                <div 
+                  [innerHTML]="getSanitizedHtml(mail.body)" 
+                  class="prose prose-sm max-w-none dark:prose-invert text-gray-900 dark:text-gray-100"
+                ></div>
+              } @else {
+                <div class="mail-content">
+                  <pre class="whitespace-pre-wrap font-sans text-sm text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-dark-800 p-4 rounded-lg border border-gray-200 dark:border-dark-700 leading-relaxed">{{ mail.body }}</pre>
+                </div>
+              }
+            </div>
           </div>
         </div>
         
-        <!-- Footer -->
-        <div class="border-t border-gray-200 dark:border-dark-700 px-6 py-4 bg-white dark:bg-dark-900">
+        <!-- Footer - Fixed -->
+        <div class="flex-shrink-0 border-t border-gray-200 dark:border-dark-700 px-6 py-4 bg-white dark:bg-dark-900">
           <div class="flex justify-end">
             <app-button
               variant="secondary"
               size="sm"
-              (onClick)="onClose.emit()"
+              (onClick)="closeModal()"
             >
+              <app-icon name="x" [size]="16" class="mr-2"></app-icon>
               Close
             </app-button>
           </div>
@@ -64,4 +73,9 @@
       </div>
     </div>
   </div>
+}
+
+<!-- SSR Fallback - Show nothing during SSR -->
+@if (isOpen && mail && !isBrowser) {
+  <div class="hidden"></div>
 }
