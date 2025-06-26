@@ -4,6 +4,28 @@
   border-spacing: 0;
 }
 
+/* Table header improvements - Force dark mode styles */
+.mail-table thead th {
+  background: linear-gradient(135deg, rgba(249, 250, 251, 1) 0%, rgba(243, 244, 246, 1) 100%) !important;
+  border-bottom: 2px solid rgba(36, 200, 219, 0.1) !important;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+:host-context(.dark) .mail-table thead th,
+.dark .mail-table thead th {
+  background: linear-gradient(135deg, rgba(22, 27, 34, 1) 0%, rgba(13, 17, 23, 1) 100%) !important;
+  border-bottom: 2px solid rgba(36, 200, 219, 0.2) !important;
+  color: rgb(209 213 219) !important; /* text-gray-300 */
+}
+
+/* Ensure header text is visible in dark mode */
+:host-context(.dark) .mail-table thead th span,
+.dark .mail-table thead th span {
+  color: rgb(209 213 219) !important;
+}
+
 .mail-row {
   transition: all 0.2s ease;
   position: relative;
@@ -42,17 +64,6 @@
 .mail-row:hover .sender-avatar {
   transform: scale(1.05);
   box-shadow: 0 4px 8px rgba(36, 200, 219, 0.3);
-}
-
-/* Table header improvements */
-.mail-table thead th {
-  background: linear-gradient(135deg, rgba(249, 250, 251, 1) 0%, rgba(243, 244, 246, 1) 100%);
-  border-bottom: 2px solid rgba(36, 200, 219, 0.1);
-}
-
-.dark .mail-table thead th {
-  background: linear-gradient(135deg, rgba(22, 27, 34, 1) 0%, rgba(13, 17, 23, 1) 100%);
-  border-bottom: 2px solid rgba(36, 200, 219, 0.2);
 }
 
 /* Responsive improvements */
