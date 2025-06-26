@@ -2,41 +2,41 @@
 <html lang="en" class="dark">
 <head>
   <meta charset="utf-8">
-  <title>MinuteMail.co - Temporary Email Address</title>
+  <title>MinuteMail - Temporary Email Address</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Get a temporary, disposable email address that expires automatically. Perfect for signups, downloads, and protecting your privacy.">
   <meta name="keywords" content="temporary email, disposable email, privacy, anonymous email, minutemail">
-  <meta name="author" content="MinuteMail.co">
-  
+  <meta name="author" content="MinuteMail">
+
   <!-- Security Headers -->
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self' https://minutemail.co https://api.minutemail.co;">
   <meta http-equiv="Referrer-Policy" content="no-referrer">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta http-equiv="X-Frame-Options" content="DENY">
-  
+
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  
+
   <!-- Theme Color -->
   <meta name="theme-color" content="#24c8db">
   <meta name="msapplication-TileColor" content="#24c8db">
-  
+
   <!-- Open Graph -->
-  <meta property="og:title" content="MinuteMail.co - Temporary Email Address">
+  <meta property="og:title" content="MinuteMail - Temporary Email Address">
   <meta property="og:description" content="Get a temporary, disposable email address that expires automatically. Perfect for signups, downloads, and protecting your privacy.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://minutemail.co">
-  
+
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="MinuteMail.co - Temporary Email Address">
+  <meta name="twitter:title" content="MinuteMail - Temporary Email Address">
   <meta name="twitter:description" content="Get a temporary, disposable email address that expires automatically.">
-  
+
   <!-- Preload critical resources -->
   <link rel="preconnect" href="https://minutemail.co">
   <link rel="preconnect" href="https://api.minutemail.co">
-  
+
   <!-- Critical CSS for theme initialization and SSR -->
   <style>
     /* Prevent flash of unstyled content */
@@ -57,23 +57,23 @@
       --text-muted: #8b949e;
       --border-color: #30363d;
     }
-    
+
     html {
       background-color: var(--background-color);
       color: var(--text-color);
       transition: background-color 0.3s ease, color 0.3s ease;
     }
-    
+
     html.dark {
       background-color: #0d1117;
       color: #e6edf3;
     }
-    
+
     html:not(.dark) {
       background-color: #ffffff;
       color: #1e293b;
     }
-    
+
     body {
       margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -82,13 +82,13 @@
       transition: background-color 0.3s ease, color 0.3s ease;
       min-height: 100vh;
     }
-    
+
     /* Ensure app root takes full height */
     app-root {
       display: block;
       min-height: 100vh;
     }
-    
+
     /* Loading state */
     .loading-screen {
       position: fixed;
@@ -103,7 +103,7 @@
       z-index: 9999;
       transition: opacity 0.3s ease;
     }
-    
+
     .loading-spinner {
       width: 40px;
       height: 40px;
@@ -112,12 +112,12 @@
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
-    
+
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-    
+
     /* Hide loading screen when app is ready */
     app-root:not(:empty) + .loading-screen {
       opacity: 0;
@@ -137,12 +137,12 @@
 </head>
 <body class="dark">
   <app-root></app-root>
-  
+
   <!-- Loading screen fallback -->
   <div class="loading-screen">
     <div class="loading-spinner"></div>
   </div>
-  
+
   <!-- Theme initialization script -->
   <script>
     // Immediately apply saved theme or default to dark
@@ -150,10 +150,10 @@
       try {
         const savedTheme = localStorage.getItem('minutemail_theme');
         const shouldUseDark = savedTheme ? savedTheme === 'dark' : true; // Default to dark mode
-        
+
         const html = document.documentElement;
         const body = document.body;
-        
+
         if (shouldUseDark) {
           html.classList.add('dark');
           body.classList.add('dark');

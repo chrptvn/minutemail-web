@@ -19,27 +19,16 @@ export class ApiService {
 
   getMails(alias: string): Observable<MailResponse> {
     const url = `${this.baseUrl}/mails/${alias}`;
-    return of({
-      mails: [
-        {
-          id: '1',
-          from: 'chrptvn@gmail.com',
-          subject: 'Test Email',
-          body: 'This is a test email body.',
-          received_at: '2024-05-01T12:00:00Z'
-        } as Mail,
-      ],
-      expiresAt: '2026-06-01T00:00:00Z'
-    })
-    // return this.http
-    //   .get<Mail[]>(url)
-    //   .pipe(
-    //     map(mails => ({
-    //       mails,
-    //       expiresAt: undefined
-    //     })),
-    //     catchError(this.handleError)
-    //   );
+
+    return this.http
+      .get<Mail[]>(url)
+      .pipe(
+        map(mails => ({
+          mails,
+          expiresAt: '2025-06-26T12:00:00Z' // Example expiration date, replace with actual logic
+        })),
+        catchError(this.handleError)
+      );
   }
 
   private handleError = (error: HttpErrorResponse): Observable<never> => {
