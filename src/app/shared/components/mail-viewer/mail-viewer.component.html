@@ -7,8 +7,8 @@
       aria-hidden="true"
     ></div>
     
-    <!-- Drawer -->
-    <div class="absolute right-0 top-0 h-full w-full max-w-3xl bg-white dark:bg-dark-900 shadow-xl animate-slide-in">
+    <!-- Drawer - Limited to 2xl width (32rem = 512px) -->
+    <div class="absolute right-0 top-0 h-full w-full max-w-2xl bg-white dark:bg-dark-900 shadow-xl animate-slide-in">
       <div class="flex h-full flex-col">
         <!-- Header -->
         <div class="border-b border-gray-200 dark:border-dark-700 px-6 py-4 bg-white dark:bg-dark-900">
@@ -21,9 +21,8 @@
               size="sm"
               (onClick)="onClose.emit()"
               ariaLabel="Close email viewer"
-              class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-800"
             >
-              <app-icon name="x" [size]="20"></app-icon>
+              <app-icon name="x" [size]="20" class="text-gray-700 dark:text-gray-300"></app-icon>
             </app-button>
           </div>
           

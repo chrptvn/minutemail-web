@@ -62,52 +62,6 @@
 .email-address-container h1 {
   margin: 0;
   line-height: 1.2;
-  color: var(--text-color) !important;
-}
-
-/* Header improvements - Force proper text colors */
-header {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  background-color: white !important;
-}
-
-.dark header {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  background-color: #161b22 !important;
-}
-
-/* Force text colors in header */
-header h1 {
-  color: #1f2937 !important;
-}
-
-.dark header h1 {
-  color: #e5e7eb !important;
-}
-
-header .text-gray-700 {
-  color: #374151 !important;
-}
-
-.dark header .text-gray-300 {
-  color: #d1d5db !important;
-}
-
-/* Stats card improvements */
-.inbox-stats-card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(249, 250, 251, 1) 100%);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
-}
-
-.dark .inbox-stats-card {
-  background: linear-gradient(135deg, rgba(22, 27, 34, 1) 0%, rgba(13, 17, 23, 1) 100%);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
-}
-
-/* Message count badge */
-.message-count-badge {
-  background: linear-gradient(135deg, var(--primary-color) 0%, rgba(36, 200, 219, 0.8) 100%);
-  box-shadow: 0 2px 4px rgba(36, 200, 219, 0.3);
 }
 
 /* Responsive improvements */
@@ -171,15 +125,4 @@ header .text-gray-700 {
 /* Smooth transitions */
 * {
   transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-}
-
-/* Mail viewer improvements */
-.mail-viewer-drawer {
-  max-width: 48rem !important; /* Limit width to 3xl instead of full screen */
-}
-
-@media (max-width: 768px) {
-  .mail-viewer-drawer {
-    max-width: 100% !important;
-  }
 }
