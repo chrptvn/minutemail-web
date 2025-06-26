@@ -1,18 +1,22 @@
-<div class="bg-white dark:bg-dark-900 rounded-lg border border-gray-200 dark:border-dark-700 overflow-hidden">
+<div class="bg-white dark:bg-dark-900 rounded-xl border border-gray-200 dark:border-dark-700 overflow-hidden shadow-sm">
   @if (loading && mails.length === 0) {
-    <div class="p-8 text-center">
-      <app-spinner size="lg" text="Loading messages..."></app-spinner>
+    <div class="p-12 text-center">
+      <app-spinner size="lg" text="Loading messages..." center></app-spinner>
     </div>
   } @else if (mails.length === 0) {
-    <div class="p-8 text-center space-y-4">
-      <div class="w-16 h-16 mx-auto bg-gray-100 dark:bg-dark-800 rounded-full flex items-center justify-center">
-        <app-icon name="mail" [size]="32" class="text-gray-400"></app-icon>
+    <div class="p-12 text-center space-y-6">
+      <div class="w-20 h-20 mx-auto bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900 dark:to-primary-800 rounded-2xl flex items-center justify-center">
+        <app-icon name="mail" [size]="40" class="text-primary-600 dark:text-primary-400"></app-icon>
       </div>
       <div>
-        <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">No messages yet</h3>
-        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-          Messages sent to your temporary email will appear here
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">No messages yet</h3>
+        <p class="text-gray-600 dark:text-gray-400 max-w-sm mx-auto">
+          Messages sent to your temporary email will appear here. Share your email address to start receiving messages.
         </p>
+      </div>
+      <div class="inline-flex items-center px-4 py-2 bg-primary-50 dark:bg-primary-900/20 rounded-lg">
+        <app-icon name="clock" [size]="16" class="text-primary-600 dark:text-primary-400 mr-2"></app-icon>
+        <span class="text-sm text-primary-700 dark:text-primary-300">Checking for new messages...</span>
       </div>
     </div>
   } @else {
@@ -20,36 +24,71 @@
       <table class="min-w-full divide-y divide-gray-200 dark:divide-dark-700">
         <thead class="bg-gray-50 dark:bg-dark-800">
           <tr>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-              From
+            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+              <div class="flex items-center space-x-2">
+                <app-icon name="mail" [size]="14"></app-icon>
+                <span>From</span>
+              </div>
             </th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-              Subject
+            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+              <div class="flex items-center space-x-2">
+                <app-icon name="file-text" [size]="14"></app-icon>
+                <span>Subject</span>
+              </div>
             </th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-              Received
+            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+              <div class="flex items-center space-x-2">
+                <app-icon name="clock" [size]="14"></app-icon>
+                <span>Received</span>
+              </div>
             </th>
           </tr>
         </thead>
-        <tbody class="bg-white dark:bg-dark-900 divide-y divide-gray-200 dark:divide-dark-700">
+        <tbody class="bg-white dark:bg-dark-900 divide-y divide-gray-100 dark:divide-dark-800">
           @for (mail of mails; track mail.id) {
             <tr
-              class="hover:bg-gray-50 dark:hover:bg-dark-800 cursor-pointer transition-colors duration-150"
+              class="mail-row hover:bg-gray-50 dark:hover:bg-dark-800 cursor-pointer transition-all duration-200 group"
               (click)="onMailClick.emit(mail)"
-              [attr.aria-label]="'Email from ' + mail.from + ' with subject ' + mail.subject"
+              [attr.aria-label]="'Email from ' + mail.from + ' with subject ' + (mail.subject || 'No subject')"
             >
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm font-medium text-gray-900 dark:text-gray-100 truncate max-w-xs">
-                  {{ mail.from }}
+              <td class="px-6 py-4">
+                <div class="flex items-center space-x-3">
+                  <div class="w-8 h-8 bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900 dark:to-primary-800 rounded-full flex items-center justify-center flex-shrink-0">
+                    <span class="text-xs font-semibold text-primary-700 dark:text-primary-300">
+                      {{ mail.from.charAt(0).toUpperCase() }}
+                    </span>
+                  </div>
+                  <div class="min-w-0 flex-1">
+                    <div class="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
+                      {{ mail.from }}
+                    </div>
+                  </div>
                 </div>
               </td>
               <td class="px-6 py-4">
-                <div class="text-sm text-gray-900 dark:text-gray-100 truncate max-w-md">
-                  {{ mail.subject || '(No subject)' }}
+                <div class="flex items-center space-x-2">
+                  <div class="min-w-0 flex-1">
+                    <div class="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
+                      {{ mail.subject || '(No subject)' }}
+                    </div>
+                    <div class="text-xs text-gray-500 dark:text-gray-400 truncate mt-1">
+                      {{ getEmailPreview(mail.body) }}
+                    </div>
+                  </div>
+                  @if (!mail.subject) {
+                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-dark-700 text-gray-600 dark:text-gray-400">
+                      No subject
+                    </span>
+                  }
                 </div>
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                {{ formatDate(mail.received_at) }}
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center space-x-2">
+                  <div class="text-sm text-gray-900 dark:text-gray-100 font-medium">
+                    {{ formatDate(mail.received_at) }}
+                  </div>
+                  <app-icon name="chevron-right" [size]="16" class="text-gray-400 group-hover:text-primary-500 transition-colors"></app-icon>
+                </div>
               </td>
             </tr>
           }

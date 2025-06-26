@@ -1,6 +1,6 @@
 <div class="min-h-screen bg-gray-50 dark:bg-dark-950">
   <!-- Header -->
-  <header class="bg-white dark:bg-dark-900 border-b border-gray-200 dark:border-dark-700">
+  <header class="bg-white dark:bg-dark-900 border-b border-gray-200 dark:border-dark-700 sticky top-0 z-30 backdrop-blur-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16">
         <div class="flex items-center space-x-4">
@@ -9,15 +9,18 @@
             size="sm"
             (onClick)="goHome()"
             ariaLabel="Go back to home"
+            class="hover:bg-gray-100 dark:hover:bg-dark-800"
           >
             <app-icon name="arrow-left" [size]="20"></app-icon>
           </app-button>
           
           <div class="flex items-center space-x-3">
-            <app-icon name="mail" [size]="24" class="text-primary-500"></app-icon>
+            <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900 rounded-lg flex items-center justify-center">
+              <app-icon name="mail" [size]="20" class="text-primary-600 dark:text-primary-400"></app-icon>
+            </div>
             <div>
               <div class="flex items-center space-x-2">
-                <h1 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                <h1 class="text-lg font-semibold text-gray-900 dark:text-gray-100 truncate max-w-xs sm:max-w-sm">
                   {{ fullAlias() }}
                 </h1>
                 <app-button
@@ -26,7 +29,7 @@
                   [loading]="copying()"
                   (onClick)="copyEmailAddress()"
                   ariaLabel="Copy email address"
-                  class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                  class="text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors"
                 >
                   @if (copied()) {
                     <app-icon name="check" [size]="16" class="text-green-500"></app-icon>
@@ -49,6 +52,7 @@
             [loading]="refreshing()"
             (onClick)="refreshMails()"
             ariaLabel="Refresh inbox"
+            class="hover:bg-gray-100 dark:hover:bg-dark-800"
           >
             <app-icon name="refresh" [size]="20"></app-icon>
           </app-button>
@@ -58,6 +62,7 @@
             size="sm"
             (onClick)="toggleTheme()"
             [ariaLabel]="themeService.isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
+            class="hover:bg-gray-100 dark:hover:bg-dark-800"
           >
             @if (themeService.isDarkMode()) {
               <app-icon name="sun" [size]="20"></app-icon>
@@ -74,26 +79,30 @@
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     @if (error()) {
       <div class="max-w-2xl mx-auto">
-        <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 text-center">
-          <app-icon name="alert-circle" [size]="48" class="mx-auto text-red-500 mb-4"></app-icon>
-          <h2 class="text-lg font-semibold text-red-900 dark:text-red-100 mb-2">
+        <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-8 text-center shadow-sm">
+          <div class="w-16 h-16 mx-auto bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mb-4">
+            <app-icon name="alert-circle" [size]="32" class="text-red-500"></app-icon>
+          </div>
+          <h2 class="text-xl font-semibold text-red-900 dark:text-red-100 mb-2">
             Inbox Error
           </h2>
-          <p class="text-red-700 dark:text-red-300 mb-4">
+          <p class="text-red-700 dark:text-red-300 mb-6">
             {{ error() }}
           </p>
-          <div class="space-x-3">
+          <div class="flex justify-center space-x-3">
             <app-button
               variant="primary"
               (onClick)="refreshMails()"
               [loading]="loading()"
             >
+              <app-icon name="refresh" [size]="16" class="mr-2"></app-icon>
               Try Again
             </app-button>
             <app-button
               variant="secondary"
               (onClick)="goHome()"
             >
+              <app-icon name="arrow-left" [size]="16" class="mr-2"></app-icon>
               Go Home
             </app-button>
           </div>
@@ -102,25 +111,34 @@
     } @else {
       <div class="space-y-6">
         <!-- Inbox Stats -->
-        <div class="bg-white dark:bg-dark-900 rounded-lg border border-gray-200 dark:border-dark-700 p-6">
+        <div class="bg-white dark:bg-dark-900 rounded-xl border border-gray-200 dark:border-dark-700 p-6 shadow-sm">
           <div class="flex items-center justify-between">
-            <div>
-              <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                Inbox
-              </h2>
-              <p class="text-sm text-gray-600 dark:text-gray-400">
-                {{ mails().length }} {{ mails().length === 1 ? 'message' : 'messages' }}
-                @if (loading()) {
-                  <span class="ml-2">
-                    <app-spinner size="sm"></app-spinner>
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 bg-primary-100 dark:bg-primary-900 rounded-lg flex items-center justify-center">
+                <app-icon name="mail" [size]="20" class="text-primary-600 dark:text-primary-400"></app-icon>
+              </div>
+              <div>
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                  Inbox
+                </h2>
+                <p class="text-sm text-gray-600 dark:text-gray-400 flex items-center">
+                  <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 mr-2">
+                    {{ mails().length }}
                   </span>
-                }
-              </p>
+                  {{ mails().length === 1 ? 'message' : 'messages' }}
+                  @if (loading()) {
+                    <span class="ml-2">
+                      <app-spinner size="sm"></app-spinner>
+                    </span>
+                  }
+                </p>
+              </div>
             </div>
             
             @if (mails().length > 0) {
-              <div class="text-sm text-gray-500 dark:text-gray-400">
-                Last updated: {{ formatDate(lastUpdated()) }}
+              <div class="text-right">
+                <div class="text-sm font-medium text-gray-900 dark:text-gray-100">Last updated</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400">{{ formatDate(lastUpdated()) }}</div>
               </div>
             }
           </div>

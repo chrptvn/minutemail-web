@@ -7,31 +7,21 @@
 .mail-row {
   transition: all 0.2s ease;
   position: relative;
+  border-left: 3px solid transparent;
 }
 
 .mail-row:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(36, 200, 219, 0.1);
+  border-left-color: var(--primary-color);
 }
 
 .dark .mail-row:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(36, 200, 219, 0.2);
 }
 
-.mail-row::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background: var(--primary-color);
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.mail-row:hover::before {
-  opacity: 1;
+.mail-row:active {
+  transform: translateY(0);
 }
 
 .empty-state {
@@ -42,10 +32,34 @@
   background: linear-gradient(135deg, rgba(36, 200, 219, 0.1) 0%, rgba(36, 200, 219, 0.05) 100%);
 }
 
+/* Avatar styles */
+.sender-avatar {
+  background: linear-gradient(135deg, var(--primary-color) 0%, rgba(36, 200, 219, 0.8) 100%);
+  box-shadow: 0 2px 4px rgba(36, 200, 219, 0.2);
+}
+
+/* Enhanced hover effects */
+.mail-row:hover .sender-avatar {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(36, 200, 219, 0.3);
+}
+
+/* Table header improvements */
+thead th {
+  background: linear-gradient(135deg, rgba(249, 250, 251, 1) 0%, rgba(243, 244, 246, 1) 100%);
+  border-bottom: 2px solid rgba(36, 200, 219, 0.1);
+}
+
+.dark thead th {
+  background: linear-gradient(135deg, rgba(22, 27, 34, 1) 0%, rgba(13, 17, 23, 1) 100%);
+  border-bottom: 2px solid rgba(36, 200, 219, 0.2);
+}
+
+/* Responsive improvements */
 @media (max-width: 768px) {
   .mail-table th,
   .mail-table td {
-    padding: 0.75rem 0.5rem;
+    padding: 1rem 0.75rem;
   }
   
   .mail-table th {
@@ -59,4 +73,37 @@
   .truncate {
     max-width: 120px;
   }
+  
+  .sender-avatar {
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .mail-table th:nth-child(3),
+  .mail-table td:nth-child(3) {
+    display: none;
+  }
+  
+  .mail-table th,
+  .mail-table td {
+    padding: 0.75rem 0.5rem;
+  }
+}
+
+/* Animation for new emails */
+@keyframes slideInFromTop {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mail-row.new-email {
+  animation: slideInFromTop 0.5s ease-out;
 }

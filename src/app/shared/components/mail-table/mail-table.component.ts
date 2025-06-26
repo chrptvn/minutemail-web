@@ -24,11 +24,28 @@ export class MailTableComponent {
 
     if (diffInHours < 1) {
       const diffInMinutes = Math.floor(diffInHours * 60);
-      return `${diffInMinutes}m ago`;
+      return diffInMinutes <= 0 ? 'Just now' : `${diffInMinutes}m ago`;
     } else if (diffInHours < 24) {
       return `${Math.floor(diffInHours)}h ago`;
+    } else if (diffInHours < 48) {
+      return 'Yesterday';
     } else {
-      return date.toLocaleDateString();
+      return date.toLocaleDateString(undefined, { 
+        month: 'short', 
+        day: 'numeric',
+        year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
+      });
     }
+  }
+
+  getEmailPreview(body: string): string {
+    if (!body) return 'No content';
+    
+    // Remove HTML tags if present
+    const textContent = body.replace(/<[^>]*>/g, '');
+    
+    // Get first 60 characters and add ellipsis if longer
+    const preview = textContent.trim().substring(0, 60);
+    return preview.length < textContent.trim().length ? `${preview}...` : preview;
   }
 }
