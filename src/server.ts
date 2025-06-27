@@ -4,7 +4,7 @@ import {
   isMainModule,
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
-import express from 'express';
+import express, { Request, Response } from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { join } from 'node:path';
 
@@ -21,7 +21,7 @@ app.use('/api', createProxyMiddleware({
   changeOrigin: true,
   secure: true,
   logLevel: 'debug',
-  onError: (err, req, res) => {
+  onError: (err: Error, req: Request, res: Response) => {
     console.error('Proxy error:', err);
     res.status(500).json({ error: 'Proxy error' });
   },
