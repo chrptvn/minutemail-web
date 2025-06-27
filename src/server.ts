@@ -5,7 +5,8 @@ import {
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
 import express, { Request, Response } from 'express';
-import { createProxyMiddleware } from 'http-proxy-middleware';
+import { createProxyMiddleware, Options } from 'http-proxy-middleware';
+import { ClientRequest } from 'http';
 import { join } from 'node:path';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
@@ -25,10 +26,10 @@ app.use('/api', createProxyMiddleware({
     console.error('Proxy error:', err);
     res.status(500).json({ error: 'Proxy error' });
   },
-  onProxyReq: (proxyReq, req, res) => {
+  onProxyReq: (proxyReq: ClientRequest, req: Request, res: Response) => {
     console.log('Proxying request:', req.method, req.url);
   }
-}));
+} as Options));
 
 /**
  * Example Express Rest API endpoints can be defined here.
