@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiBase: 'https://api.minutemail.co/v1'
+  apiBase: '/api/v1'
 };

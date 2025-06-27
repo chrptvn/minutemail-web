@@ -5,12 +5,30 @@ import {
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
 import express from 'express';
+import { createProxyMiddleware } from 'http-proxy-middleware';
 import { join } from 'node:path';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
 const app = express();
 const angularApp = new AngularNodeAppEngine();
+
+/**
+ * Add proxy middleware for API calls in SSR mode
+ */
+app.use('/api', createProxyMiddleware({
+  target: 'https://api.minutemail.co',
+  changeOrigin: true,
+  secure: true,
+  logLevel: 'debug',
+  onError: (err, req, res) => {
+    console.error('Proxy error:', err);
+    res.status(500).json({ error: 'Proxy error' });
+  },
+  onProxyReq: (proxyReq, req, res) => {
+    console.log('Proxying request:', req.method, req.url);
+  }
+}));
 
 /**
  * Example Express Rest API endpoints can be defined here.
