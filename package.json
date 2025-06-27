@@ -32,7 +32,6 @@
     "@angular/cli": "^20.0.3",
     "@angular/compiler-cli": "^20.0.0",
     "@types/express": "^5.0.1",
-    "@types/http-proxy-middleware": "^1.0.8",
     "@types/jasmine": "~5.1.0",
     "@types/node": "^20.17.19",
     "autoprefixer": "^10.4.20",
