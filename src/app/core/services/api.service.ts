@@ -5,6 +5,7 @@ import {Observable, of, throwError} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { Mail, MailResponse } from '../models/mail.model';
+import {RegisterModel} from '../models/register.model';
 
 @Injectable({
   providedIn: 'root'
@@ -21,12 +22,19 @@ export class ApiService {
     const url = `${this.baseUrl}/mails/${alias}`;
 
     return this.http
-      .get<Mail[]>(url)
+      .get<MailResponse>(url)
       .pipe(
-        map(mails => ({
-          mails,
-          expiresAt: '2025-06-26T12:00:00Z' // Example expiration date, replace with actual logic
-        })),
+        catchError(this.handleError)
+      );
+  }
+
+  registerMail(alias: string): Observable<RegisterModel> {
+    const url = `${this.baseUrl}/mails/${alias}`;
+
+    return this.http
+      .post(url, {})
+      .pipe(
+        map(response => response as RegisterModel),
         catchError(this.handleError)
       );
   }
