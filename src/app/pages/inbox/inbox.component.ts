@@ -71,7 +71,7 @@ export class InboxComponent implements OnInit, OnDestroy {
         this.fullAlias.set(`${alias}@minutemail.co`);
         this.aliasService.setCurrentAlias(this.fullAlias());
         this.loadMails(false)
-        // this.startPolling();
+        this.startPolling();
       } else {
         window.location.href = `/`;
       }

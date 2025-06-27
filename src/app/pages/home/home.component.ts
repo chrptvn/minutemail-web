@@ -57,13 +57,13 @@ export class HomeComponent implements OnInit {
       this.aliasService.generateAndRegisterAlias().subscribe({
         next: (result) => {
           this.currentAlias.set(result.alias);
-          
+          console.log('Generated alias:', result.alias);
           // Set expiration time if provided by API
           if (result.ttl) {
             const expirationTime = new Date(Date.now() + result.ttl * 1000);
             this.expiresAt.set(expirationTime.toISOString());
           }
-          
+
           this.showToastMessage('success', 'New email address generated and registered!');
           this.generating.set(false);
         },
