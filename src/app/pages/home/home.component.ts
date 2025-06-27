@@ -29,6 +29,7 @@ export class HomeComponent implements OnInit {
   generating = signal(false);
   copying = signal(false);
   copied = signal(false);
+  expiresAt = signal<string | undefined>(undefined);
 
   showToast = signal(false);
   toastType = signal<'success' | 'error' | 'warning' | 'info'>('info');
@@ -52,16 +53,29 @@ export class HomeComponent implements OnInit {
     this.generating.set(true);
 
     try {
-      // Simulate API delay for better UX
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      const newAlias = this.aliasService.generateRandomAlias();
-      this.currentAlias.set(newAlias);
-
-      this.showToastMessage('success', 'New email address generated!');
+      // Call the new method that registers the alias with the API
+      this.aliasService.generateAndRegisterAlias().subscribe({
+        next: (result) => {
+          this.currentAlias.set(result.alias);
+          
+          // Set expiration time if provided by API
+          if (result.ttl) {
+            const expirationTime = new Date(Date.now() + result.ttl * 1000);
+            this.expiresAt.set(expirationTime.toISOString());
+          }
+          
+          this.showToastMessage('success', 'New email address generated and registered!');
+          this.generating.set(false);
+        },
+        error: (error) => {
+          console.error('Error generating alias:', error);
+          this.showToastMessage('error', 'Failed to generate email address. Please try again.');
+          this.generating.set(false);
+        }
+      });
     } catch (error) {
-      this.showToastMessage('error', 'Failed to generate email address');
-    } finally {
+      console.error('Unexpected error:', error);
+      this.showToastMessage('error', 'An unexpected error occurred');
       this.generating.set(false);
     }
   }
@@ -77,6 +91,7 @@ export class HomeComponent implements OnInit {
 
       if (success) {
         this.copied.set(true);
+        this.showToastMessage('success', 'Email address copied to clipboard!');
 
         // Reset copied state after 2 seconds
         setTimeout(() => {

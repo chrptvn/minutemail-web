@@ -1,10 +1,14 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { ApiService } from './api.service';
+import { Observable, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AliasService {
   private readonly STORAGE_KEY = 'minutemail_current_alias';
+  private readonly apiService = inject(ApiService);
   
   private readonly adjectives = [
     'warm', 'cool', 'bright', 'swift', 'gentle', 'bold', 'calm', 'wild',
@@ -26,9 +30,35 @@ export class AliasService {
     const animal = this.animals[Math.floor(Math.random() * this.animals.length)];
     const number = Math.floor(Math.random() * 999) + 1;
     
-    const alias = `${adj1}-${adj2}-${animal}-${number}@minutemail.co`;
-    this.setCurrentAlias(alias);
-    return alias;
+    return `${adj1}-${adj2}-${animal}-${number}@minutemail.co`;
+  }
+
+  /**
+   * Generate a new alias and register it with the API
+   */
+  generateAndRegisterAlias(): Observable<{ alias: string; ttl?: number }> {
+    const newAlias = this.generateRandomAlias();
+    const aliasName = this.extractAliasFromEmail(newAlias);
+    
+    return this.apiService.registerMail(aliasName).pipe(
+      map(response => {
+        // Store the alias after successful registration
+        this.setCurrentAlias(newAlias);
+        return {
+          alias: newAlias,
+          ttl: response.ttl
+        };
+      }),
+      catchError(error => {
+        console.error('Failed to register alias:', error);
+        // Fallback: still generate the alias locally even if registration fails
+        this.setCurrentAlias(newAlias);
+        return of({
+          alias: newAlias,
+          ttl: undefined
+        });
+      })
+    );
   }
 
   getCurrentAlias(): string | null {

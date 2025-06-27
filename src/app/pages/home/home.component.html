@@ -43,6 +43,7 @@
       <div class="max-w-2xl mx-auto">
         <app-address-card
           [alias]="currentAlias()"
+          [expiresAt]="expiresAt()"
           [generating]="generating()"
           [copying]="copying()"
           [copied]="copied()"
@@ -62,7 +63,7 @@
             Auto-Expires
           </h3>
           <p class="text-gray-600 dark:text-gray-400">
-            Your temporary email automatically expires after 60 minutes
+            Your temporary email automatically expires after the specified time
           </p>
         </div>
 
