@@ -140,7 +140,7 @@
     }
   </style>
 </head>
-<body class="dark">
+<body>
   <app-root></app-root>
 
   <!-- Loading screen fallback -->
@@ -148,7 +148,7 @@
     <div class="loading-spinner"></div>
   </div>
 
-  <!-- Theme initialization script with cookie support -->
+  <!-- Theme initialization script with improved cookie support -->
   <script>
     // Helper function to get cookie value
     function getCookie(name) {
@@ -181,7 +181,8 @@
           }
         }
         
-        const shouldUseDark = savedTheme ? savedTheme === 'dark' : true; // Default to dark mode
+        // Determine theme: use saved preference or default to dark
+        const shouldUseDark = savedTheme ? savedTheme === 'dark' : true;
 
         const html = document.documentElement;
         const body = document.body;
@@ -190,13 +191,13 @@
         html.classList.add('no-transition');
         body.classList.add('no-transition');
 
-        // Remove existing theme classes
-        html.classList.remove('dark');
-        body.classList.remove('dark');
-
+        // Apply theme immediately
         if (shouldUseDark) {
           html.classList.add('dark');
           body.classList.add('dark');
+        } else {
+          html.classList.remove('dark');
+          body.classList.remove('dark');
         }
 
         // Force a reflow to ensure styles are applied
@@ -206,8 +207,9 @@
         setTimeout(() => {
           html.classList.remove('no-transition');
           body.classList.remove('no-transition');
-        }, 100);
+        }, 50);
       } catch (e) {
+        console.warn('Theme initialization error:', e);
         // Fallback to dark mode if cookies/localStorage are not available
         document.documentElement.classList.add('dark');
         document.body.classList.add('dark');

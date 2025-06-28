@@ -18,7 +18,7 @@ export class ThemeService {
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
     
-    // Apply theme immediately on service creation without transitions
+    // Apply theme immediately on service creation
     this.applyThemeImmediate();
     
     // Listen for system theme changes only in browser
@@ -37,8 +37,8 @@ export class ThemeService {
 
   toggleTheme(): void {
     this.isDarkMode.update(current => !current);
-    this.applyThemeImmediate();
     this.saveTheme();
+    this.applyThemeImmediate();
   }
 
   private getInitialTheme(): boolean {
@@ -90,16 +90,16 @@ export class ThemeService {
     html.classList.add('no-transition');
     body.classList.add('no-transition');
     
-    // Remove existing classes first to prevent conflicts
-    html.classList.remove('dark');
-    body.classList.remove('dark');
-    
+    // Apply theme
     if (this.isDarkMode()) {
       html.classList.add('dark');
       body.classList.add('dark');
+    } else {
+      html.classList.remove('dark');
+      body.classList.remove('dark');
     }
     
-    // Force a style recalculation to ensure immediate application
+    // Force a style recalculation
     html.offsetHeight;
     
     // Remove no-transition class after ensuring styles are applied
