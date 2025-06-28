@@ -18,12 +18,11 @@ export class App implements OnInit {
   ngOnInit() {
     // Ensure theme is properly initialized for browser platform
     if (isPlatformBrowser(this.platformId)) {
-      // Small delay to ensure DOM is fully ready
+      // Force theme application to ensure consistency across page navigation
       setTimeout(() => {
-        // Force theme application to ensure consistency
         const currentTheme = this.themeService.isDarkMode();
         this.themeService.isDarkMode.set(currentTheme);
-      }, 100);
+      }, 50);
     }
   }
 }

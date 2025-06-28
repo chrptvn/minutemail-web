@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <title>MinuteMail - Temporary Email Address</title>
@@ -135,7 +135,7 @@
     }
   </style>
 </head>
-<body class="dark">
+<body>
   <app-root></app-root>
 
   <!-- Loading screen fallback -->
@@ -145,11 +145,19 @@
 
   <!-- Theme initialization script -->
   <script>
-    // Immediately apply saved theme or default to dark
+    // Immediately apply saved theme or detect system preference
     (function() {
       try {
-        const savedTheme = localStorage.getItem('minutemail_theme');
-        const shouldUseDark = savedTheme ? savedTheme === 'dark' : true; // Default to dark mode
+        let savedTheme = localStorage.getItem('minutemail_theme');
+        let shouldUseDark;
+        
+        if (savedTheme !== null) {
+          // Use saved preference
+          shouldUseDark = savedTheme === 'dark';
+        } else {
+          // Check system preference
+          shouldUseDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        }
 
         const html = document.documentElement;
         const body = document.body;
@@ -162,9 +170,12 @@
           body.classList.remove('dark');
         }
       } catch (e) {
-        // Fallback to dark mode if localStorage is not available
-        document.documentElement.classList.add('dark');
-        document.body.classList.add('dark');
+        // Fallback to system preference or light mode
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDark) {
+          document.documentElement.classList.add('dark');
+          document.body.classList.add('dark');
+        }
       }
     })();
   </script>

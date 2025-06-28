@@ -21,7 +21,7 @@ export class ThemeService {
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
       mediaQuery.addEventListener('change', (e) => {
         // Only update if no user preference is saved
-        const saved = localStorage.getItem(this.STORAGE_KEY);
+        const saved = this.getSavedTheme();
         if (saved === null) {
           this.isDarkMode.set(e.matches);
           this.applyTheme();
@@ -41,13 +41,29 @@ export class ThemeService {
       return true; // Default to dark mode for SSR
     }
 
-    const saved = localStorage.getItem(this.STORAGE_KEY);
+    const saved = this.getSavedTheme();
     if (saved !== null) {
       return saved === 'dark';
     }
 
-    // Default to dark mode (as specified in requirements)
-    return true;
+    // Check system preference if no saved theme
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return true;
+    }
+
+    // Default to light mode if no preference is set
+    return false;
+  }
+
+  private getSavedTheme(): string | null {
+    if (!this.isBrowser) return null;
+    
+    try {
+      return localStorage.getItem(this.STORAGE_KEY);
+    } catch (error) {
+      console.warn('localStorage not available:', error);
+      return null;
+    }
   }
 
   private applyTheme(): void {
@@ -71,6 +87,10 @@ export class ThemeService {
   private saveTheme(): void {
     if (!this.isBrowser) return;
     
-    localStorage.setItem(this.STORAGE_KEY, this.isDarkMode() ? 'dark' : 'light');
+    try {
+      localStorage.setItem(this.STORAGE_KEY, this.isDarkMode() ? 'dark' : 'light');
+    } catch (error) {
+      console.warn('localStorage not available:', error);
+    }
   }
 }
