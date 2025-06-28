@@ -4,6 +4,7 @@ export interface Mail {
   subject: string;
   body: string;
   received_at: string;
+  attachments?: string[];
 }
 
 export interface MailResponse {
