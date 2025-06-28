@@ -37,7 +37,7 @@
                 </app-button>
               </div>
               @if (expiresAt()) {
-                <div class="hidden sm:block">
+                <div class="block sm:hidden">
                   <app-countdown [expiresAt]="expiresAt()"></app-countdown>
                 </div>
               }
@@ -47,7 +47,7 @@
         
         <div class="flex items-center space-x-2">
           @if (expiresAt()) {
-            <div class="hidden md:flex items-center space-x-2 px-3 py-1.5 bg-gray-100 dark:bg-dark-800 rounded-lg">
+            <div class="hidden sm:flex items-center space-x-2 px-3 py-1.5 bg-gray-100 dark:bg-dark-800 rounded-lg">
               <app-countdown [expiresAt]="expiresAt()" class="text-sm"></app-countdown>
             </div>
           }
