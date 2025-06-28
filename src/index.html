@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
   <meta charset="utf-8">
   <title>MinuteMail - Temporary Email Address</title>
@@ -61,7 +61,7 @@
     html {
       background-color: var(--background-color);
       color: var(--text-color);
-      transition: background-color 0.3s ease, color 0.3s ease;
+      transition: none !important; /* Prevent transition flashing */
     }
 
     html.dark {
@@ -79,7 +79,7 @@
       font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
       background-color: var(--background-color);
       color: var(--text-color);
-      transition: background-color 0.3s ease, color 0.3s ease;
+      transition: none !important; /* Prevent transition flashing */
       min-height: 100vh;
     }
 
@@ -133,9 +133,14 @@
       bottom: 0 !important;
       z-index: 9999 !important;
     }
+
+    /* Prevent theme transition flashing */
+    .no-transition * {
+      transition: none !important;
+    }
   </style>
 </head>
-<body>
+<body class="dark">
   <app-root></app-root>
 
   <!-- Loading screen fallback -->
@@ -143,39 +148,69 @@
     <div class="loading-spinner"></div>
   </div>
 
-  <!-- Theme initialization script -->
+  <!-- Theme initialization script with cookie support -->
   <script>
-    // Immediately apply saved theme or detect system preference
+    // Helper function to get cookie value
+    function getCookie(name) {
+      const nameEQ = name + "=";
+      const ca = document.cookie.split(';');
+      for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+      }
+      return null;
+    }
+
+    // Immediately apply saved theme or default to dark
     (function() {
       try {
-        let savedTheme = localStorage.getItem('minutemail_theme');
-        let shouldUseDark;
+        // Try cookie first (preferred method)
+        let savedTheme = getCookie('minutemail_theme');
         
-        if (savedTheme !== null) {
-          // Use saved preference
-          shouldUseDark = savedTheme === 'dark';
-        } else {
-          // Check system preference
-          shouldUseDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        // Fallback to localStorage for existing users
+        if (!savedTheme) {
+          savedTheme = localStorage.getItem('minutemail_theme');
+          
+          // If found in localStorage, migrate to cookie
+          if (savedTheme) {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + (365 * 24 * 60 * 60 * 1000));
+            document.cookie = `minutemail_theme=${savedTheme};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
+            localStorage.removeItem('minutemail_theme');
+          }
         }
+        
+        const shouldUseDark = savedTheme ? savedTheme === 'dark' : true; // Default to dark mode
 
         const html = document.documentElement;
         const body = document.body;
 
+        // Add no-transition class to prevent flashing
+        html.classList.add('no-transition');
+        body.classList.add('no-transition');
+
+        // Remove existing theme classes
+        html.classList.remove('dark');
+        body.classList.remove('dark');
+
         if (shouldUseDark) {
           html.classList.add('dark');
           body.classList.add('dark');
-        } else {
-          html.classList.remove('dark');
-          body.classList.remove('dark');
         }
+
+        // Force a reflow to ensure styles are applied
+        html.offsetHeight;
+
+        // Remove no-transition class after a short delay
+        setTimeout(() => {
+          html.classList.remove('no-transition');
+          body.classList.remove('no-transition');
+        }, 100);
       } catch (e) {
-        // Fallback to system preference or light mode
-        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (prefersDark) {
-          document.documentElement.classList.add('dark');
-          document.body.classList.add('dark');
-        }
+        // Fallback to dark mode if cookies/localStorage are not available
+        document.documentElement.classList.add('dark');
+        document.body.classList.add('dark');
       }
     })();
   </script>

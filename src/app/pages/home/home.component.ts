@@ -9,6 +9,7 @@ import { VpnBannerComponent } from '../../shared/components/vpn-banner/vpn-banne
 import { ButtonComponent } from '../../shared/components/ui/button.component';
 import { TablerIconComponent } from '../../shared/components/icons/tabler-icons.component';
 import { ToastComponent } from '../../shared/components/ui/toast.component';
+import { CountdownComponent } from '../../shared/components/ui/countdown.component';
 
 @Component({
   selector: 'app-home',
@@ -19,7 +20,8 @@ import { ToastComponent } from '../../shared/components/ui/toast.component';
     VpnBannerComponent,
     ButtonComponent,
     TablerIconComponent,
-    ToastComponent
+    ToastComponent,
+    CountdownComponent
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'

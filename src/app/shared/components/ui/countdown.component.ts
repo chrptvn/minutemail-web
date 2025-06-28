@@ -11,7 +11,7 @@ import { TablerIconComponent } from '../icons/tabler-icons.component';
       <app-icon name="clock" [size]="16" class="text-gray-500 dark:text-gray-400"></app-icon>
       <span [class]="textClasses">
         @if (timeLeft() > 0) {
-          Expires in {{ formatTime(timeLeft()) }}
+          {{ formatTime(timeLeft()) }}
         } @else {
           Expired
         }
@@ -51,13 +51,6 @@ export class CountdownComponent implements OnInit, OnDestroy {
       : now + this.defaultMinutes * 60_000;
 
     this.timeLeft.set(Math.max(0, target - now));
-  }
-
-
-  private startCountdown() {
-    this.intervalId = window.setInterval(() => {
-      this.calculateTimeLeft();
-    }, 1000);
   }
 
   formatTime(milliseconds: number): string {
