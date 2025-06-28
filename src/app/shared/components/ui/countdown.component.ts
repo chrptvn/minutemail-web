@@ -11,7 +11,7 @@ import { TablerIconComponent } from '../icons/tabler-icons.component';
       <app-icon name="clock" [size]="16" class="text-gray-500 dark:text-gray-400"></app-icon>
       <span [class]="textClasses">
         @if (timeLeft() > 0) {
-          {{ formatTime(timeLeft()) }}
+          Expires in {{ formatTime(timeLeft()) }}
         } @else {
           Expired
         }
