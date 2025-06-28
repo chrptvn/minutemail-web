@@ -9,5 +9,5 @@ export interface Mail {
 
 export interface MailResponse {
   mails: Mail[];
-  expiresAt?: string;
+  expireAt?: string;
 }

@@ -70,11 +70,11 @@ export class InboxComponent implements OnInit, OnDestroy {
         this.alias.set(alias);
         this.fullAlias.set(`${alias}@minutemail.co`);
         this.aliasService.setCurrentAlias(this.fullAlias());
-        
+
         // Set a default expiration time (1 hour from now) as fallback
         const defaultExpiration = new Date(Date.now() + 60 * 60 * 1000).toISOString();
         this.expiresAt.set(defaultExpiration);
-        
+
         this.loadMails(false);
         this.startPolling();
       } else {
@@ -98,10 +98,11 @@ export class InboxComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
         catchError(error => {
           console.error('Polling error:', error);
-          return of({ mails: [], expiresAt: undefined });
+          return of({ mails: [], expireAt: undefined });
         })
       )
       .subscribe(response => {
+
         const newMails = response.mails || [];
         const currentMails = this.mails();
 
@@ -117,11 +118,11 @@ export class InboxComponent implements OnInit, OnDestroy {
 
         this.mails.set(newMails);
         this.lastUpdated.set(new Date());
-
+        console.log('Polling response:', response);
         // Update expiration time if provided by API
-        if (response.expiresAt) {
-          this.expiresAt.set(response.expiresAt);
-          console.log('Updated expiresAt from API:', response.expiresAt);
+        if (response.expireAt) {
+          this.expiresAt.set(response.expireAt);
+          console.log('Updated expiresAt from API:', response.expireAt);
         }
       });
   }
@@ -137,14 +138,14 @@ export class InboxComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           console.log('API Response:', response);
-          
+
           this.mails.set(response.mails || []);
           this.lastUpdated.set(new Date());
 
           // Handle expiration time from API response
-          if (response.expiresAt) {
-            this.expiresAt.set(response.expiresAt);
-            console.log('Set expiresAt from API:', response.expiresAt);
+          if (response.expireAt) {
+            this.expiresAt.set(response.expireAt);
+            console.log('Set expiresAt from API:', response.expireAt);
           } else {
             // If API doesn't provide expiration, calculate based on typical email service behavior
             // Most temporary email services expire after 1 hour
