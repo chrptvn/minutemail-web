@@ -36,6 +36,15 @@
               <span class="font-medium text-gray-700 dark:text-gray-300 mr-3 flex-shrink-0 w-20">Received:</span>
               <span class="text-gray-600 dark:text-gray-400">{{ formatDate(mail.received_at) }}</span>
             </div>
+            @if (mail.attachments && mail.attachments.length > 0) {
+              <div class="flex items-center text-sm">
+                <span class="font-medium text-gray-700 dark:text-gray-300 mr-3 flex-shrink-0 w-20">Attachments:</span>
+                <div class="flex items-center space-x-1">
+                  <app-icon name="paperclip" [size]="14" class="text-gray-500 dark:text-gray-400"></app-icon>
+                  <span class="text-gray-600 dark:text-gray-400">{{ mail.attachments.length }} file{{ mail.attachments.length === 1 ? '' : 's' }}</span>
+                </div>
+              </div>
+            }
           </div>
         </div>
         
@@ -54,6 +63,13 @@
                 </div>
               }
             </div>
+
+            <!-- Attachments -->
+            <app-attachment-list
+              [attachments]="mail.attachments || []"
+              [aliasName]="getAliasName()"
+              [mailId]="mail.id"
+            ></app-attachment-list>
           </div>
         </div>
         

@@ -3,18 +3,20 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { TablerIconComponent } from '../icons/tabler-icons.component';
 import { ButtonComponent } from '../ui/button.component';
+import { AttachmentListComponent } from '../attachment-list/attachment-list.component';
 import { Mail } from '../../../core/models/mail.model';
 
 @Component({
   selector: 'app-mail-viewer',
   standalone: true,
-  imports: [CommonModule, TablerIconComponent, ButtonComponent],
+  imports: [CommonModule, TablerIconComponent, ButtonComponent, AttachmentListComponent],
   templateUrl: './mail-viewer.component.html',
   styleUrl: './mail-viewer.component.scss'
 })
 export class MailViewerComponent implements OnInit, OnDestroy {
   @Input() mail?: Mail;
   @Input() isOpen = false;
+  @Input() aliasName?: string;
 
   @Output() onClose = new EventEmitter<void>();
 
@@ -61,6 +63,20 @@ export class MailViewerComponent implements OnInit, OnDestroy {
 
   getSanitizedHtml(html: string): SafeHtml {
     return this.sanitizer.sanitize(1, html) || '';
+  }
+
+  getAliasName(): string {
+    // Extract alias name from the current URL or use provided aliasName
+    if (this.aliasName) {
+      return this.aliasName;
+    }
+    
+    if (this.isBrowser) {
+      const pathSegments = window.location.pathname.split('/');
+      return pathSegments[1] || '';
+    }
+    
+    return '';
   }
 
   closeModal() {

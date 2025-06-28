@@ -8,5 +8,11 @@
       "Accept": "application/json",
       "Content-Type": "application/json"
     }
+  },
+  "/files": {
+    "target": "https://minutemail.co",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
   }
 }

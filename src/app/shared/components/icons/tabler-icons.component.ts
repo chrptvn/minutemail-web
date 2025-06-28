@@ -168,6 +168,59 @@ import { Component, Input } from '@angular/core';
             <polyline points="9,18 15,12 9,6"/>
           </g>
         }
+
+        @case('download') {
+          <g>
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7,10 12,15 17,10"/>
+            <line x1="12" x2="12" y1="15" y2="3"/>
+          </g>
+        }
+
+        @case('paperclip') {
+          <g>
+            <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+          </g>
+        }
+
+        @case('image') {
+          <g>
+            <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
+            <circle cx="9" cy="9" r="2"/>
+            <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+          </g>
+        }
+
+        @case('file') {
+          <g>
+            <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
+            <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
+          </g>
+        }
+
+        @case('table') {
+          <g>
+            <path d="M12 3v18"/>
+            <rect width="18" height="18" x="3" y="3" rx="2"/>
+            <path d="M3 9h18"/>
+            <path d="M3 15h18"/>
+          </g>
+        }
+
+        @case('presentation') {
+          <g>
+            <path d="M2 3h20v14H2z"/>
+            <path d="m7 21 5-5 5 5"/>
+          </g>
+        }
+
+        @case('archive') {
+          <g>
+            <rect width="20" height="5" x="2" y="3" rx="1"/>
+            <path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/>
+            <path d="M10 12h4"/>
+          </g>
+        }
       }
     </svg>
   `

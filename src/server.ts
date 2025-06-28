@@ -18,16 +18,31 @@ const angularApp = new AngularNodeAppEngine();
  * Add proxy middleware for API calls in SSR mode
  */
 app.use('/api', createProxyMiddleware({
-  target: 'https://api.minutemail.co',
+  target: 'https://minutemail.co',
   changeOrigin: true,
   secure: true,
-  logLevel: 'debug',
   onError: (err: Error, req: Request, res: Response) => {
     console.error('Proxy error:', err);
     res.status(500).json({ error: 'Proxy error' });
   },
   onProxyReq: (proxyReq: ClientRequest, req: Request, res: Response) => {
     console.log('Proxying request:', req.method, req.url);
+  }
+} as Options));
+
+/**
+ * Add proxy middleware for file attachments
+ */
+app.use('/files', createProxyMiddleware({
+  target: 'https://minutemail.co',
+  changeOrigin: true,
+  secure: true,
+  onError: (err: Error, req: Request, res: Response) => {
+    console.error('File proxy error:', err);
+    res.status(500).json({ error: 'File proxy error' });
+  },
+  onProxyReq: (proxyReq: ClientRequest, req: Request, res: Response) => {
+    console.log('Proxying file request:', req.method, req.url);
   }
 } as Options));
 

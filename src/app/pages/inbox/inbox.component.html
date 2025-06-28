@@ -154,6 +154,7 @@
   <app-mail-viewer
     [mail]="selectedMail()"
     [isOpen]="isMailViewerOpen()"
+    [aliasName]="alias()"
     (onClose)="closeMail()"
   ></app-mail-viewer>
 

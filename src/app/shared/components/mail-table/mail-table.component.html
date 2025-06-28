@@ -68,8 +68,16 @@
               <td class="px-6 py-4">
                 <div class="flex items-center space-x-2">
                   <div class="min-w-0 flex-1">
-                    <div class="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
-                      {{ mail.subject || '(No subject)' }}
+                    <div class="flex items-center space-x-2">
+                      <div class="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
+                        {{ mail.subject || '(No subject)' }}
+                      </div>
+                      @if (mail.attachments && mail.attachments.length > 0) {
+                        <div class="flex items-center space-x-1">
+                          <app-icon name="paperclip" [size]="14" class="text-gray-500 dark:text-gray-400"></app-icon>
+                          <span class="text-xs text-gray-500 dark:text-gray-400">{{ mail.attachments.length }}</span>
+                        </div>
+                      }
                     </div>
                     <div class="text-xs text-gray-500 dark:text-gray-400 truncate mt-1">
                       {{ getEmailPreview(mail.body) }}
