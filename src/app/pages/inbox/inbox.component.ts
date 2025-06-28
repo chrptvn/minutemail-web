@@ -70,7 +70,12 @@ export class InboxComponent implements OnInit, OnDestroy {
         this.alias.set(alias);
         this.fullAlias.set(`${alias}@minutemail.co`);
         this.aliasService.setCurrentAlias(this.fullAlias());
-        this.loadMails(false)
+        
+        // Set a default expiration time (1 hour from now) as fallback
+        const defaultExpiration = new Date(Date.now() + 60 * 60 * 1000).toISOString();
+        this.expiresAt.set(defaultExpiration);
+        
+        this.loadMails(false);
         this.startPolling();
       } else {
         window.location.href = `/`;
@@ -113,8 +118,10 @@ export class InboxComponent implements OnInit, OnDestroy {
         this.mails.set(newMails);
         this.lastUpdated.set(new Date());
 
+        // Update expiration time if provided by API
         if (response.expiresAt) {
           this.expiresAt.set(response.expiresAt);
+          console.log('Updated expiresAt from API:', response.expiresAt);
         }
       });
   }
@@ -129,11 +136,21 @@ export class InboxComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response) => {
+          console.log('API Response:', response);
+          
           this.mails.set(response.mails || []);
           this.lastUpdated.set(new Date());
 
+          // Handle expiration time from API response
           if (response.expiresAt) {
             this.expiresAt.set(response.expiresAt);
+            console.log('Set expiresAt from API:', response.expiresAt);
+          } else {
+            // If API doesn't provide expiration, calculate based on typical email service behavior
+            // Most temporary email services expire after 1 hour
+            const calculatedExpiration = new Date(Date.now() + 60 * 60 * 1000).toISOString();
+            this.expiresAt.set(calculatedExpiration);
+            console.log('Set calculated expiresAt:', calculatedExpiration);
           }
 
           this.loading.set(false);
