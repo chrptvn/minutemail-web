@@ -1,7 +1,7 @@
 # ------------------
 # 1) Build Stage
 # ------------------
-FROM node:18 AS builder
+FROM node:22 AS builder
 
 WORKDIR /app
 
@@ -20,7 +20,7 @@ RUN npm run build:production
 # ------------------
 # 2) Runtime Stage
 # ------------------
-FROM node:18 AS runner
+FROM node:22 AS runner
 
 WORKDIR /usr/src/app
 
