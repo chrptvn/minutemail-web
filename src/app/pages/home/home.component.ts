@@ -30,7 +30,6 @@ export class HomeComponent implements OnInit {
   copying = signal(false);
   copied = signal(false);
   expiresAt = signal<string | undefined>(undefined);
-
   showToast = signal(false);
   toastType = signal<'success' | 'error' | 'warning' | 'info'>('info');
   toastMessage = signal('');

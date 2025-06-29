@@ -118,7 +118,6 @@ export class InboxComponent implements OnInit, OnDestroy {
 
         this.mails.set(newMails);
         this.lastUpdated.set(new Date());
-        console.log('Polling response:', response);
         // Update expiration time if provided by API
         if (response.expireAt) {
           this.expiresAt.set(response.expireAt);
