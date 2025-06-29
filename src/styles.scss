@@ -32,6 +32,10 @@ html {
   color: var(--text-color);
   /* Remove transitions by default to prevent flashing */
   transition: none !important;
+  /* Force proper mobile rendering */
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
@@ -47,6 +51,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  /* Prevent iOS zoom on input focus */
+  font-size: 16px;
+  /* Disable iOS bounce scrolling */
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: none;
 }
 
 /* Ensure app root takes full height */
@@ -197,6 +206,12 @@ html:not(.no-transition) .input {
     padding-left: 1rem;
     padding-right: 1rem;
   }
+
+  /* Force hide desktop-only elements */
+  .hidden.md\:grid,
+  .md\:grid {
+    display: none !important;
+  }
 }
 
 /* Very small screens */
@@ -262,5 +277,45 @@ html:not(.no-transition) .input {
   
   .safe-area-inset-right {
     padding-right: max(1rem, env(safe-area-inset-right));
+  }
+}
+
+/* iOS specific fixes */
+@supports (-webkit-touch-callout: none) {
+  /* iOS Safari specific styles */
+  body {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  
+  input, textarea, [contenteditable] {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+  
+  /* Prevent iOS zoom */
+  input[type="text"], input[type="email"], textarea {
+    font-size: 16px !important;
+  }
+
+  /* Force mobile styles on iOS */
+  .hidden.md\:grid,
+  .md\:grid {
+    display: none !important;
+  }
+}
+
+/* Force mobile styles for devices with mobile user agents */
+.mobile-device .hidden.md\:grid,
+.mobile-device .md\:grid {
+  display: none !important;
+}
+
+/* Additional mobile detection fallback */
+@media screen and (max-device-width: 768px) {
+  .hidden.md\:grid,
+  .md\:grid {
+    display: none !important;
   }
 }
