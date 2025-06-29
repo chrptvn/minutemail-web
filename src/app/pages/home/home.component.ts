@@ -9,7 +9,7 @@ import { VpnBannerComponent } from '../../shared/components/vpn-banner/vpn-banne
 import { ButtonComponent } from '../../shared/components/ui/button.component';
 import { TablerIconComponent } from '../../shared/components/icons/tabler-icons.component';
 import { ToastComponent } from '../../shared/components/ui/toast.component';
-import { CountdownComponent } from '../../shared/components/ui/countdown.component';
+import {ApiService} from '../../core/services/api.service';
 
 @Component({
   selector: 'app-home',
@@ -21,7 +21,6 @@ import { CountdownComponent } from '../../shared/components/ui/countdown.compone
     ButtonComponent,
     TablerIconComponent,
     ToastComponent,
-    CountdownComponent
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
@@ -39,6 +38,7 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private aliasService: AliasService,
+    private apiService: ApiService,
     private clipboardService: ClipboardService,
     public themeService: ThemeService,
     private router: Router
@@ -46,8 +46,14 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     const existingAlias = this.aliasService.getCurrentAlias();
+
     if (existingAlias) {
-      this.currentAlias.set(existingAlias);
+      this.apiService.getMails(existingAlias).subscribe({
+        next: (result) => {
+          this.expiresAt.set(result.expireAt ? new Date(result.expireAt).toISOString() : undefined);
+          this.currentAlias.set(existingAlias + '@minutemail.co');
+        }
+      })
     }
   }
 
@@ -102,8 +108,6 @@ export class HomeComponent implements OnInit {
       } else {
         this.showToastMessage('error', 'Failed to copy to clipboard');
       }
-    } catch (error) {
-      this.showToastMessage('error', 'Failed to copy to clipboard');
     } finally {
       this.copying.set(false);
     }

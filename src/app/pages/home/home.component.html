@@ -11,13 +11,6 @@
         </div>
 
         <div class="flex items-center space-x-3">
-          @if (currentAlias() && expiresAt()) {
-            <div class="hidden sm:flex items-center space-x-2 px-3 py-1.5 bg-gray-100 dark:bg-dark-800 rounded-lg">
-              <app-icon name="clock" [size]="16" class="text-gray-500 dark:text-gray-400"></app-icon>
-              <span class="text-sm text-gray-600 dark:text-gray-400">Expires in</span>
-              <app-countdown [expiresAt]="expiresAt()" class="text-sm font-medium"></app-countdown>
-            </div>
-          }
 
           <app-button
             variant="ghost"
