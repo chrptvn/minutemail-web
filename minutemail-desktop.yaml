@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minutemail-desktop
+  labels:
+    app: minutemail-desktop
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minutemail-desktop
+  template:
+    metadata:
+      labels:
+        app: minutemail-desktop
+    spec:
+      imagePullSecrets:
+        - name: dockerhub-secret
+      containers:
+        - name: minutemail-desktop
+          image: chrptvn/minutemail-desktop:1.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 4000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minutemail-desktop
+spec:
+  type: ClusterIP
+  selector:
+    app: minutemail-desktop
+  ports:
+    - port: 4000
+      targetPort: 4000
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: minutemail-desktop-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/enable-cors:            "true"
+    nginx.ingress.kubernetes.io/cors-allow-methods:     "GET, POST, OPTIONS"
+    nginx.ingress.kubernetes.io/cors-allow-headers:     "Content-Type,Authorization"
+    nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+    nginx.ingress.kubernetes.io/cors-max-age:           "86400"
+
+spec:
+  ingressClassName: nginx
+
+  tls:
+    - hosts:
+        - minutemail.co
+      secretName: api-minutemail-tls
+
+  rules:
+    - host: minutemail.co
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: minutemail-desktop
+                port:
+                  number: 4000
