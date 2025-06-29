@@ -15,7 +15,7 @@ RUN npm ci --legacy-peer-deps
 COPY . .
 
 # Build the SSR output
-RUN npm run build:production
+RUN npm run build:ssr
 
 # ------------------
 # 2) Runtime Stage
