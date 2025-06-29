@@ -16,7 +16,7 @@ import { CommonModule } from '@angular/common';
       <ng-content></ng-content>
       @if (loading) {
         <div class="ml-2 animate-spin">
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none">
+          <svg class="w-3 h-3 sm:w-4 sm:h-4" viewBox="0 0 24 24" fill="none">
             <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" class="opacity-25"></circle>
             <path fill="currentColor" class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
@@ -45,9 +45,9 @@ export class ButtonComponent {
     };
 
     const sizeClasses = {
-      sm: 'px-3 py-1.5 text-sm',
-      md: 'px-4 py-2 text-sm',
-      lg: 'px-6 py-3 text-base'
+      sm: 'px-2.5 py-1.5 text-xs sm:px-3 sm:py-1.5 sm:text-sm',
+      md: 'px-3 py-2 text-sm sm:px-4 sm:py-2 sm:text-sm',
+      lg: 'px-4 py-2.5 text-sm sm:px-6 sm:py-3 sm:text-base'
     };
 
     return `${baseClasses} ${variantClasses[this.variant]} ${sizeClasses[this.size]}`;

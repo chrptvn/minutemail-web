@@ -33,6 +33,7 @@
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
+/* Mobile optimizations */
 @media (max-width: 640px) {
   .vpn-banner {
     padding: 1rem;
@@ -40,14 +41,49 @@
   
   .vpn-banner h3 {
     font-size: 1rem;
+    line-height: 1.3;
   }
   
   .vpn-banner p {
     font-size: 0.875rem;
+    line-height: 1.4;
   }
   
   .vpn-cta {
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0.75rem;
     font-size: 0.875rem;
+    min-height: 2.5rem;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 480px) {
+  .vpn-banner {
+    padding: 0.75rem;
+  }
+  
+  .vpn-banner h3 {
+    font-size: 0.9rem;
+  }
+  
+  .vpn-banner p {
+    font-size: 0.8rem;
+  }
+  
+  .vpn-cta {
+    width: 100%;
+    justify-content: center;
+    padding: 0.625rem;
+  }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+  .vpn-cta:hover {
+    transform: none;
+  }
+  
+  .vpn-cta:active {
+    transform: scale(0.98);
   }
 }

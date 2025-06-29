@@ -7,13 +7,13 @@
       aria-hidden="true"
     ></div>
     
-    <!-- Drawer - Properly constrained -->
-    <div class="absolute right-0 top-0 h-full w-full max-w-2xl bg-white dark:bg-dark-900 shadow-2xl mail-viewer-drawer">
+    <!-- Drawer - Mobile responsive -->
+    <div class="absolute right-0 top-0 h-full w-full sm:max-w-2xl bg-white dark:bg-dark-900 shadow-2xl mail-viewer-drawer">
       <div class="flex h-full flex-col">
         <!-- Header - Fixed -->
-        <div class="flex-shrink-0 border-b border-gray-200 dark:border-dark-700 px-6 py-4 bg-white dark:bg-dark-900">
+        <div class="flex-shrink-0 border-b border-gray-200 dark:border-dark-700 px-4 py-3 sm:px-6 sm:py-4 bg-white dark:bg-dark-900">
           <div class="flex items-center justify-between">
-            <h2 [id]="'mail-title-' + mail.id" class="text-lg font-semibold text-gray-900 dark:text-gray-100 truncate pr-4">
+            <h2 [id]="'mail-title-' + mail.id" class="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100 truncate pr-4">
               {{ mail.subject || '(No subject)' }}
             </h2>
             <app-button
@@ -23,24 +23,24 @@
               ariaLabel="Close email viewer"
               class="flex-shrink-0"
             >
-              <app-icon name="x" [size]="20" class="text-gray-700 dark:text-gray-300"></app-icon>
+              <app-icon name="x" [size]="18" class="text-gray-700 dark:text-gray-300 sm:w-5 sm:h-5"></app-icon>
             </app-button>
           </div>
           
-          <div class="mt-3 space-y-2">
-            <div class="flex items-start text-sm">
-              <span class="font-medium text-gray-700 dark:text-gray-300 mr-3 flex-shrink-0 w-20">From:</span>
+          <div class="mt-2 sm:mt-3 space-y-1 sm:space-y-2">
+            <div class="flex items-start text-xs sm:text-sm">
+              <span class="font-medium text-gray-700 dark:text-gray-300 mr-2 sm:mr-3 flex-shrink-0 w-16 sm:w-20">From:</span>
               <span class="text-gray-900 dark:text-gray-100 break-all">{{ mail.from }}</span>
             </div>
-            <div class="flex items-center text-sm">
-              <span class="font-medium text-gray-700 dark:text-gray-300 mr-3 flex-shrink-0 w-20">Received:</span>
+            <div class="flex items-center text-xs sm:text-sm">
+              <span class="font-medium text-gray-700 dark:text-gray-300 mr-2 sm:mr-3 flex-shrink-0 w-16 sm:w-20">Received:</span>
               <span class="text-gray-600 dark:text-gray-400">{{ formatDate(mail.received_at) }}</span>
             </div>
             @if (mail.attachments && mail.attachments.length > 0) {
-              <div class="flex items-center text-sm">
-                <span class="font-medium text-gray-700 dark:text-gray-300 mr-3 flex-shrink-0 w-20">Attachments:</span>
+              <div class="flex items-center text-xs sm:text-sm">
+                <span class="font-medium text-gray-700 dark:text-gray-300 mr-2 sm:mr-3 flex-shrink-0 w-16 sm:w-20">Attachments:</span>
                 <div class="flex items-center space-x-1">
-                  <app-icon name="paperclip" [size]="14" class="text-gray-500 dark:text-gray-400"></app-icon>
+                  <app-icon name="paperclip" [size]="12" class="text-gray-500 dark:text-gray-400 sm:w-3.5 sm:h-3.5"></app-icon>
                   <span class="text-gray-600 dark:text-gray-400">{{ mail.attachments.length }} file{{ mail.attachments.length === 1 ? '' : 's' }}</span>
                 </div>
               </div>
@@ -50,8 +50,8 @@
         
         <!-- Content - Scrollable -->
         <div class="flex-1 overflow-y-auto bg-gray-50 dark:bg-dark-950">
-          <div class="p-6">
-            <div class="bg-white dark:bg-dark-900 rounded-lg border border-gray-200 dark:border-dark-700 p-6">
+          <div class="p-4 sm:p-6">
+            <div class="bg-white dark:bg-dark-900 rounded-lg border border-gray-200 dark:border-dark-700 p-4 sm:p-6">
               @if (isHtmlContent(mail.body)) {
                 <div 
                   [innerHTML]="getSanitizedHtml(mail.body)" 
@@ -59,7 +59,7 @@
                 ></div>
               } @else {
                 <div class="mail-content">
-                  <pre class="whitespace-pre-wrap font-sans text-sm text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-dark-800 p-4 rounded-lg border border-gray-200 dark:border-dark-700 leading-relaxed">{{ mail.body }}</pre>
+                  <pre class="whitespace-pre-wrap font-sans text-xs sm:text-sm text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-dark-800 p-3 sm:p-4 rounded-lg border border-gray-200 dark:border-dark-700 leading-relaxed">{{ mail.body }}</pre>
                 </div>
               }
             </div>
@@ -74,14 +74,15 @@
         </div>
         
         <!-- Footer - Fixed -->
-        <div class="flex-shrink-0 border-t border-gray-200 dark:border-dark-700 px-6 py-4 bg-white dark:bg-dark-900">
+        <div class="flex-shrink-0 border-t border-gray-200 dark:border-dark-700 px-4 py-3 sm:px-6 sm:py-4 bg-white dark:bg-dark-900">
           <div class="flex justify-end">
             <app-button
               variant="secondary"
               size="sm"
               (onClick)="closeModal()"
+              class="w-full sm:w-auto"
             >
-              <app-icon name="x" [size]="16" class="mr-2"></app-icon>
+              <app-icon name="x" [size]="14" class="mr-2 sm:w-4 sm:h-4"></app-icon>
               Close
             </app-button>
           </div>

@@ -1,4 +1,4 @@
-/* Mail viewer specific styles - Enhanced for SSR */
+/* Mail viewer specific styles - Enhanced for SSR and Mobile */
 .mail-viewer-overlay {
   /* Ensure proper stacking */
   position: fixed;
@@ -22,8 +22,14 @@
   right: 0;
   top: 0;
   height: 100%;
-  max-width: 42rem; /* 672px - slightly larger for better readability */
   width: 100%;
+}
+
+/* Desktop specific styles */
+@media (min-width: 640px) {
+  .mail-viewer-drawer {
+    max-width: 42rem; /* 672px - slightly larger for better readability */
+  }
 }
 
 .dark .mail-viewer-drawer {
@@ -37,11 +43,8 @@
 .mail-content pre {
   background: rgba(36, 200, 219, 0.05) !important;
   border-radius: 0.5rem;
-  padding: 1rem;
   border-left: 3px solid var(--primary-color);
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
-  font-size: 0.875rem;
-  line-height: 1.5;
   overflow-x: auto;
   white-space: pre-wrap;
   word-wrap: break-word;
@@ -134,8 +137,8 @@
   }
 }
 
-/* Responsive improvements */
-@media (max-width: 768px) {
+/* Mobile specific improvements */
+@media (max-width: 640px) {
   .mail-viewer-drawer {
     max-width: 100%;
     width: 100%;
@@ -148,18 +151,38 @@
   .mail-content pre {
     font-size: 0.75rem;
     padding: 0.75rem;
+    line-height: 1.4;
+  }
+
+  /* Improve readability on small screens */
+  .prose {
+    font-size: 0.875rem;
+  }
+
+  .prose h1, .prose h2, .prose h3 {
+    font-size: 1.125rem;
+  }
+
+  .prose h4, .prose h5, .prose h6 {
+    font-size: 1rem;
   }
 }
 
-@media (max-width: 640px) {
-  .mail-viewer-drawer .px-6 {
-    padding-left: 1rem;
-    padding-right: 1rem;
+/* Very small screens */
+@media (max-width: 480px) {
+  .mail-viewer-drawer .px-4 {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
   }
   
-  .mail-viewer-drawer .py-4 {
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
+  .mail-viewer-drawer .py-3 {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .mail-content pre {
+    font-size: 0.7rem;
+    padding: 0.5rem;
   }
 }
 
@@ -187,4 +210,12 @@
 
 .dark .mail-viewer-drawer .text-gray-700 {
   color: rgb(209 213 219) !important;
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+  .mail-viewer-drawer button {
+    min-height: 2.75rem;
+    min-width: 2.75rem;
+  }
 }

@@ -1,19 +1,19 @@
 <!-- src/app/components/address-card/address-card.component.html -->
 <app-card customClass="animate-fade-in">
-  <div class="text-center space-y-4">
-    <div class="space-y-2">
-      <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
+  <div class="text-center space-y-3 sm:space-y-4">
+    <div class="space-y-1 sm:space-y-2">
+      <h2 class="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100">
         Your Temporary Email
       </h2>
-      <p class="text-sm text-gray-600 dark:text-gray-400">
+      <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
         Use this address to receive emails anonymously
       </p>
     </div>
 
     @if (alias) {
-      <div class="email-display rounded-lg p-4">
-        <div class="flex items-center justify-between">
-          <code class="text-sm font-mono break-all text-gray-900 dark:text-gray-100">
+      <div class="email-display rounded-lg p-3 sm:p-4">
+        <div class="flex items-center justify-between gap-2">
+          <code class="text-xs sm:text-sm font-mono break-all text-gray-900 dark:text-gray-100 flex-1 min-w-0">
             {{ alias }}
           </code>
           <app-button
@@ -22,12 +22,12 @@
             [loading]="copying"
             (onClick)="onCopy.emit()"
             ariaLabel="Copy email address"
-            class="ml-2 flex-shrink-0 copy-button"
+            class="flex-shrink-0 copy-button"
           >
             @if (copied) {
-              <app-icon name="check" [size]="16" class="text-green-500"></app-icon>
+              <app-icon name="check" [size]="14" class="text-green-500 sm:w-4 sm:h-4"></app-icon>
             } @else {
-              <app-icon name="copy" [size]="16"></app-icon>
+              <app-icon name="copy" [size]="14" class="sm:w-4 sm:h-4"></app-icon>
             }
           </app-button>
         </div>
@@ -37,8 +37,8 @@
         <app-countdown [expiresAt]="expiresAt"></app-countdown>
       </div>
     } @else {
-      <div class="space-y-4">
-        <p class="text-gray-600 dark:text-gray-400">
+      <div class="space-y-3 sm:space-y-4">
+        <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">
           Generate a temporary email address to get started
         </p>
         <app-button
@@ -47,24 +47,25 @@
           [loading]="generating"
           (onClick)="onGenerate.emit()"
           ariaLabel="Generate new email address"
-          class="generate-button"
+          class="generate-button w-full sm:w-auto"
         >
-          <app-icon name="mail" [size]="20" class="mr-2"></app-icon>
+          <app-icon name="mail" [size]="18" class="mr-2 sm:w-5 sm:h-5"></app-icon>
           Generate Email Address
         </app-button>
       </div>
     }
 
     @if (alias) {
-      <div class="flex justify-center action-buttons">
+      <div class="flex flex-col sm:flex-row justify-center action-buttons gap-2 sm:gap-3">
         <app-button
           variant="secondary"
           size="sm"
           [loading]="generating"
           (onClick)="onGenerate.emit()"
           ariaLabel="Generate new email address"
+          class="w-full sm:w-auto"
         >
-          <app-icon name="refresh" [size]="16" class="mr-2"></app-icon>
+          <app-icon name="refresh" [size]="14" class="mr-2 sm:w-4 sm:h-4"></app-icon>
           New Address
         </app-button>
         <app-button
@@ -72,8 +73,9 @@
           size="sm"
           (onClick)="onViewInbox.emit()"
           ariaLabel="View inbox"
+          class="w-full sm:w-auto"
         >
-          <app-icon name="mail" [size]="16" class="mr-2"></app-icon>
+          <app-icon name="mail" [size]="14" class="mr-2 sm:w-4 sm:h-4"></app-icon>
           View Inbox
         </app-button>
       </div>

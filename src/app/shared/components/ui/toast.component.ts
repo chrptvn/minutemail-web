@@ -10,19 +10,19 @@ import { TablerIconComponent } from '../icons/tabler-icons.component';
     <div [class]="toastClasses" class="animate-slide-in">
       <div class="flex items-start">
         <div class="flex-shrink-0">
-          <app-icon [name]="iconName" [size]="20" [class]="iconClasses"></app-icon>
+          <app-icon [name]="iconName" [size]="18" [class]="iconClasses" class="sm:w-5 sm:h-5"></app-icon>
         </div>
-        <div class="ml-3 flex-1">
+        <div class="ml-2 sm:ml-3 flex-1">
           <p [class]="messageClasses">{{ message }}</p>
         </div>
-        <div class="ml-4 flex-shrink-0">
+        <div class="ml-2 sm:ml-4 flex-shrink-0">
           <button
             type="button"
-            class="inline-flex text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 focus-ring rounded"
+            class="inline-flex text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 focus-ring rounded p-1"
             (click)="onClose.emit()"
             aria-label="Close notification"
           >
-            <app-icon name="x" [size]="20"></app-icon>
+            <app-icon name="x" [size]="16" class="sm:w-5 sm:h-5"></app-icon>
           </button>
         </div>
       </div>
@@ -42,7 +42,7 @@ export class ToastComponent {
       warning: 'border-l-4 border-yellow-400',
       info: 'border-l-4 border-blue-400'
     };
-    return `${baseClasses} ${typeClasses[this.type]} p-4`;
+    return `${baseClasses} ${typeClasses[this.type]} p-3 sm:p-4`;
   }
 
   get iconName(): string {
@@ -66,6 +66,6 @@ export class ToastComponent {
   }
 
   get messageClasses(): string {
-    return 'text-sm text-gray-900 dark:text-gray-100';
+    return 'text-xs sm:text-sm text-gray-900 dark:text-gray-100';
   }
 }

@@ -7,8 +7,8 @@ import { TablerIconComponent } from '../icons/tabler-icons.component';
   standalone: true,
   imports: [CommonModule, TablerIconComponent],
   template: `
-    <div class="flex items-center space-x-2 text-sm">
-      <app-icon name="clock" [size]="16" class="text-gray-500 dark:text-gray-400"></app-icon>
+    <div class="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm">
+      <app-icon name="clock" [size]="14" class="text-gray-500 dark:text-gray-400 sm:w-4 sm:h-4"></app-icon>
       <span [class]="textClasses">
         @if (timeLeft() > 0) {
           Expires in {{ formatTime(timeLeft()) }}

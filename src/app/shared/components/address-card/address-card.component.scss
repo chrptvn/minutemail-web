@@ -4,7 +4,6 @@
   background: linear-gradient(135deg, rgba(36, 200, 219, 0.1) 0%, rgba(36, 200, 219, 0.05) 100%);
   border: 2px dashed rgba(36, 200, 219, 0.3);
   transition: all 0.3s ease;
-  padding: 0.5em;
 }
 
 .email-display:hover {
@@ -14,6 +13,7 @@
 
 .copy-button {
   transition: all 0.2s ease;
+  padding: 0.375rem;
 }
 
 .copy-button:hover {
@@ -35,15 +35,78 @@
   gap: 0.75rem;
 }
 
+/* Mobile optimizations */
 @media (max-width: 640px) {
-  .action-buttons {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
   .email-display {
     padding: 0.75rem;
   }
+  
   .email-display code {
     font-size: 0.75rem;
+    line-height: 1.4;
+  }
+
+  .copy-button {
+    padding: 0.5rem;
+    min-width: 2rem;
+    min-height: 2rem;
+  }
+
+  .action-buttons {
+    gap: 0.5rem;
+  }
+
+  /* Ensure buttons are properly sized on mobile */
+  .action-buttons button {
+    min-height: 2.5rem;
+    font-size: 0.875rem;
+  }
+
+  .generate-button {
+    min-height: 3rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 480px) {
+  .email-display {
+    padding: 0.5rem;
+  }
+
+  .email-display code {
+    font-size: 0.7rem;
+  }
+
+  .copy-button {
+    padding: 0.375rem;
+    min-width: 1.75rem;
+    min-height: 1.75rem;
+  }
+}
+
+/* Ensure proper text wrapping */
+.email-display code {
+  word-break: break-all;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+/* Improve button accessibility on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .copy-button:hover {
+    transform: none;
+  }
+  
+  .generate-button:hover {
+    transform: none;
+  }
+  
+  .copy-button:active {
+    transform: scale(0.95);
+  }
+  
+  .generate-button:active {
+    transform: scale(0.98);
   }
 }

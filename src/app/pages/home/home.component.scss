@@ -15,12 +15,57 @@
   background: linear-gradient(135deg, var(--primary-color) 0%, rgba(36, 200, 219, 0.8) 100%);
 }
 
+/* Mobile-specific optimizations */
 @media (max-width: 768px) {
   .hero-title {
-    font-size: 2.5rem;
+    font-size: 2rem;
+    line-height: 1.2;
   }
   
   .hero-description {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  /* Ensure proper spacing on mobile */
+  .main-content {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+
+  /* Optimize header for mobile */
+  .mobile-header {
+    height: 3.5rem;
+  }
+
+  .mobile-header h1 {
     font-size: 1.125rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-title {
+    font-size: 1.75rem;
+  }
+  
+  .hero-description {
+    font-size: 0.9rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  /* Compact spacing for small screens */
+  .main-content {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+}
+
+/* Ensure toast notifications are properly positioned on mobile */
+@media (max-width: 640px) {
+  .toast-container {
+    left: 1rem !important;
+    right: 1rem !important;
+    bottom: 1rem !important;
   }
 }

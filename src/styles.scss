@@ -43,6 +43,10 @@ body {
   transition: none !important;
   /* Prevent flash of unstyled content */
   min-height: 100vh;
+  /* Improve text rendering on mobile */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 /* Ensure app root takes full height */
@@ -85,7 +89,7 @@ html:not(.no-transition) .input {
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -94,11 +98,18 @@ html:not(.no-transition) .input {
 
 ::-webkit-scrollbar-thumb {
   background: var(--border-color);
-  border-radius: 4px;
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-muted);
+}
+
+/* Mobile scrollbar improvements */
+@media (max-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
 }
 
 /* Focus styles */
@@ -166,4 +177,90 @@ html:not(.no-transition) .input {
 
 .email-display code {
   color: var(--text-color) !important;
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 768px) {
+  /* Improve touch targets */
+  button, a, [role="button"] {
+    min-height: 2.5rem;
+    min-width: 2.5rem;
+  }
+
+  /* Improve text readability */
+  body {
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+
+  /* Optimize spacing */
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 480px) {
+  /* Further optimize for small screens */
+  button, a, [role="button"] {
+    min-height: 2.25rem;
+    min-width: 2.25rem;
+  }
+
+  /* Compact spacing */
+  .container {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  /* Remove hover effects on touch devices */
+  .hover\:bg-gray-100:hover {
+    background-color: inherit;
+  }
+  
+  .hover\:bg-gray-300:hover {
+    background-color: inherit;
+  }
+  
+  /* Add active states for better feedback */
+  button:active,
+  [role="button"]:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+  }
+}
+
+/* Improve accessibility */
+@media (prefers-contrast: high) {
+  :root {
+    --border-color: #000000;
+    --text-muted: #000000;
+  }
+  
+  .dark {
+    --border-color: #ffffff;
+    --text-muted: #ffffff;
+  }
+}
+
+/* Safe area support for mobile devices with notches */
+@supports (padding: max(0px)) {
+  .safe-area-inset-top {
+    padding-top: max(1rem, env(safe-area-inset-top));
+  }
+  
+  .safe-area-inset-bottom {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+  
+  .safe-area-inset-left {
+    padding-left: max(1rem, env(safe-area-inset-left));
+  }
+  
+  .safe-area-inset-right {
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
 }
