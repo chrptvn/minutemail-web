@@ -43,7 +43,7 @@
 .mail-content pre {
   background: rgba(36, 200, 219, 0.05) !important;
   border-radius: 0.5rem;
-  border-left: 3px solid var(--primary-color);
+  /* Removed: border-left: 3px solid var(--primary-color); */
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
   overflow-x: auto;
   white-space: pre-wrap;
@@ -114,7 +114,7 @@
   border-radius: 0.5rem;
   padding: 1rem;
   overflow-x: auto;
-  border-left: 3px solid var(--primary-color);
+  /* Removed: border-left: 3px solid var(--primary-color); */
 }
 
 .dark .prose pre {
