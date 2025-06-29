@@ -137,15 +137,12 @@ export class InboxComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response) => {
-          console.log('API Response:', response);
-
           this.mails.set(response.mails || []);
           this.lastUpdated.set(new Date());
 
           // Handle expiration time from API response
           if (response.expireAt) {
             this.expiresAt.set(response.expireAt);
-            console.log('Set expiresAt from API:', response.expireAt);
           } else {
             // If API doesn't provide expiration, calculate based on typical email service behavior
             // Most temporary email services expire after 1 hour

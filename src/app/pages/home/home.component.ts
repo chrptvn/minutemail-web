@@ -1,6 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
 import { AliasService } from '../../core/services/alias.service';
 import { ClipboardService } from '../../core/services/clipboard.service';
 import { ThemeService } from '../../core/services/theme.service';
@@ -41,7 +40,6 @@ export class HomeComponent implements OnInit {
     private apiService: ApiService,
     private clipboardService: ClipboardService,
     public themeService: ThemeService,
-    private router: Router
   ) {}
 
   ngOnInit() {
@@ -50,8 +48,11 @@ export class HomeComponent implements OnInit {
     if (existingAlias) {
       this.apiService.getMails(existingAlias).subscribe({
         next: (result) => {
-          this.expiresAt.set(result.expireAt ? new Date(result.expireAt).toISOString() : undefined);
-          this.currentAlias.set(existingAlias + '@minutemail.co');
+          const isExpired = result.expireAt && new Date(result.expireAt) < new Date();
+          if (!isExpired) {
+            this.expiresAt.set(result.expireAt ? new Date(result.expireAt).toISOString() : undefined);
+            this.currentAlias.set(existingAlias + '@minutemail.co');
+          }
         }
       })
     }
