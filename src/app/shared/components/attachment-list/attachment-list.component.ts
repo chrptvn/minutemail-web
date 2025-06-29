@@ -41,17 +41,6 @@ import { AttachmentService } from '../../../core/services/attachment.service';
               </div>
               
               <div class="flex items-center space-x-2 flex-shrink-0">
-                @if (attachmentService.isImage(attachment)) {
-                  <app-button
-                    variant="ghost"
-                    size="sm"
-                    (onClick)="viewAttachment(attachment)"
-                    ariaLabel="View image"
-                  >
-                    <app-icon name="image" [size]="16"></app-icon>
-                  </app-button>
-                }
-                
                 <app-button
                   variant="ghost"
                   size="sm"
@@ -76,7 +65,7 @@ export class AttachmentListComponent {
   constructor(public attachmentService: AttachmentService) {}
 
   getFileTypeLabel(filename: string): string {
-    const extension = this.attachmentService.getFileExtension(filename).toUpperCase();
+    const extension = this.attachmentService.getFileExtension(filename).toLowerCase().toUpperCase();
     
     if (this.attachmentService.isImage(filename)) {
       return `${extension} Image`;
@@ -91,11 +80,6 @@ export class AttachmentListComponent {
     }
     
     return extension ? `${extension} File` : 'File';
-  }
-
-  viewAttachment(filename: string): void {
-    const url = this.attachmentService.getAttachmentUrl(this.aliasName, this.mailId, filename);
-    window.open(url, '_blank');
   }
 
   downloadAttachment(filename: string): void {
