@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <title>MinuteMail - Temporary Email Address</title>
   <base href="/">
-  
+
   <!-- Enhanced viewport for better iOS support -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <meta name="format-detection" content="telephone=no">
@@ -12,7 +12,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="MinuteMail">
-  
+
   <meta name="description" content="Get a temporary, disposable email address that expires automatically. Perfect for signups, downloads, and protecting your privacy.">
   <meta name="keywords" content="temporary email, disposable email, privacy, anonymous email, minutemail">
   <meta name="author" content="MinuteMail">
@@ -44,7 +44,7 @@
   <!-- Preload critical resources -->
   <link rel="preconnect" href="https://minutemail.co">
   <link rel="preconnect" href="https://api.minutemail.co">
-
+  <script defer data-domain="minutemail.co" src="https://plausible.minutemail.co/js/script.tagged-events.js"></script>
   <!-- Critical CSS for theme initialization and SSR -->
   <style>
     /* Prevent flash of unstyled content */
@@ -165,16 +165,16 @@
       .hidden.md\\:grid {
         display: none !important;
       }
-      
+
       .md\\:grid {
         display: none !important;
       }
-      
+
       /* Ensure proper font sizes */
       body {
         font-size: 16px !important;
       }
-      
+
       /* Improve touch targets */
       button, [role="button"], a {
         min-height: 44px;
@@ -190,12 +190,12 @@
         -webkit-user-select: none;
         user-select: none;
       }
-      
+
       input, textarea, [contenteditable] {
         -webkit-user-select: text;
         user-select: text;
       }
-      
+
       /* Prevent iOS zoom */
       input[type="text"], input[type="email"], textarea {
         font-size: 16px !important;
@@ -243,7 +243,7 @@
           .md\\:grid {
             display: none !important;
           }
-          
+
           @media screen and (max-width: 768px) {
             .hidden.md\\:grid,
             .md\\:grid {
@@ -260,11 +260,11 @@
       try {
         // Try cookie first (preferred method)
         let savedTheme = getCookie('minutemail_theme');
-        
+
         // Fallback to localStorage for existing users
         if (!savedTheme) {
           savedTheme = localStorage.getItem('minutemail_theme');
-          
+
           // If found in localStorage, migrate to cookie
           if (savedTheme) {
             const expires = new Date();
@@ -273,7 +273,7 @@
             localStorage.removeItem('minutemail_theme');
           }
         }
-        
+
         // Determine theme: use saved preference or default to dark
         const shouldUseDark = savedTheme ? savedTheme === 'dark' : true;
 
@@ -330,7 +330,7 @@
           viewport.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover');
         }
       }
-      
+
       // Apply fix on load and orientation change
       window.addEventListener('load', fixIOSViewport);
       window.addEventListener('orientationchange', function() {
