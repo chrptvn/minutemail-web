@@ -9,7 +9,6 @@ import { ThemeService } from '../../core/services/theme.service';
 import { Mail } from '../../core/models/mail.model';
 import { MailTableComponent } from '../../shared/components/mail-table/mail-table.component';
 import { MailViewerComponent } from '../../shared/components/mail-viewer/mail-viewer.component';
-import { FooterComponent } from '../../shared/components/footer/footer.component';
 import { CountdownComponent } from '../../shared/components/ui/countdown.component';
 import { ButtonComponent } from '../../shared/components/ui/button.component';
 import { TablerIconComponent } from '../../shared/components/icons/tabler-icons.component';
@@ -23,7 +22,6 @@ import { SpinnerComponent } from '../../shared/components/ui/spinner.component';
     CommonModule,
     MailTableComponent,
     MailViewerComponent,
-    FooterComponent,
     CountdownComponent,
     ButtonComponent,
     TablerIconComponent,
