@@ -48,6 +48,8 @@
           (onClick)="onGenerate.emit()"
           ariaLabel="Generate new email address"
           class="generate-button w-full sm:w-auto"
+          [dataEvent]="'Generate Email Address'"
+          [dataProps]="{ 'generation': generation }"
         >
           <app-icon name="mail" [size]="18" class="mr-2 sm:w-5 sm:h-5"></app-icon>
           Generate Email Address
@@ -64,6 +66,8 @@
           (onClick)="onGenerate.emit()"
           ariaLabel="Generate new email address"
           class="w-full sm:w-auto"
+          [dataEvent]="'Generate Email Address'"
+          [dataProps]="{ 'generation': generation }"
         >
           <app-icon name="refresh" [size]="14" class="mr-2 sm:w-4 sm:h-4"></app-icon>
           New Address

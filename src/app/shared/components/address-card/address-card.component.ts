@@ -22,4 +22,11 @@ export class AddressCardComponent {
   @Output() onGenerate = new EventEmitter<void>();
   @Output() onCopy = new EventEmitter<void>();
   @Output() onViewInbox = new EventEmitter<void>();
+
+  generation: number = 0;
+
+  generate() {
+    this.generation++;
+    this.onGenerate.emit();
+  }
 }
