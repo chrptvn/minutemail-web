@@ -1,5 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { AliasService } from '../../core/services/alias.service';
 import { ClipboardService } from '../../core/services/clipboard.service';
 import { ThemeService } from '../../core/services/theme.service';
@@ -35,6 +36,7 @@ export class HomeComponent implements OnInit {
   toastMessage = signal('');
 
   constructor(
+    private router: Router,
     private aliasService: AliasService,
     private apiService: ApiService,
     private clipboardService: ClipboardService,
@@ -115,7 +117,11 @@ export class HomeComponent implements OnInit {
 
   viewInbox() {
     const aliasName = this.aliasService.extractAliasFromEmail(this.currentAlias()!);
-    window.location.href = `/${aliasName}`;
+    this.router.navigate([`/${aliasName}`]);
+  }
+
+  goToPrivacy() {
+    this.router.navigate(['/privacy']);
   }
 
   toggleTheme() {

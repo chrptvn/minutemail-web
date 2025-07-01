@@ -60,6 +60,16 @@
           <app-button
             variant="ghost"
             size="sm"
+            (onClick)="goToPrivacy()"
+            ariaLabel="View privacy policy"
+            class="hidden sm:inline-flex"
+          >
+            <app-icon name="shield" [size]="18" class="text-gray-700 dark:text-gray-300 sm:w-5 sm:h-5"></app-icon>
+          </app-button>
+
+          <app-button
+            variant="ghost"
+            size="sm"
             (onClick)="toggleTheme()"
             [ariaLabel]="themeService.isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
           >
@@ -149,6 +159,20 @@
               <app-countdown [expiresAt]="expiresAt()" class="text-sm"></app-countdown>
             </div>
           }
+
+          <!-- Mobile privacy link -->
+          <div class="mt-3 sm:hidden">
+            <app-button
+              variant="ghost"
+              size="sm"
+              (onClick)="goToPrivacy()"
+              ariaLabel="View privacy policy"
+              class="text-xs"
+            >
+              <app-icon name="shield" [size]="14" class="mr-1"></app-icon>
+              Privacy Policy
+            </app-button>
+          </div>
         </div>
 
         <!-- Mail Table -->

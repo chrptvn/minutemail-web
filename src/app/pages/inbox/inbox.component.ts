@@ -78,7 +78,7 @@ export class InboxComponent implements OnInit, OnDestroy {
         this.loadMails(false);
         this.startPolling();
       } else {
-        window.location.href = `/`;
+        this.router.navigate(['/']);
       }
     });
   }
@@ -201,7 +201,11 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   goHome() {
-    window.location.href = `/`;
+    this.router.navigate(['/']);
+  }
+
+  goToPrivacy() {
+    this.router.navigate(['/privacy']);
   }
 
   toggleTheme() {

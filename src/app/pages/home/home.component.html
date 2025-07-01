@@ -14,6 +14,17 @@
           <app-button
             variant="ghost"
             size="sm"
+            (onClick)="goToPrivacy()"
+            ariaLabel="View privacy policy"
+            class="hidden sm:inline-flex"
+          >
+            <app-icon name="shield" [size]="18" class="mr-2"></app-icon>
+            Privacy
+          </app-button>
+          
+          <app-button
+            variant="ghost"
+            size="sm"
             (onClick)="toggleTheme()"
             [ariaLabel]="themeService.isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
           >
@@ -97,6 +108,22 @@
       <!-- VPN Banner -->
       <div class="max-w-2xl mx-auto mt-12 sm:mt-16">
         <app-vpn-banner></app-vpn-banner>
+      </div>
+
+      <!-- Footer Links - Mobile -->
+      <div class="sm:hidden mt-8 pt-6 border-t border-gray-200 dark:border-dark-700">
+        <div class="flex justify-center">
+          <app-button
+            variant="ghost"
+            size="sm"
+            (onClick)="goToPrivacy()"
+            ariaLabel="View privacy policy"
+            class="text-sm"
+          >
+            <app-icon name="shield" [size]="16" class="mr-2"></app-icon>
+            Privacy Policy
+          </app-button>
+        </div>
       </div>
     </div>
   </main>

@@ -1,0 +1,206 @@
+<div class="min-h-screen bg-gray-50 dark:bg-dark-950">
+  <!-- Header -->
+  <header class="bg-white dark:bg-dark-900 border-b border-gray-200 dark:border-dark-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14 sm:h-16">
+        <div class="flex items-center space-x-2 sm:space-x-4">
+          <app-button
+            variant="ghost"
+            size="sm"
+            (onClick)="goHome()"
+            ariaLabel="Go back to home"
+            class="flex-shrink-0"
+          >
+            <app-icon name="arrow-left" [size]="18" class="text-gray-700 dark:text-gray-300 sm:w-5 sm:h-5"></app-icon>
+          </app-button>
+          
+          <div class="flex items-center space-x-2 sm:space-x-3">
+            <img src="/minutemail64x64.png" alt="MinuteMail" class="w-8 h-8 sm:w-10 sm:h-10" />
+            <h1 class="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100">
+              MinuteMail
+            </h1>
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-2 sm:space-x-3">
+          <app-button
+            variant="ghost"
+            size="sm"
+            (onClick)="toggleTheme()"
+            [ariaLabel]="themeService.isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
+          >
+            @if (themeService.isDarkMode()) {
+              <app-icon name="sun" [size]="18" class="sm:w-5 sm:h-5"></app-icon>
+            } @else {
+              <app-icon name="moon" [size]="18" class="sm:w-5 sm:h-5"></app-icon>
+            }
+          </app-button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12">
+    <div class="bg-white dark:bg-dark-900 rounded-xl border border-gray-200 dark:border-dark-700 shadow-sm">
+      <div class="px-6 py-8 sm:px-8 sm:py-12">
+        <!-- Header -->
+        <div class="text-center mb-8 sm:mb-12">
+          <div class="w-16 h-16 mx-auto bg-primary-100 dark:bg-primary-900 rounded-xl flex items-center justify-center mb-4">
+            <app-icon name="shield" [size]="32" class="text-primary-600 dark:text-primary-400"></app-icon>
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+            Privacy Policy
+          </h1>
+          <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">
+            Last updated: January 2025
+          </p>
+        </div>
+
+        <!-- Content -->
+        <div class="prose prose-sm sm:prose max-w-none dark:prose-invert">
+          <section class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Our Commitment to Privacy</h2>
+            <p class="text-gray-700 dark:text-gray-300 mb-4">
+              MinuteMail is designed with privacy as our core principle. We provide temporary email addresses to protect your real email from spam, tracking, and unwanted communications. This privacy policy explains how we handle your data.
+            </p>
+          </section>
+
+          <section class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">What We Don't Collect</h2>
+            <ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2">
+              <li><strong>Personal Information:</strong> We don't require registration, so we don't collect names, real email addresses, or personal details</li>
+              <li><strong>Account Data:</strong> No usernames, passwords, or account profiles are created or stored</li>
+              <li><strong>Payment Information:</strong> Our service is completely free, so no payment data is collected</li>
+              <li><strong>Email Content Storage:</strong> Emails are automatically deleted when they expire</li>
+            </ul>
+          </section>
+
+          <section class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">What We Temporarily Store</h2>
+            <ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2">
+              <li><strong>Temporary Email Addresses:</strong> Generated aliases are stored only for their active lifetime</li>
+              <li><strong>Received Emails:</strong> Messages sent to your temporary address are stored temporarily and automatically deleted upon expiration</li>
+              <li><strong>Session Data:</strong> Your current temporary email is stored in your browser's session storage (not on our servers)</li>
+              <li><strong>Theme Preference:</strong> Your dark/light mode preference is stored locally in your browser</li>
+            </ul>
+          </section>
+
+          <section class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Automatic Data Deletion</h2>
+            <p class="text-gray-700 dark:text-gray-300 mb-4">
+              All temporary email addresses and their associated messages are automatically deleted after expiration. We don't maintain any permanent records of:
+            </p>
+            <ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2">
+              <li>Email content or attachments</li>
+              <li>Sender or recipient information</li>
+              <li>Usage patterns or access logs</li>
+              <li>IP addresses or location data</li>
+            </ul>
+          </section>
+
+          <section class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Technical Information</h2>
+            <p class="text-gray-700 dark:text-gray-300 mb-4">
+              To provide our service, we may temporarily process:
+            </p>
+            <ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2">
+              <li><strong>Server Logs:</strong> Basic technical logs for service operation (automatically deleted)</li>
+              <li><strong>Browser Data:</strong> Session storage and local storage for functionality (stays on your device)</li>
+              <li><strong>Cookies:</strong> Only essential cookies for theme preferences and basic functionality</li>
+            </ul>
+          </section>
+
+          <section class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Third-Party Services</h2>
+            <p class="text-gray-700 dark:text-gray-300 mb-4">
+              We use minimal third-party services:
+            </p>
+            <ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2">
+              <li><strong>Analytics:</strong> We use privacy-focused analytics (Plausible) that doesn't track individuals or use cookies</li>
+              <li><strong>CDN:</strong> Content delivery for faster loading (no personal data shared)</li>
+              <li><strong>Affiliate Links:</strong> Some privacy tool recommendations may include affiliate links (clearly marked)</li>
+            </ul>
+          </section>
+
+          <section class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Data Security</h2>
+            <p class="text-gray-700 dark:text-gray-300 mb-4">
+              We implement security measures to protect the temporary data we process:
+            </p>
+            <ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2">
+              <li>HTTPS encryption for all communications</li>
+              <li>Secure server infrastructure</li>
+              <li>Regular security updates and monitoring</li>
+              <li>No permanent data storage reduces security risks</li>
+            </ul>
+          </section>
+
+          <section class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Your Rights</h2>
+            <p class="text-gray-700 dark:text-gray-300 mb-4">
+              Since we don't collect or permanently store personal data:
+            </p>
+            <ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2">
+              <li><strong>No Data to Delete:</strong> All data is automatically deleted upon expiration</li>
+              <li><strong>No Tracking:</strong> We don't track users across sessions or devices</li>
+              <li><strong>Full Control:</strong> You control when to generate new addresses and when to stop using the service</li>
+              <li><strong>Transparency:</strong> This policy explains exactly what we do and don't do with data</li>
+            </ul>
+          </section>
+
+          <section class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Legal Compliance</h2>
+            <p class="text-gray-700 dark:text-gray-300 mb-4">
+              We comply with applicable privacy laws including GDPR, CCPA, and other regional privacy regulations. Our minimal data collection approach ensures compliance by design.
+            </p>
+          </section>
+
+          <section class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Service Limitations</h2>
+            <p class="text-gray-700 dark:text-gray-300 mb-4">
+              Please note:
+            </p>
+            <ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2">
+              <li>Temporary emails are not suitable for important communications</li>
+              <li>We cannot recover expired emails or addresses</li>
+              <li>The service is provided "as-is" without warranties</li>
+              <li>We reserve the right to block abusive usage</li>
+            </ul>
+          </section>
+
+          <section class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Changes to This Policy</h2>
+            <p class="text-gray-700 dark:text-gray-300 mb-4">
+              We may update this privacy policy occasionally. Changes will be posted on this page with an updated date. Since we don't collect contact information, we cannot notify users directly of changes.
+            </p>
+          </section>
+
+          <section class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Contact</h2>
+            <p class="text-gray-700 dark:text-gray-300 mb-4">
+              If you have questions about this privacy policy or our practices, you can reach us through our website or create a temporary email address to contact us.
+            </p>
+          </section>
+        </div>
+
+        <!-- Footer Actions -->
+        <div class="mt-12 pt-8 border-t border-gray-200 dark:border-dark-700">
+          <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6">
+            <app-button
+              variant="primary"
+              (onClick)="goHome()"
+              class="w-full sm:w-auto"
+            >
+              <app-icon name="arrow-left" [size]="16" class="mr-2"></app-icon>
+              Back to MinuteMail
+            </app-button>
+            <div class="text-sm text-gray-500 dark:text-gray-400 text-center">
+              Questions? Generate a temporary email and contact us!
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
