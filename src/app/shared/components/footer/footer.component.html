@@ -1,71 +1,22 @@
-<footer class="bg-white dark:bg-dark-900 border-t border-gray-200 dark:border-dark-700 mt-auto">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-    <div class="flex flex-col space-y-6">
-      <!-- Main Footer Content -->
-      <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
-        <!-- Logo and Description -->
-        <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
-          <div class="flex items-center space-x-3">
-            <img src="/minutemail64x64.png" alt="MinuteMail" class="w-8 h-8" />
-            <span class="text-lg font-bold text-gray-900 dark:text-gray-100">MinuteMail</span>
-          </div>
-          <div class="hidden sm:block w-px h-6 bg-gray-300 dark:bg-dark-600"></div>
-          <p class="text-sm text-gray-600 dark:text-gray-400 text-center sm:text-left">
-            Temporary email addresses for privacy protection
-          </p>
-        </div>
-
-        <!-- Footer Links -->
-        <div class="flex items-center space-x-6">
-          <app-button
-            variant="ghost"
-            size="sm"
-            (onClick)="goToPrivacy()"
-            ariaLabel="View privacy policy"
-            class="text-sm"
-          >
-            <app-icon name="shield" [size]="16" class="mr-2"></app-icon>
-            Privacy Policy
-          </app-button>
-          
-          <a
-            href="https://github.com/minutemail"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
-            aria-label="View source code on GitHub"
-          >
-            <app-icon name="external-link" [size]="16" class="mr-2"></app-icon>
-            GitHub
-          </a>
-        </div>
+<footer class="bg-white dark:bg-dark-900 border-t border-gray-200 dark:border-dark-700">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-14 sm:h-16">
+      <!-- Left side - Copyright -->
+      <div class="text-sm text-gray-600 dark:text-gray-400">
+        © {{ currentYear }} MinuteMail. All rights reserved.
       </div>
 
-      <!-- Divider -->
-      <div class="border-t border-gray-200 dark:border-dark-700"></div>
-
-      <!-- Copyright and Legal -->
-      <div class="flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
-        <div class="text-sm text-gray-500 dark:text-gray-400 text-center sm:text-left">
-          © {{ currentYear }} MinuteMail. All rights reserved.
-        </div>
-        
-        <div class="flex items-center space-x-4 text-xs text-gray-500 dark:text-gray-400">
-          <span>Made with privacy in mind</span>
-          <div class="flex items-center space-x-1">
-            <app-icon name="shield" [size]="12" class="text-primary-500"></app-icon>
-            <span>No tracking</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Additional Info -->
-      <div class="text-center">
-        <p class="text-xs text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
-          MinuteMail provides temporary email addresses that automatically expire. 
-          We don't store personal information or track users. 
-          All emails are automatically deleted when they expire.
-        </p>
+      <!-- Right side - Privacy link -->
+      <div class="flex items-center space-x-3">
+        <app-button
+          variant="ghost"
+          size="sm"
+          (onClick)="goToPrivacy()"
+          ariaLabel="View privacy policy"
+        >
+          <app-icon name="shield" [size]="18" class="mr-2"></app-icon>
+          Privacy Policy
+        </app-button>
       </div>
     </div>
   </div>

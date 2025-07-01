@@ -19,8 +19,4 @@ export class FooterComponent {
   goToPrivacy() {
     this.router.navigate(['/privacy']);
   }
-
-  goHome() {
-    this.router.navigate(['/']);
-  }
 }
