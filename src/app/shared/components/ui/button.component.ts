@@ -11,8 +11,6 @@ import { CommonModule } from '@angular/common';
       [disabled]="disabled || loading"
       [class]="buttonClasses"
       (click)="onClick.emit($event)"
-      [attr.data-event]="dataEvent"
-      [attr.data-props]="dataPropsJson"
       [attr.aria-label]="ariaLabel"
     >
       <ng-content></ng-content>
