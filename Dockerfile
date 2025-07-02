@@ -31,4 +31,4 @@ COPY --from=builder /app/dist /usr/src/app/dist
 EXPOSE 8080
 
 # Launch the SSR server
-CMD ["node", "dist/minutemail-desktop/server/server.mjs"]
+CMD ["node", "dist/minutemail-web/server/server.mjs"]

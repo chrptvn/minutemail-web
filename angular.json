@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "minutemail-desktop": {
+    "minutemail-web": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -66,10 +66,10 @@
           },
           "configurations": {
             "production": {
-              "buildTarget": "minutemail-desktop:build:production"
+              "buildTarget": "minutemail-web:build:production"
             },
             "development": {
-              "buildTarget": "minutemail-desktop:build:development"
+              "buildTarget": "minutemail-web:build:development"
             }
           },
           "defaultConfiguration": "development"

@@ -44,7 +44,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: chrptvn/minutemail-desktop:1.0.0
+          tags: chrptvn/minutemail-web:1.0.0
 
       - name: Log out of Docker Hub
         run: docker logout
