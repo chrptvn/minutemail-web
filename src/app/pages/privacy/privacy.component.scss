@@ -58,11 +58,75 @@
   font-weight: 600;
 }
 
-/* Mobile optimizations */
-@media (max-width: 640px) {
+/* Mobile optimizations - Fix scrolling issues */
+@media (max-width: 768px) {
+  /* Ensure the page container allows scrolling */
+  .min-h-screen {
+    min-height: 100vh;
+    height: auto !important; /* Override any fixed height */
+    overflow-y: auto !important; /* Ensure vertical scrolling */
+  }
+
+  /* Ensure main content is scrollable */
+  main {
+    height: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  }
+
+  /* Fix content container */
+  .bg-white.dark\\:bg-dark-900 {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
   .privacy-content {
     font-size: 0.875rem;
     line-height: 1.6;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  
+  .privacy-section h2 {
+    font-size: 1.125rem;
+  }
+  
+  .prose {
+    font-size: 0.875rem;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  
+  .prose h2 {
+    font-size: 1.125rem;
+  }
+
+  /* Ensure proper spacing for mobile */
+  .px-6.py-8 {
+    padding: 1.5rem 1rem !important;
+  }
+
+  .sm\\:px-8.sm\\:py-12 {
+    padding: 1.5rem 1rem !important;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Additional mobile fixes */
+  body {
+    overflow-y: auto !important;
+    height: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Ensure no fixed heights on small screens */
+  * {
+    max-height: none !important;
+  }
+
+  .privacy-content {
+    font-size: 0.875rem;
   }
   
   .privacy-section h2 {
@@ -114,4 +178,24 @@
   outline: 2px solid var(--primary-color);
   outline-offset: 2px;
   border-radius: 2px;
+}
+
+/* Force scrollable behavior on all mobile devices */
+@media screen and (max-width: 768px) {
+  html, body {
+    overflow-y: auto !important;
+    height: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .min-h-screen {
+    min-height: 100vh !important;
+    height: auto !important;
+  }
+
+  /* Ensure content containers don't restrict height */
+  .max-w-4xl, .bg-white, .dark\\:bg-dark-900 {
+    height: auto !important;
+    max-height: none !important;
+  }
 }

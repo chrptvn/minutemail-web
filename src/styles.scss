@@ -36,6 +36,9 @@ html {
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  /* CRITICAL: Ensure scrolling works on mobile */
+  overflow-y: auto !important;
+  height: auto !important;
 }
 
 body {
@@ -53,15 +56,20 @@ body {
   text-rendering: optimizeLegibility;
   /* Prevent iOS zoom on input focus */
   font-size: 16px;
-  /* Disable iOS bounce scrolling */
+  /* CRITICAL: Ensure scrolling works on mobile */
+  overflow-y: auto !important;
+  height: auto !important;
+  /* Enable smooth scrolling on iOS */
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: none;
 }
 
-/* Ensure app root takes full height */
+/* Ensure app root takes full height but allows scrolling */
 app-root {
   display: block;
   min-height: 100vh;
+  height: auto !important;
+  overflow-y: auto !important;
 }
 
 /* No transition class to prevent theme switching flashes */
@@ -188,8 +196,36 @@ html:not(.no-transition) .input {
   color: var(--text-color) !important;
 }
 
-/* Mobile-specific improvements */
+/* Mobile-specific improvements - CRITICAL SCROLLING FIXES */
 @media (max-width: 768px) {
+  /* FORCE scrolling on all mobile devices */
+  html, body {
+    overflow-y: auto !important;
+    height: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Ensure page containers allow scrolling */
+  .min-h-screen {
+    min-height: 100vh !important;
+    height: auto !important;
+    overflow-y: auto !important;
+  }
+
+  /* Ensure main content areas are scrollable */
+  main {
+    height: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Remove any height restrictions on content containers */
+  .max-w-4xl, .max-w-5xl, .bg-white, .dark\:bg-dark-900 {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
   /* Improve touch targets */
   button, a, [role="button"] {
     min-height: 2.5rem;
@@ -227,6 +263,12 @@ html:not(.no-transition) .input {
     padding-left: 0.75rem;
     padding-right: 0.75rem;
   }
+
+  /* Ensure scrolling still works */
+  html, body {
+    overflow-y: auto !important;
+    height: auto !important;
+  }
 }
 
 /* Touch device optimizations */
@@ -245,6 +287,12 @@ html:not(.no-transition) .input {
   [role="button"]:active {
     transform: scale(0.98);
     transition: transform 0.1s ease;
+  }
+
+  /* Ensure scrolling works on touch devices */
+  html, body {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 }
 
@@ -287,6 +335,10 @@ html:not(.no-transition) .input {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     user-select: none;
+    /* CRITICAL: Force scrolling on iOS */
+    overflow-y: auto !important;
+    height: auto !important;
+    -webkit-overflow-scrolling: touch !important;
   }
   
   input, textarea, [contenteditable] {
@@ -304,6 +356,13 @@ html:not(.no-transition) .input {
   .md\:grid {
     display: none !important;
   }
+
+  /* Ensure iOS allows scrolling */
+  html {
+    overflow-y: auto !important;
+    height: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
 }
 
 /* Force mobile styles for devices with mobile user agents */
@@ -317,5 +376,24 @@ html:not(.no-transition) .input {
   .hidden.md\:grid,
   .md\:grid {
     display: none !important;
+  }
+
+  /* Force scrolling on all mobile devices */
+  html, body {
+    overflow-y: auto !important;
+    height: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+}
+
+/* CRITICAL: Override any potential overflow hidden from other sources */
+@media (max-width: 768px) {
+  * {
+    overflow-x: visible !important;
+  }
+
+  html, body, app-root, main, .min-h-screen {
+    overflow-y: auto !important;
+    height: auto !important;
   }
 }
