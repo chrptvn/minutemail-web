@@ -1,0 +1,396 @@
+<div class="min-h-screen bg-gray-50 dark:bg-dark-950">
+  <!-- Header -->
+  <header class="bg-white dark:bg-dark-900 border-b border-gray-200 dark:border-dark-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14 sm:h-16">
+        <div class="flex items-center space-x-2 sm:space-x-4">
+          <app-button
+            variant="ghost"
+            size="sm"
+            (onClick)="goHome()"
+            ariaLabel="Go back to home"
+            class="flex-shrink-0"
+          >
+            <app-icon name="arrow-left" [size]="18" class="text-gray-700 dark:text-gray-300 sm:w-5 sm:h-5"></app-icon>
+          </app-button>
+
+          <div class="flex items-center space-x-2 sm:space-x-3">
+            <img src="/minutemail64x64.png" alt="MinuteMail" class="w-8 h-8 sm:w-10 sm:h-10" />
+            <h1 class="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100">
+              MinuteMail
+            </h1>
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-2 sm:space-x-3">
+          <app-button
+            variant="ghost"
+            size="sm"
+            (onClick)="toggleTheme()"
+            [ariaLabel]="themeService.isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
+          >
+            @if (themeService.isDarkMode()) {
+              <app-icon name="sun" [size]="18" class="sm:w-5 sm:h-5"></app-icon>
+            } @else {
+              <app-icon name="moon" [size]="18" class="sm:w-5 sm:h-5"></app-icon>
+            }
+          </app-button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12">
+    <div class="bg-white dark:bg-dark-900 rounded-xl border border-gray-200 dark:border-dark-700 shadow-sm">
+      <div class="px-6 py-8 sm:px-8 sm:py-12">
+        <!-- Header -->
+        <div class="text-center mb-8 sm:mb-12">
+          <div class="w-16 h-16 mx-auto bg-primary-100 dark:bg-primary-900 rounded-xl flex items-center justify-center mb-4">
+            <app-icon name="code" [size]="32" class="text-primary-600 dark:text-primary-400"></app-icon>
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+            API Documentation
+          </h1>
+          <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">
+            Integrate temporary email functionality into your applications
+          </p>
+        </div>
+
+        <!-- Content -->
+        <div class="prose prose-sm sm:prose max-w-none dark:prose-invert">
+          <!-- Authentication Section -->
+          <section class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Authentication</h2>
+            <p class="text-gray-700 dark:text-gray-300 mb-4">
+              All endpoints operating on an existing mailbox support <strong>two</strong> interchangeable auth methods; choose one:
+            </p>
+            
+            <div class="space-y-4">
+              <div class="bg-gray-50 dark:bg-dark-800 p-4 rounded-lg border border-gray-200 dark:border-dark-700">
+                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">1. HTTP Basic Auth</h3>
+                <ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-1">
+                  <li><strong>Username:</strong> mailbox <code>name</code></li>
+                  <li><strong>Password:</strong> mailbox <code>password</code> (if set; otherwise no auth required)</li>
+                  <li><strong>Header:</strong></li>
+                </ul>
+                <pre class="mt-2 bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-x-auto"><code>Authorization: Basic BASE64(&lt;name&gt;:&lt;password&gt;)</code></pre>
+              </div>
+
+              <div class="bg-gray-50 dark:bg-dark-800 p-4 rounded-lg border border-gray-200 dark:border-dark-700">
+                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">2. Custom Header</h3>
+                <ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-1">
+                  <li><strong>Header key:</strong> <code>X-Mailbox-Password</code></li>
+                  <li><strong>Value:</strong> mailbox <code>password</code> (if set; omit header if none)</li>
+                  <li><strong>Example:</strong></li>
+                </ul>
+                <pre class="mt-2 bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-x-auto"><code>X-Mailbox-Password: hunter2</code></pre>
+              </div>
+            </div>
+
+            <div class="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+              <p class="text-sm text-blue-800 dark:text-blue-200">
+                <strong>Note:</strong> The mailbox <code>name</code> returned by creation is both the identifier <strong>and</strong> the Basic-Auth username.
+              </p>
+            </div>
+          </section>
+
+          <!-- Data Model Section -->
+          <section class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Data Model</h2>
+            
+            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">Mail Record</h3>
+            <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-x-auto"><code>{
+  "id": "4f8b1a2e3c9d4f5a8b7c6d0e1f2a3b4c",
+  "from": "alice@example.com",
+  "subject": "Welcome!",
+  "body": "Hello there…",
+  "received_at": "2025-07-02T14:23:45.123456+00:00",
+  "attachments": []
+}</code></pre>
+          </section>
+
+          <!-- Endpoints Section -->
+          <section class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-6">Endpoints</h2>
+
+            <!-- Create Mailbox -->
+            <div class="mb-8 border border-gray-200 dark:border-dark-700 rounded-lg p-6">
+              <div class="flex items-center space-x-3 mb-4">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
+                  POST
+                </span>
+                <code class="text-sm font-mono text-gray-900 dark:text-gray-100">/api/mail_box/create</code>
+              </div>
+              
+              <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">1. Create Mailbox</h3>
+              
+              <div class="space-y-4">
+                <div>
+                  <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">Request Body (JSON):</h4>
+                  <div class="overflow-x-auto">
+                    <table class="min-w-full border border-gray-200 dark:border-dark-700 rounded">
+                      <thead class="bg-gray-50 dark:bg-dark-800">
+                        <tr>
+                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Field</th>
+                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Type</th>
+                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Required</th>
+                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Description</th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-gray-200 dark:divide-dark-700">
+                        <tr>
+                          <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">password</td>
+                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">string</td>
+                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">No</td>
+                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Optional mailbox password (plain text)</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">Response (HTTP 200):</h4>
+                  <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-x-auto"><code>{
+  "message": "Mailbox created",
+  "name": "q9x2k8",
+  "ttl": 3600
+}</code></pre>
+                </div>
+              </div>
+            </div>
+
+            <!-- Fetch All Mails -->
+            <div class="mb-8 border border-gray-200 dark:border-dark-700 rounded-lg p-6">
+              <div class="flex items-center space-x-3 mb-4">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
+                  GET
+                </span>
+                <code class="text-sm font-mono text-gray-900 dark:text-gray-100">/api/mail_box/{name}</code>
+              </div>
+              
+              <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">2. Fetch All Mails</h3>
+              
+              <div class="space-y-4">
+                <div>
+                  <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">URL Path Parameters:</h4>
+                  <div class="overflow-x-auto">
+                    <table class="min-w-full border border-gray-200 dark:border-dark-700 rounded">
+                      <thead class="bg-gray-50 dark:bg-dark-800">
+                        <tr>
+                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Name</th>
+                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Type</th>
+                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Description</th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-gray-200 dark:divide-dark-700">
+                        <tr>
+                          <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">name</td>
+                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">string</td>
+                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Mailbox identifier (from creation)</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">Headers:</h4>
+                  <p class="text-sm text-gray-700 dark:text-gray-300">Use either Basic Auth or <code>X-Mailbox-Password</code> as described above.</p>
+                </div>
+
+                <div>
+                  <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">Response (HTTP 200):</h4>
+                  <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-x-auto"><code>{
+  "mails": [ /* array of MailRecord */ ],
+  "expireAt": "2025-07-02T15:23:45.123456+00:00"
+}</code></pre>
+                  <ul class="mt-2 list-disc pl-6 text-sm text-gray-700 dark:text-gray-300 space-y-1">
+                    <li><code>mails</code>: array of all stored mail records (in insertion order)</li>
+                    <li><code>expireAt</code>: ISO-8601 timestamp when this mailbox will expire</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Delete Entire Mailbox -->
+            <div class="mb-8 border border-gray-200 dark:border-dark-700 rounded-lg p-6">
+              <div class="flex items-center space-x-3 mb-4">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200">
+                  DELETE
+                </span>
+                <code class="text-sm font-mono text-gray-900 dark:text-gray-100">/api/mail_box/{name}</code>
+              </div>
+              
+              <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">3. Delete Entire Mailbox</h3>
+              
+              <div class="space-y-4">
+                <div>
+                  <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">URL Path Parameters:</h4>
+                  <div class="overflow-x-auto">
+                    <table class="min-w-full border border-gray-200 dark:border-dark-700 rounded">
+                      <thead class="bg-gray-50 dark:bg-dark-800">
+                        <tr>
+                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Name</th>
+                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Type</th>
+                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Description</th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-gray-200 dark:divide-dark-700">
+                        <tr>
+                          <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">name</td>
+                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">string</td>
+                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Mailbox identifier</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">Headers:</h4>
+                  <p class="text-sm text-gray-700 dark:text-gray-300">Use either Basic Auth or <code>X-Mailbox-Password</code>.</p>
+                </div>
+
+                <div>
+                  <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">Response (HTTP 200):</h4>
+                  <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-x-auto"><code>{
+  "message": "Mailbox deleted"
+}</code></pre>
+                </div>
+              </div>
+            </div>
+
+            <!-- Delete Single Mail -->
+            <div class="mb-8 border border-gray-200 dark:border-dark-700 rounded-lg p-6">
+              <div class="flex items-center space-x-3 mb-4">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200">
+                  DELETE
+                </span>
+                <code class="text-sm font-mono text-gray-900 dark:text-gray-100">/api/mail_box/{name}/mail/{mail_id}</code>
+              </div>
+              
+              <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">4. Delete Single Mail</h3>
+              
+              <div class="space-y-4">
+                <div>
+                  <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">URL Path Parameters:</h4>
+                  <div class="overflow-x-auto">
+                    <table class="min-w-full border border-gray-200 dark:border-dark-700 rounded">
+                      <thead class="bg-gray-50 dark:bg-dark-800">
+                        <tr>
+                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Name</th>
+                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Type</th>
+                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Description</th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-gray-200 dark:divide-dark-700">
+                        <tr>
+                          <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">name</td>
+                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">string</td>
+                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Mailbox identifier</td>
+                        </tr>
+                        <tr>
+                          <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">mail_id</td>
+                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">string</td>
+                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300"><code>id</code> field of the mail to remove</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">Headers:</h4>
+                  <p class="text-sm text-gray-700 dark:text-gray-300">Use either Basic Auth or <code>X-Mailbox-Password</code>.</p>
+                </div>
+
+                <div>
+                  <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">Response (HTTP 200):</h4>
+                  <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-x-auto"><code>{
+  "message": "Mail deleted"
+}</code></pre>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Usage Examples Section -->
+          <section class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Usage Examples</h2>
+            
+            <div class="space-y-4">
+              <div>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">1. Create a mailbox with password</h3>
+                <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-x-auto"><code>curl -X POST https://minutemail.co/api/mail_box/create \
+  -H "Content-Type: application/json" \
+  -d '{ "password": "hunter2" }'</code></pre>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">2. Fetch all mails (Basic Auth)</h3>
+                <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-x-auto"><code>curl https://minutemail.co/api/mail_box/q9x2k8 \
+  -H "Authorization: Basic cTl4Mms4Omh1bnRlcjI="</code></pre>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">3. Fetch all mails (custom header)</h3>
+                <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-x-auto"><code>curl https://minutemail.co/api/mail_box/q9x2k8 \
+  -H "X-Mailbox-Password: hunter2"</code></pre>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">4. Delete a single mail</h3>
+                <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-x-auto"><code>curl -X DELETE https://minutemail.co/api/mail_box/q9x2k8/mail/4f8b1a2e3c9d4f5a8b7c6d0e1f2a3b4c \
+  -H "X-Mailbox-Password: hunter2"</code></pre>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">5. Delete entire mailbox</h3>
+                <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-x-auto"><code>curl -X DELETE https://minutemail.co/api/mail_box/q9x2k8 \
+  -H "X-Mailbox-Password: hunter2"</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Base URL Section -->
+          <section class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Base URL</h2>
+            <div class="bg-gray-50 dark:bg-dark-800 p-4 rounded-lg border border-gray-200 dark:border-dark-700">
+              <p class="text-gray-700 dark:text-gray-300 mb-2">All API endpoints are available at:</p>
+              <code class="text-lg font-mono text-primary-600 dark:text-primary-400">https://minutemail.co</code>
+            </div>
+          </section>
+
+          <!-- Rate Limiting Section -->
+          <section class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Rate Limiting</h2>
+            <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
+              <p class="text-sm text-yellow-800 dark:text-yellow-200">
+                <strong>Note:</strong> API endpoints may be subject to rate limiting. Please implement appropriate retry logic with exponential backoff in your applications.
+              </p>
+            </div>
+          </section>
+        </div>
+
+        <!-- Footer Actions -->
+        <div class="mt-12 pt-8 border-t border-gray-200 dark:border-dark-700">
+          <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6">
+            <app-button
+              variant="primary"
+              (onClick)="goHome()"
+              class="w-full sm:w-auto"
+            >
+              <app-icon name="arrow-left" [size]="16" class="mr-2"></app-icon>
+              Back to MinuteMail
+            </app-button>
+            <div class="text-sm text-gray-500 dark:text-gray-400 text-center">
+              Need help? Create a temporary email and contact us!
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

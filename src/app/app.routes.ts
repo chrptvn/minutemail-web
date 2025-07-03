@@ -7,6 +7,11 @@ export const routes: Routes = [
     title: 'MinuteMail - Temporary Email Address'
   },
   {
+    path: 'api',
+    loadComponent: () => import('./pages/api/api.component').then(m => m.ApiComponent),
+    title: 'API Documentation - MinuteMail'
+  },
+  {
     path: 'privacy',
     loadComponent: () => import('./pages/privacy/privacy.component').then(m => m.PrivacyComponent),
     title: 'Privacy Policy - MinuteMail'

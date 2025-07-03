@@ -204,6 +204,10 @@ export class InboxComponent implements OnInit, OnDestroy {
     this.router.navigate(['/']);
   }
 
+  goToApi() {
+    this.router.navigate(['/api']);
+  }
+
   goToPrivacy() {
     this.router.navigate(['/privacy']);
   }

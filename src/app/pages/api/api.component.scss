@@ -1,0 +1,278 @@
+/* API documentation page specific styles */
+.api-content {
+  line-height: 1.7;
+}
+
+.api-section {
+  margin-bottom: 2rem;
+}
+
+.api-section h2 {
+  color: var(--text-color);
+  border-bottom: 2px solid rgba(36, 200, 219, 0.2);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.api-section h3 {
+  color: var(--text-color);
+  margin-bottom: 0.75rem;
+}
+
+.api-section h4 {
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+}
+
+/* Code blocks */
+.api-section pre {
+  background: #1a1a1a !important;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  overflow-x: auto;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.api-section code {
+  background: rgba(36, 200, 219, 0.1);
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+/* Tables */
+.api-section table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.api-section th,
+.api-section td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.api-section th {
+  background-color: var(--surface-color);
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Method badges */
+.method-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.method-get {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: rgb(59, 130, 246);
+}
+
+.method-post {
+  background-color: rgba(34, 197, 94, 0.1);
+  color: rgb(34, 197, 94);
+}
+
+.method-delete {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: rgb(239, 68, 68);
+}
+
+.dark .method-get {
+  background-color: rgba(59, 130, 246, 0.2);
+  color: rgb(147, 197, 253);
+}
+
+.dark .method-post {
+  background-color: rgba(34, 197, 94, 0.2);
+  color: rgb(134, 239, 172);
+}
+
+.dark .method-delete {
+  background-color: rgba(239, 68, 68, 0.2);
+  color: rgb(252, 165, 165);
+}
+
+/* Endpoint cards */
+.endpoint-card {
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  background-color: var(--background-color);
+}
+
+.endpoint-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.endpoint-path {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.875rem;
+  color: var(--text-color);
+  background: rgba(36, 200, 219, 0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+}
+
+/* Enhanced readability */
+.prose {
+  color: var(--text-color);
+}
+
+.prose h2 {
+  color: var(--text-color) !important;
+  border-bottom: 2px solid rgba(36, 200, 219, 0.2);
+  padding-bottom: 0.5rem;
+}
+
+.prose h3,
+.prose h4 {
+  color: var(--text-color) !important;
+}
+
+.prose p {
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+
+.prose ul {
+  margin: 1rem 0;
+}
+
+.prose li {
+  margin: 0.5rem 0;
+  line-height: 1.6;
+}
+
+.prose strong {
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  .api-content {
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+  
+  .api-section h2 {
+    font-size: 1.125rem;
+  }
+  
+  .api-section h3 {
+    font-size: 1rem;
+  }
+  
+  .prose {
+    font-size: 0.875rem;
+  }
+  
+  .prose h2 {
+    font-size: 1.125rem;
+  }
+  
+  .prose h3 {
+    font-size: 1rem;
+  }
+
+  .endpoint-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .endpoint-path {
+    font-size: 0.75rem;
+    word-break: break-all;
+  }
+
+  .api-section pre {
+    font-size: 0.75rem;
+    padding: 0.75rem;
+  }
+
+  .api-section th,
+  .api-section td {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Ensure proper contrast in all themes */
+.dark .prose {
+  color: rgb(229 231 235);
+}
+
+.dark .prose h2,
+.dark .prose h3,
+.dark .prose h4 {
+  color: rgb(229 231 235) !important;
+}
+
+.dark .prose strong {
+  color: rgb(229 231 235);
+}
+
+.dark .prose li {
+  color: rgb(209 213 219);
+}
+
+.dark .prose p {
+  color: rgb(209 213 219);
+}
+
+.dark .api-section th {
+  color: rgb(156 163 175);
+}
+
+.dark .api-section td {
+  color: rgb(209 213 219);
+}
+
+/* Focus improvements for accessibility */
+.prose a {
+  color: var(--primary-color);
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.prose a:hover {
+  color: rgba(36, 200, 219, 0.8);
+}
+
+.prose a:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Scrollable tables on mobile */
+@media (max-width: 768px) {
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .table-container table {
+    min-width: 500px;
+  }
+}

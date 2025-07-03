@@ -120,6 +120,10 @@ export class HomeComponent implements OnInit {
     this.router.navigate([`/${aliasName}`]);
   }
 
+  goToApi() {
+    this.router.navigate(['/api']);
+  }
+
   goToPrivacy() {
     this.router.navigate(['/privacy']);
   }
