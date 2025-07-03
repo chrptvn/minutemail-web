@@ -58,177 +58,60 @@
   font-weight: 600;
 }
 
-/* CRITICAL MOBILE SCROLLING FIXES */
+/* Mobile adjustments */
 @media (max-width: 768px) {
-  /* Force scrolling on mobile */
-  html, body {
-    overflow-y: auto !important;
-    height: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-    position: relative !important;
+  html,
+  body {
+    overflow-y: auto;
+    height: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
-  /* Ensure the page container allows scrolling */
   .min-h-screen {
-    min-height: 100vh !important;
-    height: auto !important;
-    overflow-y: auto !important;
-    position: relative !important;
+    min-height: 100vh;
   }
 
-  /* Ensure main content is scrollable */
-  main {
-    height: auto !important;
-    overflow-y: visible !important;
-    -webkit-overflow-scrolling: touch !important;
-    position: relative !important;
-  }
-
-  /* Fix content container */
-  .bg-white, .dark\:bg-dark-900 {
-    height: auto !important;
-    max-height: none !important;
-    overflow: visible !important;
-    position: relative !important;
-  }
-
-  /* Apply mobile scroll classes */
-  .mobile-scroll-container {
-    overflow-y: auto !important;
-    height: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-    position: relative !important;
-  }
-
-  .mobile-scroll-content {
-    height: auto !important;
-    overflow-y: visible !important;
-    -webkit-overflow-scrolling: touch !important;
-    position: relative !important;
-  }
-
-  .mobile-scroll-card {
-    height: auto !important;
-    max-height: none !important;
-    overflow: visible !important;
-    position: relative !important;
-  }
-
-  .mobile-scroll-inner {
-    height: auto !important;
-    overflow: visible !important;
-    position: relative !important;
-  }
-
-  .mobile-scroll-prose {
-    height: auto !important;
-    overflow: visible !important;
-    position: relative !important;
+  .max-w-4xl {
+    overflow-y: auto;
   }
 
   .privacy-content {
     font-size: 0.875rem;
     line-height: 1.6;
-    height: auto !important;
-    overflow: visible !important;
   }
-  
+
   .privacy-section h2 {
     font-size: 1.125rem;
   }
-  
+
   .prose {
     font-size: 0.875rem;
-    height: auto !important;
-    overflow: visible !important;
   }
-  
+
   .prose h2 {
     font-size: 1.125rem;
-  }
-
-  /* Ensure proper spacing for mobile */
-  .px-6.py-8 {
-    padding: 1.5rem 1rem !important;
-  }
-
-  .sm\:px-8.sm\:py-12 {
-    padding: 1.5rem 1rem !important;
-  }
-
-  /* Remove any potential fixed positioning */
-  * {
-    position: relative !important;
-  }
-
-  .fixed {
-    position: relative !important;
   }
 }
 
 @media (max-width: 640px) {
-  /* Additional mobile fixes */
-  body {
-    overflow-y: auto !important;
-    height: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-    position: relative !important;
-  }
-
-  /* Ensure no fixed heights on small screens */
-  * {
-    max-height: none !important;
-    position: relative !important;
-  }
-
   .privacy-content {
     font-size: 0.875rem;
   }
-  
+
   .privacy-section h2 {
     font-size: 1.125rem;
   }
-  
+
   .prose {
     font-size: 0.875rem;
   }
-  
+
   .prose h2 {
     font-size: 1.125rem;
   }
 }
 
-/* iOS specific fixes */
-@supports (-webkit-touch-callout: none) {
-  @media (max-width: 768px) {
-    html, body {
-      overflow-y: auto !important;
-      height: auto !important;
-      -webkit-overflow-scrolling: touch !important;
-      position: relative !important;
-    }
-
-    .min-h-screen {
-      min-height: 100vh !important;
-      height: auto !important;
-      overflow-y: auto !important;
-      position: relative !important;
-    }
-
-    .mobile-scroll-container,
-    .mobile-scroll-content,
-    .mobile-scroll-card,
-    .mobile-scroll-inner,
-    .mobile-scroll-prose {
-      overflow-y: auto !important;
-      height: auto !important;
-      -webkit-overflow-scrolling: touch !important;
-      position: relative !important;
-    }
-  }
-}
-
-/* Ensure proper contrast in all themes */
+/* Dark mode contrast enhancements */
 .dark .prose {
   color: rgb(229 231 235);
 }
@@ -249,7 +132,7 @@
   color: rgb(209 213 219);
 }
 
-/* Focus improvements for accessibility */
+/* Accessibility focus improvements */
 .prose a {
   color: var(--primary-color);
   text-decoration: underline;
@@ -264,34 +147,4 @@
   outline: 2px solid var(--primary-color);
   outline-offset: 2px;
   border-radius: 2px;
-}
-
-/* Emergency mobile scroll fix - Last resort */
-@media screen and (max-width: 768px) {
-  body {
-    position: relative !important;
-    overflow-y: auto !important;
-    height: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-  }
-
-  .min-h-screen {
-    position: relative !important;
-    overflow-y: auto !important;
-    height: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-  }
-
-  /* Disable any potential position fixed that might block scrolling */
-  .fixed {
-    position: relative !important;
-  }
-
-  /* Force all containers to be scrollable */
-  .max-w-4xl, .bg-white, .dark\:bg-dark-900 {
-    height: auto !important;
-    max-height: none !important;
-    overflow: visible !important;
-    position: relative !important;
-  }
 }
