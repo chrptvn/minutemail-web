@@ -74,7 +74,7 @@
                   <li><strong>Password:</strong> mailbox <code>password</code> (if set; otherwise no auth required)</li>
                   <li><strong>Header:</strong></li>
                 </ul>
-                <pre class="mt-2 bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-x-auto"><code>Authorization: Basic BASE64(&lt;name&gt;:&lt;password&gt;)</code></pre>
+                <pre class="mt-2 bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-scroll"><code>Authorization: Basic BASE64(&lt;name&gt;:&lt;password&gt;)</code></pre>
               </div>
 
               <div class="bg-gray-50 dark:bg-dark-800 p-4 rounded-lg border border-gray-200 dark:border-dark-700">
@@ -84,7 +84,7 @@
                   <li><strong>Value:</strong> mailbox <code>password</code> (if set; omit header if none)</li>
                   <li><strong>Example:</strong></li>
                 </ul>
-                <pre class="mt-2 bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-x-auto"><code>X-Mailbox-Password: hunter2</code></pre>
+                <pre class="mt-2 bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-scroll"><code>X-Mailbox-Password: hunter2</code></pre>
               </div>
             </div>
 
@@ -100,7 +100,7 @@
             <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Data Model</h2>
 
             <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">Mail Record</h3>
-            <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-x-auto"><code>&#123;
+            <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-scroll"><code>&#123;
   "id": "4f8b1a2e3c9d4f5a8b7c6d0e1f2a3b4c",
   "from": "alice&#64;example.com",
   "subject": "Welcome!",
@@ -128,7 +128,7 @@
               <div class="space-y-4">
                 <div>
                   <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">Request Body (JSON):</h4>
-                  <div class="overflow-x-auto">
+                  <div class="overflow-scroll">
                     <table class="min-w-full border border-gray-200 dark:border-dark-700 rounded">
                       <thead class="bg-gray-50 dark:bg-dark-800">
                         <tr>
@@ -152,7 +152,7 @@
 
                 <div>
                   <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">Response (HTTP 200):</h4>
-                  <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-x-auto"><code>&#123;
+                  <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-scroll"><code>&#123;
   "message": "Mailbox created",
   "name": "friendly-pear-shaped-cougar-191",
   "ttl": 3600
@@ -175,7 +175,7 @@
               <div class="space-y-4">
                 <div>
                   <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">URL Path Parameters:</h4>
-                  <div class="overflow-x-auto">
+                  <div class="overflow-scroll">
                     <table class="min-w-full border border-gray-200 dark:border-dark-700 rounded">
                       <thead class="bg-gray-50 dark:bg-dark-800">
                         <tr>
@@ -202,7 +202,7 @@
 
                 <div>
                   <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">Response (HTTP 200):</h4>
-                  <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-x-auto"><code>&#123;
+                  <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-scroll"><code>&#123;
   "mails": [ /* array of MailRecord */ ],
   "expireAt": "2025-07-02T15:23:45.123456+00:00"
 &#125;</code></pre>
@@ -228,7 +228,7 @@
               <div class="space-y-4">
                 <div>
                   <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">URL Path Parameters:</h4>
-                  <div class="overflow-x-auto">
+                  <div class="overflow-scroll">
                     <table class="min-w-full border border-gray-200 dark:border-dark-700 rounded">
                       <thead class="bg-gray-50 dark:bg-dark-800">
                         <tr>
@@ -296,7 +296,7 @@
               <div class="space-y-4">
                 <div>
                   <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">URL Path Parameters:</h4>
-                  <div class="overflow-x-auto">
+                  <div class="overflow-scroll">
                     <table class="min-w-full border border-gray-200 dark:border-dark-700 rounded">
                       <thead class="bg-gray-50 dark:bg-dark-800">
                         <tr>
@@ -323,7 +323,7 @@
 
                 <div>
                   <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">Response (HTTP 200):</h4>
-                  <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-x-auto"><code>&#123;
+                  <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-scroll"><code>&#123;
   "message": "Mailbox deleted"
 &#125;</code></pre>
                 </div>
@@ -344,7 +344,7 @@
               <div class="space-y-4">
                 <div>
                   <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">URL Path Parameters:</h4>
-                  <div class="overflow-x-auto">
+                  <div class="overflow-scroll">
                     <table class="min-w-full border border-gray-200 dark:border-dark-700 rounded">
                       <thead class="bg-gray-50 dark:bg-dark-800">
                         <tr>
@@ -376,7 +376,7 @@
 
                 <div>
                   <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">Response (HTTP 200):</h4>
-                  <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-x-auto"><code>&#123;
+                  <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-scroll"><code>&#123;
   "message": "Mail deleted"
 &#125;</code></pre>
                 </div>
@@ -391,39 +391,39 @@
             <div class="space-y-4">
               <div>
                 <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">1. Create a mailbox with password</h3>
-                <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-x-auto"><code>curl -X POST https://api.minutemail.co/v1/mailbox/create \
+                <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-scroll"><code>curl -X POST https://api.minutemail.co/v1/mailbox/create \
   -H "Content-Type: application/json" \
   -d '&#123; "password": "hunter2" &#125;'</code></pre>
               </div>
 
               <div>
                 <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">2. Fetch all mails (Basic Auth)</h3>
-                <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-x-auto"><code>curl https://api.minutemail.co/v1/mailbox/q9x2k8 \
+                <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-scroll"><code>curl https://api.minutemail.co/v1/mailbox/q9x2k8 \
   -H "Authorization: Basic cTl4Mms4Omh1bnRlcjI="</code></pre>
               </div>
 
               <div>
                 <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">3. Fetch all mails (custom header)</h3>
-                <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-x-auto"><code>curl https://api.minutemail.co/v1/mailbox/q9x2k8 \
+                <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-scroll"><code>curl https://api.minutemail.co/v1/mailbox/q9x2k8 \
   -H "X-Mailbox-Password: hunter2"</code></pre>
               </div>
 
               <div>
                 <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">4. Download an attachment</h3>
-                <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-x-auto"><code>curl https://api.minutemail.co/v1/mailbox/q9x2k8/mail/4f8b1a2e3c9d4f5a8b7c6d0e1f2a3b4c/attachment/document.pdf \
+                <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-scroll"><code>curl https://api.minutemail.co/v1/mailbox/q9x2k8/mail/4f8b1a2e3c9d4f5a8b7c6d0e1f2a3b4c/attachment/document.pdf \
   -H "X-Mailbox-Password: hunter2" \
   -o document.pdf</code></pre>
               </div>
 
               <div>
                 <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">5. Delete a single mail</h3>
-                <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-x-auto"><code>curl -X DELETE https://api.minutemail.co/v1/mailbox/q9x2k8/mail/4f8b1a2e3c9d4f5a8b7c6d0e1f2a3b4c \
+                <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-scroll"><code>curl -X DELETE https://api.minutemail.co/v1/mailbox/q9x2k8/mail/4f8b1a2e3c9d4f5a8b7c6d0e1f2a3b4c \
   -H "X-Mailbox-Password: hunter2"</code></pre>
               </div>
 
               <div>
                 <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">6. Delete entire mailbox</h3>
-                <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-x-auto"><code>curl -X DELETE https://api.minutemail.co/v1/mailbox/q9x2k8 \
+                <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-scroll"><code>curl -X DELETE https://api.minutemail.co/v1/mailbox/q9x2k8 \
   -H "X-Mailbox-Password: hunter2"</code></pre>
               </div>
             </div>

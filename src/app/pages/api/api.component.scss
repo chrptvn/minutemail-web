@@ -5,6 +5,7 @@
 
 .api-section {
   margin-bottom: 2rem;
+  overflow-x: hidden; /* Prevent container from expanding */
 }
 
 .api-section h2 {
@@ -24,7 +25,7 @@
   margin-bottom: 0.5rem;
 }
 
-/* Code blocks - FIXED HORIZONTAL SCROLLING WITH PROPER CONTAINMENT */
+/* Code blocks */
 .api-section pre {
   background: #1a1a1a !important;
   border-radius: 0.5rem;
@@ -32,36 +33,28 @@
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   font-size: 0.875rem;
   line-height: 1.5;
-  
-  /* CRITICAL: Proper horizontal scrolling within container */
-  overflow-x: auto !important;
-  overflow-y: hidden !important;
-  white-space: pre !important;
-  
-  /* Ensure content stays within container bounds */
-  max-width: 100% !important;
-  width: 100% !important;
-  box-sizing: border-box !important;
-  
-  /* Prevent content from breaking out */
-  word-wrap: normal !important;
-  word-break: normal !important;
-  
-  /* Smooth scrolling on mobile */
+  overflow-x: auto !important; /* Enable horizontal scroll */
+  overflow-y: hidden;
+  white-space: pre;
+  max-width: 100%;
+  box-sizing: border-box;
+  word-wrap: normal;
+  word-break: normal;
   -webkit-overflow-scrolling: touch;
-  
-  /* Add scrollbar styling */
   scrollbar-width: thin;
   scrollbar-color: rgba(36, 200, 219, 0.5) transparent;
-  
-  /* Ensure proper positioning */
-  position: relative;
-  
-  /* Add subtle border to contain content visually */
   border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
 }
 
-/* Custom scrollbar for code blocks */
+.api-section pre code {
+  white-space: pre;
+  display: block;
+  max-width: 100%; /* containment */
+  overflow-x: auto; /* ensure scroll */
+}
+
+/* Scrollbar styling */
 .api-section pre::-webkit-scrollbar {
   height: 8px;
 }
@@ -80,14 +73,6 @@
   background: rgba(36, 200, 219, 0.8);
 }
 
-/* Ensure code content scrolls properly */
-.api-section pre code {
-  white-space: pre !important;
-  display: block;
-  width: max-content;
-  min-width: 100%;
-}
-
 /* Inline code styling */
 .api-section code:not(pre code) {
   background: rgba(36, 200, 219, 0.1);
@@ -98,399 +83,37 @@
   white-space: nowrap;
 }
 
-/* Tables */
-.api-section table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 1rem 0;
-}
-
-.api-section th,
-.api-section td {
-  padding: 0.75rem;
-  text-align: left;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.api-section th {
-  background-color: var(--surface-color);
-  font-weight: 600;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-/* Method badges */
-.method-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.method-get {
-  background-color: rgba(59, 130, 246, 0.1);
-  color: rgb(59, 130, 246);
-}
-
-.method-post {
-  background-color: rgba(34, 197, 94, 0.1);
-  color: rgb(34, 197, 94);
-}
-
-.method-delete {
-  background-color: rgba(239, 68, 68, 0.1);
-  color: rgb(239, 68, 68);
-}
-
-.dark .method-get {
-  background-color: rgba(59, 130, 246, 0.2);
-  color: rgb(147, 197, 253);
-}
-
-.dark .method-post {
-  background-color: rgba(34, 197, 94, 0.2);
-  color: rgb(134, 239, 172);
-}
-
-.dark .method-delete {
-  background-color: rgba(239, 68, 68, 0.2);
-  color: rgb(252, 165, 165);
-}
-
-/* Endpoint cards */
-.endpoint-card {
-  border: 1px solid var(--border-color);
-  border-radius: 0.5rem;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  background-color: var(--background-color);
-}
-
-.endpoint-header {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
-}
-
-.endpoint-path {
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-  font-size: 0.875rem;
-  color: var(--text-color);
-  background: rgba(36, 200, 219, 0.1);
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
-}
-
-/* Enhanced readability */
-.prose {
-  color: var(--text-color);
-}
-
-.prose h2 {
-  color: var(--text-color) !important;
-  border-bottom: 2px solid rgba(36, 200, 219, 0.2);
-  padding-bottom: 0.5rem;
-}
-
-.prose h3,
-.prose h4 {
-  color: var(--text-color) !important;
-}
-
-.prose p {
-  line-height: 1.7;
-  margin-bottom: 1rem;
-}
-
-.prose ul {
-  margin: 1rem 0;
-}
-
-.prose li {
-  margin: 0.5rem 0;
-  line-height: 1.6;
-}
-
-.prose strong {
-  color: var(--text-color);
-  font-weight: 600;
-}
-
-/* MOBILE OPTIMIZATIONS - Enhanced horizontal scrolling with containment */
+/* Mobile containment for code blocks */
 @media (max-width: 768px) {
-  /* Ensure the page container allows scrolling */
-  .min-h-screen {
-    min-height: 100vh;
-    height: auto !important;
-    overflow-y: auto !important;
-  }
-
-  /* Ensure main content is scrollable */
-  main {
-    height: auto !important;
-    overflow-y: visible !important;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  /* Fix content container */
-  .bg-white.dark\\:bg-dark-900 {
-    height: auto !important;
-    max-height: none !important;
-    overflow: visible !important;
-  }
-
-  .api-content {
-    font-size: 0.875rem;
-    line-height: 1.6;
-    height: auto !important;
-    overflow: visible !important;
-  }
-  
-  .api-section h2 {
-    font-size: 1.125rem;
-  }
-  
-  .api-section h3 {
-    font-size: 1rem;
-  }
-  
-  .prose {
-    font-size: 0.875rem;
-    height: auto !important;
-    overflow: visible !important;
-  }
-  
-  .prose h2 {
-    font-size: 1.125rem;
-  }
-  
-  .prose h3 {
-    font-size: 1rem;
-  }
-
-  .endpoint-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-
-  .endpoint-path {
-    font-size: 0.75rem;
-    word-break: break-all;
-  }
-
-  /* MOBILE CODE BLOCKS - Proper containment with horizontal scrolling */
   .api-section pre {
     font-size: 0.75rem;
     padding: 0.75rem;
-    
-    /* CRITICAL: Contained horizontal scrolling */
+    max-width: 100% !important;
     overflow-x: auto !important;
-    overflow-y: hidden !important;
-    white-space: pre !important;
-    
-    /* Ensure proper containment */
-    max-width: calc(100vw - 2rem) !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
-    
-    /* Better mobile scrolling */
-    -webkit-overflow-scrolling: touch;
-    
-    /* Prevent any wrapping or overflow */
-    word-wrap: normal !important;
-    word-break: normal !important;
-    
-    /* Add margin to prevent edge touching */
-    margin-left: 0;
-    margin-right: 0;
   }
 
-  /* Mobile scrollbar for code blocks */
-  .api-section pre::-webkit-scrollbar {
-    height: 6px;
-  }
-
-  .api-section th,
-  .api-section td {
-    padding: 0.5rem;
+  .api-section pre code {
     font-size: 0.75rem;
-  }
-
-  /* Ensure proper spacing for mobile */
-  .px-6.py-8 {
-    padding: 1.5rem 1rem !important;
-  }
-
-  .sm\\:px-8.sm\\:py-12 {
-    padding: 1.5rem 1rem !important;
+    max-width: 100%;
   }
 }
 
+/* Very small screens */
 @media (max-width: 640px) {
-  /* Additional mobile fixes */
-  body {
-    overflow-y: auto !important;
-    height: auto !important;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  /* Ensure no fixed heights on small screens */
-  * {
-    max-height: none !important;
-  }
-
-  .api-content {
-    font-size: 0.875rem;
-  }
-  
-  .api-section h2 {
-    font-size: 1.125rem;
-  }
-  
-  .api-section h3 {
-    font-size: 1rem;
-  }
-  
-  .prose {
-    font-size: 0.875rem;
-  }
-  
-  .prose h2 {
-    font-size: 1.125rem;
-  }
-  
-  .prose h3 {
-    font-size: 1rem;
-  }
-
-  /* VERY SMALL SCREENS - Code block optimization with strict containment */
   .api-section pre {
     font-size: 0.7rem;
     padding: 0.5rem;
-    
-    /* Ultra-strict containment for small screens */
-    max-width: calc(100vw - 1rem) !important;
+    max-width: 100% !important;
     overflow-x: auto !important;
-    white-space: pre !important;
-    word-break: keep-all !important;
-    
-    /* Ensure content doesn't break container */
-    margin-left: 0;
-    margin-right: 0;
+  }
+
+  .api-section pre code {
+    font-size: 0.7rem;
+    max-width: 100%;
   }
 }
 
-/* Ensure proper contrast in all themes */
-.dark .prose {
-  color: rgb(229 231 235);
-}
-
-.dark .prose h2,
-.dark .prose h3,
-.dark .prose h4 {
-  color: rgb(229 231 235) !important;
-}
-
-.dark .prose strong {
-  color: rgb(229 231 235);
-}
-
-.dark .prose li {
-  color: rgb(209 213 219);
-}
-
-.dark .prose p {
-  color: rgb(209 213 219);
-}
-
-.dark .api-section th {
-  color: rgb(156 163 175);
-}
-
-.dark .api-section td {
-  color: rgb(209 213 219);
-}
-
-/* Focus improvements for accessibility */
-.prose a {
-  color: var(--primary-color);
-  text-decoration: underline;
-  transition: color 0.2s ease;
-}
-
-.prose a:hover {
-  color: rgba(36, 200, 219, 0.8);
-}
-
-.prose a:focus {
-  outline: 2px solid var(--primary-color);
-  outline-offset: 2px;
-  border-radius: 2px;
-}
-
-/* Scrollable tables on mobile */
-@media (max-width: 768px) {
-  .table-container {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-  
-  .table-container table {
-    min-width: 500px;
-  }
-}
-
-/* Force scrollable behavior on all mobile devices */
-@media screen and (max-width: 768px) {
-  html, body {
-    overflow-y: auto !important;
-    height: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-  }
-
-  .min-h-screen {
-    min-height: 100vh !important;
-    height: auto !important;
-  }
-
-  /* Ensure content containers don't restrict height */
-  .max-w-5xl, .bg-white, .dark\\:bg-dark-900 {
-    height: auto !important;
-    max-height: none !important;
-  }
-}
-
-/* CRITICAL: Prevent code blocks from breaking container bounds */
-.api-section {
-  overflow-x: hidden; /* Prevent section from expanding */
-}
-
-.api-section pre {
-  /* Ensure code blocks never exceed their container */
-  max-width: 100%;
-  min-width: 0;
-  
-  /* Create proper scrolling area */
-  overflow-x: auto;
-  overflow-y: hidden;
-  
-  /* Visual containment */
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: inset 0 0 0 1px rgba(36, 200, 219, 0.1);
-}
-
-/* Add scroll indicator for better UX */
-.api-section pre {
-  position: relative;
-}
-
+/* Optional: subtle scroll indicator for users */
 .api-section pre::after {
   content: '→';
   position: absolute;
@@ -507,14 +130,7 @@
   opacity: 1;
 }
 
-/* Hide scroll indicator when not needed */
+/* Remove scroll indicator if not needed */
 .api-section pre:not([scrollWidth])::after {
   display: none;
-}
-
-/* Touch-friendly scrolling indicators */
-@media (hover: none) and (pointer: coarse) {
-  .api-section pre::after {
-    opacity: 0.3;
-  }
 }
