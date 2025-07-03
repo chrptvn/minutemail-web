@@ -100,14 +100,14 @@
             <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Data Model</h2>
             
             <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">Mail Record</h3>
-            <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-x-auto"><code>{
+            <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-x-auto"><code>&#123;
   "id": "4f8b1a2e3c9d4f5a8b7c6d0e1f2a3b4c",
   "from": "alice@example.com",
   "subject": "Welcome!",
   "body": "Hello there…",
   "received_at": "2025-07-02T14:23:45.123456+00:00",
   "attachments": []
-}</code></pre>
+&#125;</code></pre>
           </section>
 
           <!-- Endpoints Section -->
@@ -152,11 +152,11 @@
 
                 <div>
                   <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">Response (HTTP 200):</h4>
-                  <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-x-auto"><code>{
+                  <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-x-auto"><code>&#123;
   "message": "Mailbox created",
   "name": "q9x2k8",
   "ttl": 3600
-}</code></pre>
+&#125;</code></pre>
                 </div>
               </div>
             </div>
@@ -167,7 +167,7 @@
                 <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
                   GET
                 </span>
-                <code class="text-sm font-mono text-gray-900 dark:text-gray-100">/api/mail_box/{name}</code>
+                <code class="text-sm font-mono text-gray-900 dark:text-gray-100">/api/mail_box/&#123;name&#125;</code>
               </div>
               
               <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">2. Fetch All Mails</h3>
@@ -202,10 +202,10 @@
 
                 <div>
                   <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">Response (HTTP 200):</h4>
-                  <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-x-auto"><code>{
+                  <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-x-auto"><code>&#123;
   "mails": [ /* array of MailRecord */ ],
   "expireAt": "2025-07-02T15:23:45.123456+00:00"
-}</code></pre>
+&#125;</code></pre>
                   <ul class="mt-2 list-disc pl-6 text-sm text-gray-700 dark:text-gray-300 space-y-1">
                     <li><code>mails</code>: array of all stored mail records (in insertion order)</li>
                     <li><code>expireAt</code>: ISO-8601 timestamp when this mailbox will expire</li>
@@ -220,7 +220,7 @@
                 <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200">
                   DELETE
                 </span>
-                <code class="text-sm font-mono text-gray-900 dark:text-gray-100">/api/mail_box/{name}</code>
+                <code class="text-sm font-mono text-gray-900 dark:text-gray-100">/api/mail_box/&#123;name&#125;</code>
               </div>
               
               <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">3. Delete Entire Mailbox</h3>
@@ -255,9 +255,9 @@
 
                 <div>
                   <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">Response (HTTP 200):</h4>
-                  <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-x-auto"><code>{
+                  <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-x-auto"><code>&#123;
   "message": "Mailbox deleted"
-}</code></pre>
+&#125;</code></pre>
                 </div>
               </div>
             </div>
@@ -268,7 +268,7 @@
                 <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200">
                   DELETE
                 </span>
-                <code class="text-sm font-mono text-gray-900 dark:text-gray-100">/api/mail_box/{name}/mail/{mail_id}</code>
+                <code class="text-sm font-mono text-gray-900 dark:text-gray-100">/api/mail_box/&#123;name&#125;/mail/&#123;mail_id&#125;</code>
               </div>
               
               <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">4. Delete Single Mail</h3>
@@ -308,9 +308,9 @@
 
                 <div>
                   <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">Response (HTTP 200):</h4>
-                  <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-x-auto"><code>{
+                  <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-x-auto"><code>&#123;
   "message": "Mail deleted"
-}</code></pre>
+&#125;</code></pre>
                 </div>
               </div>
             </div>
@@ -325,7 +325,7 @@
                 <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">1. Create a mailbox with password</h3>
                 <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-x-auto"><code>curl -X POST https://minutemail.co/api/mail_box/create \
   -H "Content-Type: application/json" \
-  -d '{ "password": "hunter2" }'</code></pre>
+  -d '&#123; "password": "hunter2" &#125;'</code></pre>
               </div>
 
               <div>
