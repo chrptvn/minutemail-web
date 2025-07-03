@@ -4,9 +4,7 @@ import {
   isMainModule,
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
-import express, { Request, Response } from 'express';
-import { createProxyMiddleware, Options } from 'http-proxy-middleware';
-import { ClientRequest } from 'http';
+import express from 'express';
 import { join } from 'node:path';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
@@ -14,37 +12,6 @@ const browserDistFolder = join(import.meta.dirname, '../browser');
 const app = express();
 const angularApp = new AngularNodeAppEngine();
 
-/**
- * Add proxy middleware for API calls in SSR mode
- */
-app.use('/api', createProxyMiddleware({
-  target: 'https://minutemail.co',
-  changeOrigin: true,
-  secure: true,
-  onError: (err: Error, req: Request, res: Response) => {
-    console.error('Proxy error:', err);
-    res.status(500).json({ error: 'Proxy error' });
-  },
-  onProxyReq: (proxyReq: ClientRequest, req: Request, res: Response) => {
-    console.log('Proxying request:', req.method, req.url);
-  }
-} as Options));
-
-/**
- * Add proxy middleware for file attachments
- */
-app.use('/files', createProxyMiddleware({
-  target: 'https://minutemail.co',
-  changeOrigin: true,
-  secure: true,
-  onError: (err: Error, req: Request, res: Response) => {
-    console.error('File proxy error:', err);
-    res.status(500).json({ error: 'File proxy error' });
-  },
-  onProxyReq: (proxyReq: ClientRequest, req: Request, res: Response) => {
-    console.log('Proxying file request:', req.method, req.url);
-  }
-} as Options));
 
 /**
  * Example Express Rest API endpoints can be defined here.
