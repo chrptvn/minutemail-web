@@ -28,7 +28,6 @@
     ">
 
 
-
   <meta http-equiv="Referrer-Policy" content="no-referrer">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta http-equiv="X-Frame-Options" content="DENY">
@@ -84,6 +83,10 @@
       -webkit-text-size-adjust: 100%;
       -ms-text-size-adjust: 100%;
       text-size-adjust: 100%;
+      /* CRITICAL: Ensure scrolling works on all devices */
+      overflow-y: auto !important;
+      height: auto !important;
+      -webkit-overflow-scrolling: touch !important;
     }
 
     html.dark {
@@ -109,8 +112,11 @@
       text-rendering: optimizeLegibility;
       /* Prevent iOS zoom on input focus */
       font-size: 16px;
+      /* CRITICAL: Ensure body can scroll */
+      overflow-y: auto !important;
+      height: auto !important;
+      -webkit-overflow-scrolling: touch !important;
       /* Disable iOS bounce scrolling */
-      -webkit-overflow-scrolling: touch;
       overscroll-behavior: none;
     }
 
@@ -118,6 +124,9 @@
     app-root {
       display: block;
       min-height: 100vh;
+      /* CRITICAL: Don't restrict scrolling */
+      overflow-y: visible !important;
+      height: auto !important;
     }
 
     /* Loading state */
@@ -170,8 +179,17 @@
       transition: none !important;
     }
 
-    /* Force mobile styles on small screens */
+    /* CRITICAL MOBILE FIXES - Apply immediately */
     @media screen and (max-width: 768px) {
+      html, body {
+        overflow-y: auto !important;
+        height: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        /* Prevent any potential overflow hidden */
+        overflow-x: visible !important;
+      }
+
+      /* Force mobile styles */
       .hidden.md\\:grid {
         display: none !important;
       }
@@ -192,9 +210,16 @@
       }
     }
 
-    /* iOS specific fixes */
+    /* iOS specific fixes - Apply immediately */
     @supports (-webkit-touch-callout: none) {
       /* iOS Safari specific styles */
+      html, body {
+        /* CRITICAL: Force scrolling on iOS */
+        overflow-y: auto !important;
+        height: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
+
       body {
         -webkit-touch-callout: none;
         -webkit-user-select: none;
@@ -209,6 +234,27 @@
       /* Prevent iOS zoom */
       input[type="text"], input[type="email"], textarea {
         font-size: 16px !important;
+      }
+
+      /* Force mobile styles on iOS */
+      .hidden.md\\:grid,
+      .md\\:grid {
+        display: none !important;
+      }
+    }
+
+    /* EMERGENCY OVERRIDE - Last resort for stubborn devices */
+    @media screen and (max-width: 768px) {
+      * {
+        /* Remove any potential max-height restrictions */
+        max-height: none !important;
+      }
+
+      /* Force all containers to allow scrolling */
+      .min-h-screen, main, .max-w-4xl, .max-w-5xl {
+        height: auto !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
       }
     }
   </style>
@@ -265,6 +311,38 @@
       }
     }
 
+    // CRITICAL: Fix mobile scrolling immediately
+    function fixMobileScrolling() {
+      if (isMobileDevice()) {
+        // Force scrolling on html and body
+        document.documentElement.style.overflowY = 'auto';
+        document.documentElement.style.height = 'auto';
+        document.documentElement.style.webkitOverflowScrolling = 'touch';
+        
+        document.body.style.overflowY = 'auto';
+        document.body.style.height = 'auto';
+        document.body.style.webkitOverflowScrolling = 'touch';
+
+        // Remove any potential overflow hidden that might be set later
+        const observer = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+              const target = mutation.target;
+              if (target === document.body || target === document.documentElement) {
+                if (target.style.overflow === 'hidden' || target.style.overflowY === 'hidden') {
+                  target.style.overflowY = 'auto';
+                  target.style.webkitOverflowScrolling = 'touch';
+                }
+              }
+            }
+          });
+        });
+
+        observer.observe(document.body, { attributes: true, attributeFilter: ['style'] });
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['style'] });
+      }
+    }
+
     // Immediately apply saved theme or default to dark
     (function() {
       try {
@@ -306,6 +384,9 @@
         // Force mobile styles
         forceMobileStyles();
 
+        // CRITICAL: Fix mobile scrolling
+        fixMobileScrolling();
+
         // Force a reflow to ensure styles are applied
         html.offsetHeight;
 
@@ -320,17 +401,25 @@
         document.documentElement.classList.add('dark');
         document.body.classList.add('dark');
         forceMobileStyles();
+        fixMobileScrolling();
       }
     })();
 
     // Additional iOS fixes
     if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-      // Prevent iOS bounce scrolling
+      // CRITICAL: Prevent iOS from blocking scrolling
+      document.addEventListener('touchstart', function() {}, { passive: true });
       document.addEventListener('touchmove', function(e) {
-        if (e.target.closest('.overflow-y-auto, .overflow-auto')) {
-          return;
+        // Only prevent default if we're not in a scrollable container
+        const target = e.target;
+        const scrollableParent = target.closest('.overflow-y-auto, .overflow-auto, main, .mobile-scroll-container, .mobile-scroll-content');
+        if (!scrollableParent) {
+          // Allow scrolling on the main document
+          if (target === document.body || target === document.documentElement) {
+            return;
+          }
+          e.preventDefault();
         }
-        e.preventDefault();
       }, { passive: false });
 
       // Fix iOS viewport issues
@@ -339,14 +428,37 @@
         if (viewport) {
           viewport.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover');
         }
+        
+        // Force scrolling again after viewport change
+        document.documentElement.style.overflowY = 'auto';
+        document.body.style.overflowY = 'auto';
       }
 
       // Apply fix on load and orientation change
       window.addEventListener('load', fixIOSViewport);
       window.addEventListener('orientationchange', function() {
         setTimeout(fixIOSViewport, 100);
+        setTimeout(fixMobileScrolling, 200);
       });
     }
+
+    // Monitor for any changes that might break scrolling
+    window.addEventListener('load', function() {
+      if (isMobileDevice()) {
+        // Double-check scrolling is working after page load
+        setTimeout(fixMobileScrolling, 500);
+        
+        // Set up periodic check for the first few seconds
+        let checkCount = 0;
+        const checkInterval = setInterval(function() {
+          fixMobileScrolling();
+          checkCount++;
+          if (checkCount >= 10) { // Check for 5 seconds
+            clearInterval(checkInterval);
+          }
+        }, 500);
+      }
+    });
   </script>
 </body>
 </html>

@@ -21,6 +21,8 @@ export class MailViewerComponent implements OnInit, OnDestroy {
   @Output() onClose = new EventEmitter<void>();
 
   isBrowser = false;
+  private originalBodyOverflow = '';
+  private originalBodyHeight = '';
 
   constructor(
     private sanitizer: DomSanitizer,
@@ -31,26 +33,57 @@ export class MailViewerComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (this.isBrowser && this.isOpen) {
-      // Prevent body scroll when modal is open
-      document.body.style.overflow = 'hidden';
+      this.preventBodyScroll();
     }
   }
 
   ngOnDestroy() {
     if (this.isBrowser) {
-      // Restore body scroll
-      document.body.style.overflow = '';
+      this.restoreBodyScroll();
     }
   }
 
   ngOnChanges() {
     if (this.isBrowser) {
       if (this.isOpen) {
-        document.body.style.overflow = 'hidden';
+        this.preventBodyScroll();
       } else {
-        document.body.style.overflow = '';
+        this.restoreBodyScroll();
       }
     }
+  }
+
+  private preventBodyScroll() {
+    if (!this.isBrowser) return;
+
+    // Store original values
+    this.originalBodyOverflow = document.body.style.overflow;
+    this.originalBodyHeight = document.body.style.height;
+
+    // CRITICAL: Only prevent scroll on desktop, not mobile
+    const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    if (!isMobile) {
+      // Only prevent body scroll on desktop
+      document.body.style.overflow = 'hidden';
+    } else {
+      // On mobile, ensure body can still scroll
+      document.body.style.overflow = 'auto';
+      document.body.style.webkitOverflowScrolling = 'touch';
+      document.documentElement.style.overflow = 'auto';
+      document.documentElement.style.webkitOverflowScrolling = 'touch';
+    }
+  }
+
+  private restoreBodyScroll() {
+    if (!this.isBrowser) return;
+
+    // Always restore scrolling
+    document.body.style.overflow = this.originalBodyOverflow || 'auto';
+    document.body.style.height = this.originalBodyHeight || 'auto';
+    document.body.style.webkitOverflowScrolling = 'touch';
+    document.documentElement.style.overflow = 'auto';
+    document.documentElement.style.webkitOverflowScrolling = 'touch';
   }
 
   formatDate(dateString: string): string {
@@ -80,9 +113,7 @@ export class MailViewerComponent implements OnInit, OnDestroy {
   }
 
   closeModal() {
-    if (this.isBrowser) {
-      document.body.style.overflow = '';
-    }
+    this.restoreBodyScroll();
     this.onClose.emit();
   }
 }
