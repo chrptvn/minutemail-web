@@ -74,7 +74,7 @@
                   <li><strong>Password:</strong> mailbox <code>password</code> (if set; otherwise no auth required)</li>
                   <li><strong>Header:</strong></li>
                 </ul>
-                <pre class="mt-2 bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-x-auto"><code>Authorization: Basic BASE64(&lt;name&gt;:&lt;password&gt;)</code></pre>
+                <pre class="mt-2 bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-x-auto"><code>Authorization: Basic BASE64(<name>:<password>)</code></pre>
               </div>
 
               <div class="bg-gray-50 dark:bg-dark-800 p-4 rounded-lg border border-gray-200 dark:border-dark-700">
@@ -214,6 +214,74 @@
               </div>
             </div>
 
+            <!-- Fetch Mail Attachment -->
+            <div class="mb-8 border border-gray-200 dark:border-dark-700 rounded-lg p-6">
+              <div class="flex items-center space-x-3 mb-4">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
+                  GET
+                </span>
+                <code class="text-sm font-mono text-gray-900 dark:text-gray-100">/v1/mailbox/&#123;name&#125;/mail/&#123;mail_id&#125;/attachment/&#123;filename&#125;</code>
+              </div>
+
+              <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">3. Fetch Mail Attachment</h3>
+
+              <div class="space-y-4">
+                <div>
+                  <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">URL Path Parameters:</h4>
+                  <div class="overflow-x-auto">
+                    <table class="min-w-full border border-gray-200 dark:border-dark-700 rounded">
+                      <thead class="bg-gray-50 dark:bg-dark-800">
+                        <tr>
+                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Name</th>
+                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Type</th>
+                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Description</th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-gray-200 dark:divide-dark-700">
+                        <tr>
+                          <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">name</td>
+                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">string</td>
+                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Mailbox identifier</td>
+                        </tr>
+                        <tr>
+                          <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">mail_id</td>
+                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">string</td>
+                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300"><code>id</code> field of the mail containing the attachment</td>
+                        </tr>
+                        <tr>
+                          <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">filename</td>
+                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">string</td>
+                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Name of the attachment file to download</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">Headers:</h4>
+                  <p class="text-sm text-gray-700 dark:text-gray-300">Use either Basic Auth or <code>X-Mailbox-Password</code> as described above.</p>
+                </div>
+
+                <div>
+                  <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">Response (HTTP 200):</h4>
+                  <p class="text-sm text-gray-700 dark:text-gray-300 mb-2">
+                    Returns the raw attachment file with appropriate <code>Content-Type</code> and <code>Content-Disposition</code> headers for download.
+                  </p>
+                  <div class="bg-gray-50 dark:bg-dark-800 p-3 rounded border border-gray-200 dark:border-dark-700">
+                    <p class="text-sm text-gray-700 dark:text-gray-300">
+                      <strong>Response Headers:</strong>
+                    </p>
+                    <ul class="mt-1 list-disc pl-6 text-sm text-gray-700 dark:text-gray-300 space-y-1">
+                      <li><code>Content-Type</code>: MIME type of the file</li>
+                      <li><code>Content-Disposition</code>: attachment; filename="&#123;filename&#125;"</li>
+                      <li><code>Content-Length</code>: Size of the file in bytes</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <!-- Delete Entire Mailbox -->
             <div class="mb-8 border border-gray-200 dark:border-dark-700 rounded-lg p-6">
               <div class="flex items-center space-x-3 mb-4">
@@ -223,7 +291,7 @@
                 <code class="text-sm font-mono text-gray-900 dark:text-gray-100">/v1/mailbox/&#123;name&#125;</code>
               </div>
 
-              <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">3. Delete Entire Mailbox</h3>
+              <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">4. Delete Entire Mailbox</h3>
 
               <div class="space-y-4">
                 <div>
@@ -271,7 +339,7 @@
                 <code class="text-sm font-mono text-gray-900 dark:text-gray-100">/v1/mailbox/&#123;name&#125;/mail/&#123;mail_id&#125;</code>
               </div>
 
-              <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">4. Delete Single Mail</h3>
+              <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">5. Delete Single Mail</h3>
 
               <div class="space-y-4">
                 <div>
@@ -341,13 +409,20 @@
               </div>
 
               <div>
-                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">4. Delete a single mail</h3>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">4. Download an attachment</h3>
+                <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-x-auto"><code>curl https://api.minutemail.co/v1/mailbox/q9x2k8/mail/4f8b1a2e3c9d4f5a8b7c6d0e1f2a3b4c/attachment/document.pdf \
+  -H "X-Mailbox-Password: hunter2" \
+  -o document.pdf</code></pre>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">5. Delete a single mail</h3>
                 <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-x-auto"><code>curl -X DELETE https://api.minutemail.co/v1/mailbox/q9x2k8/mail/4f8b1a2e3c9d4f5a8b7c6d0e1f2a3b4c \
   -H "X-Mailbox-Password: hunter2"</code></pre>
               </div>
 
               <div>
-                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">5. Delete entire mailbox</h3>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">6. Delete entire mailbox</h3>
                 <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-x-auto"><code>curl -X DELETE https://api.minutemail.co/v1/mailbox/q9x2k8 \
   -H "X-Mailbox-Password: hunter2"</code></pre>
               </div>
