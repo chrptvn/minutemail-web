@@ -24,15 +24,56 @@
   margin-bottom: 0.5rem;
 }
 
-/* Code blocks */
+/* Code blocks - ENHANCED HORIZONTAL SCROLLING */
 .api-section pre {
   background: #1a1a1a !important;
   border-radius: 0.5rem;
   padding: 1rem;
-  overflow-x: auto;
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   font-size: 0.875rem;
   line-height: 1.5;
+  
+  /* CRITICAL: Enable horizontal scrolling */
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  white-space: nowrap !important;
+  
+  /* Smooth scrolling on mobile */
+  -webkit-overflow-scrolling: touch;
+  
+  /* Ensure content doesn't wrap */
+  word-wrap: normal !important;
+  word-break: normal !important;
+  
+  /* Add scrollbar styling */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(36, 200, 219, 0.5) transparent;
+}
+
+/* Custom scrollbar for code blocks */
+.api-section pre::-webkit-scrollbar {
+  height: 6px;
+}
+
+.api-section pre::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.api-section pre::-webkit-scrollbar-thumb {
+  background: rgba(36, 200, 219, 0.5);
+  border-radius: 3px;
+}
+
+.api-section pre::-webkit-scrollbar-thumb:hover {
+  background: rgba(36, 200, 219, 0.7);
+}
+
+/* Ensure code content stays on one line */
+.api-section pre code {
+  white-space: nowrap !important;
+  display: inline-block;
+  min-width: 100%;
 }
 
 .api-section code {
@@ -167,20 +208,20 @@
   font-weight: 600;
 }
 
-/* Mobile optimizations - Fix scrolling issues */
+/* MOBILE OPTIMIZATIONS - Enhanced horizontal scrolling */
 @media (max-width: 768px) {
   /* Ensure the page container allows scrolling */
   .min-h-screen {
     min-height: 100vh;
-    height: auto !important; /* Override any fixed height */
-    overflow-y: auto !important; /* Ensure vertical scrolling */
+    height: auto !important;
+    overflow-y: auto !important;
   }
 
   /* Ensure main content is scrollable */
   main {
     height: auto !important;
     overflow-y: visible !important;
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    -webkit-overflow-scrolling: touch;
   }
 
   /* Fix content container */
@@ -230,9 +271,32 @@
     word-break: break-all;
   }
 
+  /* MOBILE CODE BLOCKS - Enhanced horizontal scrolling */
   .api-section pre {
     font-size: 0.75rem;
     padding: 0.75rem;
+    
+    /* CRITICAL: Force horizontal scrolling on mobile */
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    white-space: nowrap !important;
+    
+    /* Better mobile scrolling */
+    -webkit-overflow-scrolling: touch;
+    
+    /* Prevent any wrapping */
+    word-wrap: normal !important;
+    word-break: normal !important;
+    text-wrap: nowrap !important;
+    
+    /* Ensure minimum width for scrolling */
+    min-width: 100%;
+    width: auto;
+  }
+
+  /* Mobile scrollbar for code blocks */
+  .api-section pre::-webkit-scrollbar {
+    height: 4px;
   }
 
   .api-section th,
@@ -286,6 +350,17 @@
   
   .prose h3 {
     font-size: 1rem;
+  }
+
+  /* VERY SMALL SCREENS - Code block optimization */
+  .api-section pre {
+    font-size: 0.7rem;
+    padding: 0.5rem;
+    
+    /* Force horizontal scrolling even on very small screens */
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    word-break: keep-all !important;
   }
 }
 
@@ -366,5 +441,41 @@
   .max-w-5xl, .bg-white, .dark\\:bg-dark-900 {
     height: auto !important;
     max-height: none !important;
+  }
+}
+
+/* ADDITIONAL HORIZONTAL SCROLL ENHANCEMENTS */
+
+/* Ensure all code content scrolls horizontally */
+.api-section pre * {
+  white-space: nowrap !important;
+}
+
+/* Add visual indicator for scrollable content */
+.api-section pre {
+  position: relative;
+}
+
+.api-section pre::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 100%;
+  background: linear-gradient(to left, #1a1a1a, transparent);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.api-section pre:hover::after {
+  opacity: 1;
+}
+
+/* Touch-friendly scrolling indicators */
+@media (hover: none) and (pointer: coarse) {
+  .api-section pre::after {
+    opacity: 0.5;
   }
 }
