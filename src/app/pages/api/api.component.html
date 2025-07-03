@@ -65,7 +65,7 @@
             <p class="text-gray-700 dark:text-gray-300 mb-4">
               All endpoints operating on an existing mailbox support <strong>two</strong> interchangeable auth methods; choose one:
             </p>
-            
+
             <div class="space-y-4">
               <div class="bg-gray-50 dark:bg-dark-800 p-4 rounded-lg border border-gray-200 dark:border-dark-700">
                 <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">1. HTTP Basic Auth</h3>
@@ -98,11 +98,11 @@
           <!-- Data Model Section -->
           <section class="mb-8">
             <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Data Model</h2>
-            
+
             <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">Mail Record</h3>
             <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-x-auto"><code>&#123;
   "id": "4f8b1a2e3c9d4f5a8b7c6d0e1f2a3b4c",
-  "from": "alice@example.com",
+  "from": "alice&#64;example.com",
   "subject": "Welcome!",
   "body": "Hello there…",
   "received_at": "2025-07-02T14:23:45.123456+00:00",
@@ -120,11 +120,11 @@
                 <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
                   POST
                 </span>
-                <code class="text-sm font-mono text-gray-900 dark:text-gray-100">/api/mail_box/create</code>
+                <code class="text-sm font-mono text-gray-900 dark:text-gray-100">/v1/mailbox/create</code>
               </div>
-              
+
               <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">1. Create Mailbox</h3>
-              
+
               <div class="space-y-4">
                 <div>
                   <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">Request Body (JSON):</h4>
@@ -154,7 +154,7 @@
                   <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">Response (HTTP 200):</h4>
                   <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-x-auto"><code>&#123;
   "message": "Mailbox created",
-  "name": "q9x2k8",
+  "name": "friendly-pear-shaped-cougar-191",
   "ttl": 3600
 &#125;</code></pre>
                 </div>
@@ -167,11 +167,11 @@
                 <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
                   GET
                 </span>
-                <code class="text-sm font-mono text-gray-900 dark:text-gray-100">/api/mail_box/&#123;name&#125;</code>
+                <code class="text-sm font-mono text-gray-900 dark:text-gray-100">/v1/mailbox/&#123;name&#125;</code>
               </div>
-              
+
               <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">2. Fetch All Mails</h3>
-              
+
               <div class="space-y-4">
                 <div>
                   <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">URL Path Parameters:</h4>
@@ -220,11 +220,11 @@
                 <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200">
                   DELETE
                 </span>
-                <code class="text-sm font-mono text-gray-900 dark:text-gray-100">/api/mail_box/&#123;name&#125;</code>
+                <code class="text-sm font-mono text-gray-900 dark:text-gray-100">/v1/mailbox/&#123;name&#125;</code>
               </div>
-              
+
               <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">3. Delete Entire Mailbox</h3>
-              
+
               <div class="space-y-4">
                 <div>
                   <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">URL Path Parameters:</h4>
@@ -268,11 +268,11 @@
                 <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200">
                   DELETE
                 </span>
-                <code class="text-sm font-mono text-gray-900 dark:text-gray-100">/api/mail_box/&#123;name&#125;/mail/&#123;mail_id&#125;</code>
+                <code class="text-sm font-mono text-gray-900 dark:text-gray-100">/v1/mailbox/&#123;name&#125;/mail/&#123;mail_id&#125;</code>
               </div>
-              
+
               <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">4. Delete Single Mail</h3>
-              
+
               <div class="space-y-4">
                 <div>
                   <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">URL Path Parameters:</h4>
@@ -319,36 +319,36 @@
           <!-- Usage Examples Section -->
           <section class="mb-8">
             <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Usage Examples</h2>
-            
+
             <div class="space-y-4">
               <div>
                 <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">1. Create a mailbox with password</h3>
-                <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-x-auto"><code>curl -X POST https://minutemail.co/api/mail_box/create \
+                <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-x-auto"><code>curl -X POST https://api.minutemail.co/v1/mailbox/create \
   -H "Content-Type: application/json" \
   -d '&#123; "password": "hunter2" &#125;'</code></pre>
               </div>
 
               <div>
                 <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">2. Fetch all mails (Basic Auth)</h3>
-                <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-x-auto"><code>curl https://minutemail.co/api/mail_box/q9x2k8 \
+                <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-x-auto"><code>curl https://api.minutemail.co/v1/mailbox/q9x2k8 \
   -H "Authorization: Basic cTl4Mms4Omh1bnRlcjI="</code></pre>
               </div>
 
               <div>
                 <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">3. Fetch all mails (custom header)</h3>
-                <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-x-auto"><code>curl https://minutemail.co/api/mail_box/q9x2k8 \
+                <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-x-auto"><code>curl https://api.minutemail.co/v1/mailbox/q9x2k8 \
   -H "X-Mailbox-Password: hunter2"</code></pre>
               </div>
 
               <div>
                 <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">4. Delete a single mail</h3>
-                <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-x-auto"><code>curl -X DELETE https://minutemail.co/api/mail_box/q9x2k8/mail/4f8b1a2e3c9d4f5a8b7c6d0e1f2a3b4c \
+                <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-x-auto"><code>curl -X DELETE https://api.minutemail.co/v1/mailbox/q9x2k8/mail/4f8b1a2e3c9d4f5a8b7c6d0e1f2a3b4c \
   -H "X-Mailbox-Password: hunter2"</code></pre>
               </div>
 
               <div>
                 <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">5. Delete entire mailbox</h3>
-                <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-x-auto"><code>curl -X DELETE https://minutemail.co/api/mail_box/q9x2k8 \
+                <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-x-auto"><code>curl -X DELETE https://api.minutemail.co/v1/mailbox/q9x2k8 \
   -H "X-Mailbox-Password: hunter2"</code></pre>
               </div>
             </div>
@@ -358,8 +358,7 @@
           <section class="mb-8">
             <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Base URL</h2>
             <div class="bg-gray-50 dark:bg-dark-800 p-4 rounded-lg border border-gray-200 dark:border-dark-700">
-              <p class="text-gray-700 dark:text-gray-300 mb-2">All API endpoints are available at:</p>
-              <code class="text-lg font-mono text-primary-600 dark:text-primary-400">https://minutemail.co</code>
+              <code class="text-lg font-mono text-primary-600 dark:text-primary-400">https://api.minutemail.co</code>
             </div>
           </section>
 
