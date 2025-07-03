@@ -318,11 +318,11 @@ html:not(.no-transition) .input {
   .hover\:bg-gray-100:hover {
     background-color: inherit;
   }
-  
+
   .hover\:bg-gray-300:hover {
     background-color: inherit;
   }
-  
+
   /* Add active states for better feedback */
   button:active,
   [role="button"]:active {
@@ -343,7 +343,7 @@ html:not(.no-transition) .input {
     --border-color: #000000;
     --text-muted: #000000;
   }
-  
+
   .dark {
     --border-color: #ffffff;
     --text-muted: #ffffff;
@@ -355,15 +355,15 @@ html:not(.no-transition) .input {
   .safe-area-inset-top {
     padding-top: max(1rem, env(safe-area-inset-top));
   }
-  
+
   .safe-area-inset-bottom {
     padding-bottom: max(1rem, env(safe-area-inset-bottom));
   }
-  
+
   .safe-area-inset-left {
     padding-left: max(1rem, env(safe-area-inset-left));
   }
-  
+
   .safe-area-inset-right {
     padding-right: max(1rem, env(safe-area-inset-right));
   }
@@ -381,12 +381,12 @@ html:not(.no-transition) .input {
     height: auto !important;
     -webkit-overflow-scrolling: touch !important;
   }
-  
+
   input, textarea, [contenteditable] {
     -webkit-user-select: text;
     user-select: text;
   }
-  
+
   /* Prevent iOS zoom */
   input[type="text"], input[type="email"], textarea {
     font-size: 16px !important;
@@ -465,21 +465,21 @@ html:not(.no-transition) .input {
 /* EMERGENCY MOBILE SCROLL FIX - Last resort */
 @media screen and (max-width: 768px) {
   body {
-    position: relative !important;
-    overflow-y: auto !important;
-    height: auto !important;
+    //position: relative !important;
+    //overflow-y: auto !important;
+    //height: auto !important;
     -webkit-overflow-scrolling: touch !important;
   }
 
-  .min-h-screen {
-    position: relative !important;
-    overflow-y: auto !important;
-    height: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-  }
+  //.min-h-screen {
+  //  position: relative !important;
+  //  overflow-y: auto !important;
+  //  height: auto !important;
+  //  -webkit-overflow-scrolling: touch !important;
+  //}
 
-  /* Disable any potential position fixed that might block scrolling */
-  .fixed {
-    position: relative !important;
-  }
+  ///* Disable any potential position fixed that might block scrolling */
+  //.fixed {
+  //  position: relative !important;
+  //}
 }
