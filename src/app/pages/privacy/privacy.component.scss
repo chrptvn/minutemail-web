@@ -58,27 +58,72 @@
   font-weight: 600;
 }
 
-/* Mobile optimizations - Fix scrolling issues */
+/* CRITICAL MOBILE SCROLLING FIXES */
 @media (max-width: 768px) {
+  /* Force scrolling on mobile */
+  html, body {
+    overflow-y: auto !important;
+    height: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    position: relative !important;
+  }
+
   /* Ensure the page container allows scrolling */
   .min-h-screen {
-    min-height: 100vh;
-    height: auto !important; /* Override any fixed height */
-    overflow-y: auto !important; /* Ensure vertical scrolling */
+    min-height: 100vh !important;
+    height: auto !important;
+    overflow-y: auto !important;
+    position: relative !important;
   }
 
   /* Ensure main content is scrollable */
   main {
     height: auto !important;
     overflow-y: visible !important;
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    -webkit-overflow-scrolling: touch !important;
+    position: relative !important;
   }
 
   /* Fix content container */
-  .bg-white.dark\\:bg-dark-900 {
+  .bg-white, .dark\:bg-dark-900 {
     height: auto !important;
     max-height: none !important;
     overflow: visible !important;
+    position: relative !important;
+  }
+
+  /* Apply mobile scroll classes */
+  .mobile-scroll-container {
+    overflow-y: auto !important;
+    height: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    position: relative !important;
+  }
+
+  .mobile-scroll-content {
+    height: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch !important;
+    position: relative !important;
+  }
+
+  .mobile-scroll-card {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    position: relative !important;
+  }
+
+  .mobile-scroll-inner {
+    height: auto !important;
+    overflow: visible !important;
+    position: relative !important;
+  }
+
+  .mobile-scroll-prose {
+    height: auto !important;
+    overflow: visible !important;
+    position: relative !important;
   }
 
   .privacy-content {
@@ -107,8 +152,17 @@
     padding: 1.5rem 1rem !important;
   }
 
-  .sm\\:px-8.sm\\:py-12 {
+  .sm\:px-8.sm\:py-12 {
     padding: 1.5rem 1rem !important;
+  }
+
+  /* Remove any potential fixed positioning */
+  * {
+    position: relative !important;
+  }
+
+  .fixed {
+    position: relative !important;
   }
 }
 
@@ -117,12 +171,14 @@
   body {
     overflow-y: auto !important;
     height: auto !important;
-    -webkit-overflow-scrolling: touch;
+    -webkit-overflow-scrolling: touch !important;
+    position: relative !important;
   }
 
   /* Ensure no fixed heights on small screens */
   * {
     max-height: none !important;
+    position: relative !important;
   }
 
   .privacy-content {
@@ -139,6 +195,36 @@
   
   .prose h2 {
     font-size: 1.125rem;
+  }
+}
+
+/* iOS specific fixes */
+@supports (-webkit-touch-callout: none) {
+  @media (max-width: 768px) {
+    html, body {
+      overflow-y: auto !important;
+      height: auto !important;
+      -webkit-overflow-scrolling: touch !important;
+      position: relative !important;
+    }
+
+    .min-h-screen {
+      min-height: 100vh !important;
+      height: auto !important;
+      overflow-y: auto !important;
+      position: relative !important;
+    }
+
+    .mobile-scroll-container,
+    .mobile-scroll-content,
+    .mobile-scroll-card,
+    .mobile-scroll-inner,
+    .mobile-scroll-prose {
+      overflow-y: auto !important;
+      height: auto !important;
+      -webkit-overflow-scrolling: touch !important;
+      position: relative !important;
+    }
   }
 }
 
@@ -180,22 +266,32 @@
   border-radius: 2px;
 }
 
-/* Force scrollable behavior on all mobile devices */
+/* Emergency mobile scroll fix - Last resort */
 @media screen and (max-width: 768px) {
-  html, body {
+  body {
+    position: relative !important;
     overflow-y: auto !important;
     height: auto !important;
     -webkit-overflow-scrolling: touch !important;
   }
 
   .min-h-screen {
-    min-height: 100vh !important;
+    position: relative !important;
+    overflow-y: auto !important;
     height: auto !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 
-  /* Ensure content containers don't restrict height */
-  .max-w-4xl, .bg-white, .dark\\:bg-dark-900 {
+  /* Disable any potential position fixed that might block scrolling */
+  .fixed {
+    position: relative !important;
+  }
+
+  /* Force all containers to be scrollable */
+  .max-w-4xl, .bg-white, .dark\:bg-dark-900 {
     height: auto !important;
     max-height: none !important;
+    overflow: visible !important;
+    position: relative !important;
   }
 }
