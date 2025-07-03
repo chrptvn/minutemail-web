@@ -36,9 +36,6 @@ html {
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  /* CRITICAL: Ensure scrolling works on mobile */
-  overflow-y: auto !important;
-  height: auto !important;
 }
 
 body {
@@ -56,9 +53,6 @@ body {
   text-rendering: optimizeLegibility;
   /* Prevent iOS zoom on input focus */
   font-size: 16px;
-  /* CRITICAL: Ensure scrolling works on mobile */
-  overflow-y: auto !important;
-  height: auto !important;
   /* Enable smooth scrolling on iOS */
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: none;
@@ -68,8 +62,6 @@ body {
 app-root {
   display: block;
   min-height: 100vh;
-  height: auto !important;
-  overflow-y: auto !important;
 }
 
 /* No transition class to prevent theme switching flashes */
@@ -196,6 +188,41 @@ html:not(.no-transition) .input {
   color: var(--text-color) !important;
 }
 
+/* CRITICAL MOBILE SCROLLING FIXES */
+.mobile-scroll-container {
+  /* Force scrollable behavior on mobile */
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  height: auto !important;
+  min-height: 100vh !important;
+}
+
+.mobile-scroll-content {
+  /* Ensure main content areas are scrollable */
+  height: auto !important;
+  overflow-y: visible !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+.mobile-scroll-card {
+  /* Remove any height restrictions on content containers */
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+.mobile-scroll-inner {
+  /* Ensure inner content is not constrained */
+  height: auto !important;
+  overflow: visible !important;
+}
+
+.mobile-scroll-prose {
+  /* Ensure prose content flows naturally */
+  height: auto !important;
+  overflow: visible !important;
+}
+
 /* Mobile-specific improvements - CRITICAL SCROLLING FIXES */
 @media (max-width: 768px) {
   /* FORCE scrolling on all mobile devices */
@@ -203,6 +230,8 @@ html:not(.no-transition) .input {
     overflow-y: auto !important;
     height: auto !important;
     -webkit-overflow-scrolling: touch !important;
+    /* Prevent any potential overflow hidden */
+    overflow-x: visible !important;
   }
 
   /* Ensure page containers allow scrolling */
@@ -210,13 +239,14 @@ html:not(.no-transition) .input {
     min-height: 100vh !important;
     height: auto !important;
     overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 
   /* Ensure main content areas are scrollable */
   main {
     height: auto !important;
     overflow-y: visible !important;
-    -webkit-overflow-scrolling: touch;
+    -webkit-overflow-scrolling: touch !important;
   }
 
   /* Remove any height restrictions on content containers */
@@ -224,6 +254,17 @@ html:not(.no-transition) .input {
     height: auto !important;
     max-height: none !important;
     overflow: visible !important;
+  }
+
+  /* Force all containers to be scrollable */
+  .mobile-scroll-container,
+  .mobile-scroll-content,
+  .mobile-scroll-card,
+  .mobile-scroll-inner,
+  .mobile-scroll-prose {
+    overflow-y: auto !important;
+    height: auto !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 
   /* Improve touch targets */
@@ -363,6 +404,17 @@ html:not(.no-transition) .input {
     height: auto !important;
     -webkit-overflow-scrolling: touch !important;
   }
+
+  /* Force all mobile scroll containers to work on iOS */
+  .mobile-scroll-container,
+  .mobile-scroll-content,
+  .mobile-scroll-card,
+  .mobile-scroll-inner,
+  .mobile-scroll-prose {
+    overflow-y: auto !important;
+    height: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
 }
 
 /* Force mobile styles for devices with mobile user agents */
@@ -395,5 +447,39 @@ html:not(.no-transition) .input {
   html, body, app-root, main, .min-h-screen {
     overflow-y: auto !important;
     height: auto !important;
+  }
+
+  /* Force all mobile scroll classes to work */
+  .mobile-scroll-container,
+  .mobile-scroll-content,
+  .mobile-scroll-card,
+  .mobile-scroll-inner,
+  .mobile-scroll-prose {
+    overflow-y: auto !important;
+    height: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    max-height: none !important;
+  }
+}
+
+/* EMERGENCY MOBILE SCROLL FIX - Last resort */
+@media screen and (max-width: 768px) {
+  body {
+    position: relative !important;
+    overflow-y: auto !important;
+    height: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .min-h-screen {
+    position: relative !important;
+    overflow-y: auto !important;
+    height: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Disable any potential position fixed that might block scrolling */
+  .fixed {
+    position: relative !important;
   }
 }
