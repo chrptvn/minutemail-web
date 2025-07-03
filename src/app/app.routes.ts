@@ -17,7 +17,7 @@ export const routes: Routes = [
     title: 'Privacy Policy - MinuteMail'
   },
   {
-    path: ':alias',
+    path: 'mailbox/:alias',
     loadComponent: () => import('./pages/inbox/inbox.component').then(m => m.InboxComponent),
     title: 'Inbox - MinuteMail'
   },

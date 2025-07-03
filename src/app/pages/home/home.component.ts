@@ -117,7 +117,7 @@ export class HomeComponent implements OnInit {
 
   viewInbox() {
     const aliasName = this.aliasService.extractAliasFromEmail(this.currentAlias()!);
-    this.router.navigate([`/${aliasName}`]);
+    this.router.navigate([`/mailbox/${aliasName}`]);
   }
 
   goToApi() {
