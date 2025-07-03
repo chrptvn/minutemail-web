@@ -314,14 +314,17 @@
     // CRITICAL: Fix mobile scrolling immediately
     function fixMobileScrolling() {
       if (isMobileDevice()) {
-        // Force scrolling on html and body
-        document.documentElement.style.overflowY = 'auto';
-        document.documentElement.style.height = 'auto';
-        document.documentElement.style.webkitOverflowScrolling = 'touch';
+        // Force scrolling on html and body using type assertion
+        const htmlStyle = document.documentElement.style;
+        const bodyStyle = document.body.style;
         
-        document.body.style.overflowY = 'auto';
-        document.body.style.height = 'auto';
-        document.body.style.webkitOverflowScrolling = 'touch';
+        htmlStyle.overflowY = 'auto';
+        htmlStyle.height = 'auto';
+        htmlStyle.setProperty('-webkit-overflow-scrolling', 'touch');
+        
+        bodyStyle.overflowY = 'auto';
+        bodyStyle.height = 'auto';
+        bodyStyle.setProperty('-webkit-overflow-scrolling', 'touch');
 
         // Remove any potential overflow hidden that might be set later
         const observer = new MutationObserver(function(mutations) {
@@ -329,9 +332,10 @@
             if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
               const target = mutation.target;
               if (target === document.body || target === document.documentElement) {
-                if (target.style.overflow === 'hidden' || target.style.overflowY === 'hidden') {
-                  target.style.overflowY = 'auto';
-                  target.style.webkitOverflowScrolling = 'touch';
+                const targetStyle = target.style;
+                if (targetStyle.overflow === 'hidden' || targetStyle.overflowY === 'hidden') {
+                  targetStyle.overflowY = 'auto';
+                  targetStyle.setProperty('-webkit-overflow-scrolling', 'touch');
                 }
               }
             }

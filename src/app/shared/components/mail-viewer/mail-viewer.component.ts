@@ -69,9 +69,9 @@ export class MailViewerComponent implements OnInit, OnDestroy {
     } else {
       // On mobile, ensure body can still scroll
       document.body.style.overflow = 'auto';
-      document.body.style.webkitOverflowScrolling = 'touch';
+      (document.body.style as any).webkitOverflowScrolling = 'touch';
       document.documentElement.style.overflow = 'auto';
-      document.documentElement.style.webkitOverflowScrolling = 'touch';
+      (document.documentElement.style as any).webkitOverflowScrolling = 'touch';
     }
   }
 
@@ -81,9 +81,9 @@ export class MailViewerComponent implements OnInit, OnDestroy {
     // Always restore scrolling
     document.body.style.overflow = this.originalBodyOverflow || 'auto';
     document.body.style.height = this.originalBodyHeight || 'auto';
-    document.body.style.webkitOverflowScrolling = 'touch';
+    (document.body.style as any).webkitOverflowScrolling = 'touch';
     document.documentElement.style.overflow = 'auto';
-    document.documentElement.style.webkitOverflowScrolling = 'touch';
+    (document.documentElement.style as any).webkitOverflowScrolling = 'touch';
   }
 
   formatDate(dateString: string): string {
