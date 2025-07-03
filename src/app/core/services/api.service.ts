@@ -19,7 +19,7 @@ export class ApiService {
   ) {}
 
   getMails(alias: string): Observable<MailResponse> {
-    const url = `${this.baseUrl}/mails/${alias}`;
+    const url = `${this.baseUrl}/mailbox/${alias}`;
 
     return this.http
       .get<MailResponse>(url)
@@ -28,13 +28,12 @@ export class ApiService {
       );
   }
 
-  registerMail(alias: string): Observable<RegisterModel> {
-    const url = `${this.baseUrl}/mails/${alias}`;
+  createMailBox(): Observable<RegisterModel> {
+    const url = `${this.baseUrl}/mailbox/create`;
 
     return this.http
-      .post(url, {})
+      .post<RegisterModel>(url, {})
       .pipe(
-        map(response => response as RegisterModel),
         catchError(this.handleError)
       );
   }

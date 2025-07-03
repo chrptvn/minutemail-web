@@ -1,15 +1,17 @@
 import { Injectable } from '@angular/core';
+import {environment} from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AttachmentService {
-  
+  private readonly baseUrl = environment.apiBase;
+
   /**
    * Generate the full URL for an attachment
    */
   getAttachmentUrl(aliasName: string, mailId: string, filename: string): string {
-    return `/files/${aliasName}/${mailId}/${filename}`;
+    return `${this.baseUrl}/mailbox/${aliasName}/mail/${mailId}/attachment/${filename}`;
   }
 
   /**
@@ -76,11 +78,11 @@ export class AttachmentService {
    */
   formatFileSize(bytes: number): string {
     if (bytes === 0) return '0 Bytes';
-    
+
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    
+
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   }
 }
