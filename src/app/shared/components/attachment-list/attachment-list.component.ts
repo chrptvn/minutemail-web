@@ -1,8 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TablerIconComponent } from '../icons/tabler-icons.component';
 import { ButtonComponent } from '../ui/button.component';
 import { AttachmentService } from '../../../core/services/attachment.service';
+import { SessionService } from '../../../core/services/session.service';
 
 @Component({
   selector: 'app-attachment-list',
@@ -62,7 +63,8 @@ export class AttachmentListComponent {
   @Input() aliasName: string = '';
   @Input() mailId: string = '';
 
-  constructor(public attachmentService: AttachmentService) {}
+  public attachmentService = inject(AttachmentService);
+  private sessionService = inject(SessionService);
 
   getFileTypeLabel(filename: string): string {
     const extension = this.attachmentService.getFileExtension(filename).toLowerCase().toUpperCase();
@@ -84,8 +86,47 @@ export class AttachmentListComponent {
 
   downloadAttachment(filename: string): void {
     const url = this.attachmentService.getAttachmentUrl(this.aliasName, this.mailId, filename);
+    const sessionId = this.sessionService.getSessionId();
     
-    // Create a temporary link element to trigger download
+    // Create a fetch request with authentication headers
+    if (sessionId) {
+      // Use fetch with authentication header for secure download
+      fetch(url, {
+        method: 'GET',
+        headers: {
+          'X-Mailbox-Password': sessionId
+        }
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.blob();
+      })
+      .then(blob => {
+        // Create download link
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(downloadUrl);
+      })
+      .catch(error => {
+        console.error('Download failed:', error);
+        // Fallback to simple link download (without auth)
+        this.fallbackDownload(url, filename);
+      });
+    } else {
+      // No session ID available, use fallback
+      this.fallbackDownload(url, filename);
+    }
+  }
+
+  private fallbackDownload(url: string, filename: string): void {
+    // Fallback method without authentication
     const link = document.createElement('a');
     link.href = url;
     link.download = filename;
