@@ -53,7 +53,7 @@
   <!-- Preload critical resources -->
   <link rel="preconnect" href="https://minutemail.co">
   <link rel="preconnect" href="https://api.minutemail.co">
-  <script defer data-domain="minutemail.co" src="https://monitoring.minutemail.co/js/script.tagged-events.js"></script>
+  <script defer src="https://monitoring.minutemail.co/umami" data-website-id="c1ff712f-9840-4c12-a7db-62128d033ecb"></script>
   <!-- Critical CSS for theme initialization and SSR -->
   <style>
     /* Prevent flash of unstyled content */
@@ -317,11 +317,11 @@
         // Force scrolling on html and body using type assertion
         const htmlStyle = document.documentElement.style;
         const bodyStyle = document.body.style;
-        
+
         htmlStyle.overflowY = 'auto';
         htmlStyle.height = 'auto';
         htmlStyle.setProperty('-webkit-overflow-scrolling', 'touch');
-        
+
         bodyStyle.overflowY = 'auto';
         bodyStyle.height = 'auto';
         bodyStyle.setProperty('-webkit-overflow-scrolling', 'touch');
@@ -432,7 +432,7 @@
         if (viewport) {
           viewport.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover');
         }
-        
+
         // Force scrolling again after viewport change
         document.documentElement.style.overflowY = 'auto';
         document.body.style.overflowY = 'auto';
@@ -451,7 +451,7 @@
       if (isMobileDevice()) {
         // Double-check scrolling is working after page load
         setTimeout(fixMobileScrolling, 500);
-        
+
         // Set up periodic check for the first few seconds
         let checkCount = 0;
         const checkInterval = setInterval(function() {
