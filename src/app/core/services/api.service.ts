@@ -1,11 +1,12 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
 import {Observable, of, throwError} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { Mail, MailResponse } from '../models/mail.model';
 import {RegisterModel} from '../models/register.model';
+import { SessionService } from './session.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,14 +16,24 @@ export class ApiService {
 
   constructor(
     private http: HttpClient,
+    private sessionService: SessionService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   getMails(alias: string): Observable<MailResponse> {
     const url = `${this.baseUrl}/mailbox/${alias}`;
 
+    // Get session ID to use as password
+    const sessionId = this.sessionService.getSessionId();
+    
+    // Create headers with session ID as X-Mailbox-Password if available
+    let headers = new HttpHeaders();
+    if (sessionId) {
+      headers = headers.set('X-Mailbox-Password', sessionId);
+    }
+
     return this.http
-      .get<MailResponse>(url)
+      .get<MailResponse>(url, { headers })
       .pipe(
         catchError(this.handleError)
       );
@@ -56,6 +67,9 @@ export class ApiService {
           errorMessage = isPlatformBrowser(this.platformId)
             ? 'Unable to connect to the server. Please check your internet connection.'
             : 'Server connection failed during SSR';
+          break;
+        case 401:
+          errorMessage = 'Unauthorized access. Session may have expired.';
           break;
         case 404:
           errorMessage = 'Inbox not found or expired';
