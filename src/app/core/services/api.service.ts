@@ -28,11 +28,14 @@ export class ApiService {
       );
   }
 
-  createMailBox(): Observable<RegisterModel> {
+  createMailBox(sessionId?: string): Observable<RegisterModel> {
     const url = `${this.baseUrl}/mailbox/create`;
+    
+    // Create request body with session ID as password if provided
+    const requestBody = sessionId ? { password: sessionId } : {};
 
     return this.http
-      .post<RegisterModel>(url, {})
+      .post<RegisterModel>(url, requestBody)
       .pipe(
         catchError(this.handleError)
       );

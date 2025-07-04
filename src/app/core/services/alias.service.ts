@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { ApiService } from './api.service';
+import { SessionService } from './session.service';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
@@ -9,13 +10,16 @@ import { map, catchError } from 'rxjs/operators';
 export class AliasService {
   private readonly STORAGE_KEY = 'minutemail_current_alias';
   private readonly apiService = inject(ApiService);
+  private readonly sessionService = inject(SessionService);
 
   /**
-   * Generate a new alias and register it with the API
+   * Generate a new alias and register it with the API using session ID as password
    */
   generateAndRegisterAlias(): Observable<{ alias?: string; ttl?: number }> {
+    // Get or create session ID to use as password
+    const sessionId = this.sessionService.getOrCreateSessionId();
 
-    return this.apiService.createMailBox().pipe(
+    return this.apiService.createMailBox(sessionId).pipe(
       map(response => {
         this.setCurrentAlias(`${response.name}@minutemail.co`);
         return {
