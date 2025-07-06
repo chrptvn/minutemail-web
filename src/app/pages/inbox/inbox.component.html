@@ -175,7 +175,9 @@
         <app-mail-table
           [mails]="mails()"
           [loading]="loading() && mails().length === 0"
+          [deletingMailId]="deletingMailId()"
           (onMailClick)="openMail($event)"
+          (onDeleteMail)="deleteMail($event)"
         ></app-mail-table>
 
         <!-- Mobile Navigation Links - Unwrapped, like homepage -->
@@ -211,6 +213,7 @@
     [isOpen]="isMailViewerOpen()"
     [aliasName]="alias()"
     (onClose)="closeMail()"
+    (onMailDeleted)="onMailDeleted($event)"
   ></app-mail-viewer>
 
   <!-- Toast Notifications -->

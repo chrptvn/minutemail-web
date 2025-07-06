@@ -46,6 +46,23 @@
   transform: translateY(0);
 }
 
+/* Action buttons styling */
+.mail-row .action-buttons {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.mail-row:hover .action-buttons {
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  /* Always show action buttons on mobile */
+  .mail-row .action-buttons {
+    opacity: 1;
+  }
+}
+
 .empty-state {
   background: linear-gradient(135deg, rgba(36, 200, 219, 0.05) 0%, rgba(36, 200, 219, 0.02) 100%);
 }

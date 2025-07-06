@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter, Inject, PLATFORM_ID, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { ApiService } from '../../../core/services/api.service';
 import { TablerIconComponent } from '../icons/tabler-icons.component';
 import { ButtonComponent } from '../ui/button.component';
 import { AttachmentListComponent } from '../attachment-list/attachment-list.component';
@@ -19,13 +20,16 @@ export class MailViewerComponent implements OnInit, OnDestroy {
   @Input() aliasName?: string;
 
   @Output() onClose = new EventEmitter<void>();
+  @Output() onMailDeleted = new EventEmitter<string>();
 
   isBrowser = false;
+  deleting = false;
   private originalBodyOverflow = '';
   private originalBodyHeight = '';
 
   constructor(
     private sanitizer: DomSanitizer,
+    private apiService: ApiService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
@@ -115,5 +119,27 @@ export class MailViewerComponent implements OnInit, OnDestroy {
   closeModal() {
     this.restoreBodyScroll();
     this.onClose.emit();
+  }
+
+  deleteMail() {
+    if (!this.mail || this.deleting) {
+      return;
+    }
+
+    this.deleting = true;
+    const aliasName = this.getAliasName();
+
+    this.apiService.deleteMail(aliasName, this.mail.id).subscribe({
+      next: (response) => {
+        this.onMailDeleted.emit(this.mail!.id);
+        this.closeModal();
+        this.deleting = false;
+      },
+      error: (error) => {
+        console.error('Error deleting mail:', error);
+        this.deleting = false;
+        // You might want to show an error toast here
+      }
+    });
   }
 }

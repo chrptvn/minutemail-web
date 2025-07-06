@@ -1,21 +1,24 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TablerIconComponent } from '../icons/tabler-icons.component';
+import { ButtonComponent } from '../ui/button.component';
 import { SpinnerComponent } from '../ui/spinner.component';
 import { Mail } from '../../../core/models/mail.model';
 
 @Component({
   selector: 'app-mail-table',
   standalone: true,
-  imports: [CommonModule, TablerIconComponent, SpinnerComponent],
+  imports: [CommonModule, TablerIconComponent, ButtonComponent, SpinnerComponent],
   templateUrl: './mail-table.component.html',
   styleUrl: './mail-table.component.scss'
 })
 export class MailTableComponent {
   @Input() mails: Mail[] = [];
   @Input() loading = false;
+  @Input() deletingMailId?: string;
 
   @Output() onMailClick = new EventEmitter<Mail>();
+  @Output() onDeleteMail = new EventEmitter<Mail>();
 
   formatDate(dateString: string): string {
     const date = new Date(dateString);

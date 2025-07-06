@@ -47,6 +47,9 @@ export class InboxComponent implements OnInit, OnDestroy {
   copying = signal(false);
   copied = signal(false);
 
+  // Delete functionality
+  deletingMailId = signal<string | undefined>(undefined);
+
   showToast = signal(false);
   toastType = signal<'success' | 'error' | 'warning' | 'info'>('info');
   toastMessage = signal('');
@@ -233,5 +236,46 @@ export class InboxComponent implements OnInit, OnDestroy {
 
   hideToast() {
     this.showToast.set(false);
+  }
+
+  deleteMail(mail: Mail) {
+    if (this.deletingMailId()) {
+      return; // Prevent multiple simultaneous deletions
+    }
+
+    this.deletingMailId.set(mail.id);
+
+    this.apiService.deleteMail(this.alias(), mail.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          // Remove the mail from the local array
+          const currentMails = this.mails();
+          const updatedMails = currentMails.filter(m => m.id !== mail.id);
+          this.mails.set(updatedMails);
+          
+          this.showToastMessage('success', 'Email deleted successfully');
+          this.deletingMailId.set(undefined);
+        },
+        error: (error) => {
+          console.error('Error deleting mail:', error);
+          this.showToastMessage('error', 'Failed to delete email. Please try again.');
+          this.deletingMailId.set(undefined);
+        }
+      });
+  }
+
+  onMailDeleted(mailId: string) {
+    // Remove the mail from the local array
+    const currentMails = this.mails();
+    const updatedMails = currentMails.filter(m => m.id !== mailId);
+    this.mails.set(updatedMails);
+    
+    this.showToastMessage('success', 'Email deleted successfully');
+    
+    // Close the mail viewer if the deleted mail was being viewed
+    if (this.selectedMail()?.id === mailId) {
+      this.closeMail();
+    }
   }
 }

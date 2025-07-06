@@ -52,6 +52,25 @@ export class ApiService {
       );
   }
 
+  deleteMail(alias: string, mailId: string): Observable<{ message: string }> {
+    const url = `${this.baseUrl}/mailbox/${alias}/mail/${mailId}`;
+
+    // Get session ID to use as password
+    const sessionId = this.sessionService.getSessionId();
+    
+    // Create headers with session ID as X-Mailbox-Password if available
+    let headers = new HttpHeaders();
+    if (sessionId) {
+      headers = headers.set('X-Mailbox-Password', sessionId);
+    }
+
+    return this.http
+      .delete<{ message: string }>(url, { headers })
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
   private handleError = (error: HttpErrorResponse): Observable<never> => {
     let errorMessage = 'An error occurred';
 

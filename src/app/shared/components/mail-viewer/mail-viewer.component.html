@@ -71,7 +71,17 @@
         
         <!-- Footer - Fixed -->
         <div class="flex-shrink-0 border-t border-gray-200 dark:border-dark-700 px-4 py-3 sm:px-6 sm:py-4 bg-white dark:bg-dark-900">
-          <div class="flex justify-end">
+          <div class="flex justify-between items-center">
+            <app-button
+              variant="danger"
+              size="sm"
+              [loading]="deleting"
+              (onClick)="deleteMail()"
+              class="text-red-600 hover:text-red-700"
+            >
+              <app-icon name="trash" [size]="14" class="mr-2 sm:w-4 sm:h-4"></app-icon>
+              Delete
+            </app-button>
             <app-button
               variant="secondary"
               size="sm"
