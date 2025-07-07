@@ -25,7 +25,7 @@ export class ApiService {
 
     // Get session ID to use as password
     const sessionId = this.sessionService.getSessionId();
-    
+
     // Create headers with session ID as X-Mailbox-Password if available
     let headers = new HttpHeaders();
     if (sessionId) {
@@ -41,9 +41,12 @@ export class ApiService {
 
   createMailBox(sessionId?: string): Observable<RegisterModel> {
     const url = `${this.baseUrl}/mailbox/create`;
-    
+
     // Create request body with session ID as password if provided
-    const requestBody = sessionId ? { password: sessionId } : {};
+    const requestBody = sessionId ? {
+      password: sessionId,
+      source: 'web'
+    } : {};
 
     return this.http
       .post<RegisterModel>(url, requestBody)
@@ -57,7 +60,7 @@ export class ApiService {
 
     // Get session ID to use as password
     const sessionId = this.sessionService.getSessionId();
-    
+
     // Create headers with session ID as X-Mailbox-Password if available
     let headers = new HttpHeaders();
     if (sessionId) {
