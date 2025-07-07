@@ -56,6 +56,68 @@
 <!--  <script defer src="https://monitoring.minutemail.co/umami" data-website-id="c1ff712f-9840-4c12-a7db-62128d033ecb"></script>-->
   <!-- Critical CSS for theme initialization and SSR -->
   <style>
+    /* FAQ JSON-LD structured data for Google */
+  </style>
+  
+  <!-- FAQ Structured Data for Google -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How long do MinuteMail inboxes live?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Each inbox self-destructs exactly 60 minutes after creation—no action required. Custom expiry options are planned for the near future."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do you store my emails or logs?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Messages are kept in memory only. Once the 60-minute timer ends, all data is wiped. We keep zero server logs—no IPs, user agents, or tracking cookies."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do attachments work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. We accept common file types and show a download link right in the inbox. The current soft limit is 10 MB per email."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is there an API?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Absolutely—everything in the UI is available via REST. Visit https://minutemail.co/api for full docs or import our Postman collection to automate inbox creation and message retrieval."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I use my own domain?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Coming soon! You'll be able to point your MX record at MinuteMail and run disposable addresses under your own domain (e.g., you@yourdomain.com). Perfect for power users and dev teams."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How is this free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "We keep the lights on through small affiliate links to privacy tools like NordVPN or domain registrars. Clicking is optional—your experience stays ad-free."
+        }
+      }
+    ]
+  }
+  </script>
+  
+  <style>
     /* Prevent flash of unstyled content */
     :root {
       --primary-color: #24c8db;
