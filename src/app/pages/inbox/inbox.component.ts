@@ -14,20 +14,22 @@ import { ButtonComponent } from '../../shared/components/ui/button.component';
 import { TablerIconComponent } from '../../shared/components/icons/tabler-icons.component';
 import { ToastComponent } from '../../shared/components/ui/toast.component';
 import { SpinnerComponent } from '../../shared/components/ui/spinner.component';
+import {VpnBannerComponent} from "../../shared/components/vpn-banner/vpn-banner.component";
 
 @Component({
   selector: 'app-inbox',
   standalone: true,
-  imports: [
-    CommonModule,
-    MailTableComponent,
-    MailViewerComponent,
-    CountdownComponent,
-    ButtonComponent,
-    TablerIconComponent,
-    ToastComponent,
-    SpinnerComponent
-  ],
+    imports: [
+        CommonModule,
+        MailTableComponent,
+        MailViewerComponent,
+        CountdownComponent,
+        ButtonComponent,
+        TablerIconComponent,
+        ToastComponent,
+        SpinnerComponent,
+        VpnBannerComponent
+    ],
   templateUrl: './inbox.component.html',
   styleUrl: './inbox.component.scss'
 })
@@ -253,7 +255,7 @@ export class InboxComponent implements OnInit, OnDestroy {
           const currentMails = this.mails();
           const updatedMails = currentMails.filter(m => m.id !== mail.id);
           this.mails.set(updatedMails);
-          
+
           this.showToastMessage('success', 'Email deleted successfully');
           this.deletingMailId.set(undefined);
         },
@@ -270,9 +272,9 @@ export class InboxComponent implements OnInit, OnDestroy {
     const currentMails = this.mails();
     const updatedMails = currentMails.filter(m => m.id !== mailId);
     this.mails.set(updatedMails);
-    
+
     this.showToastMessage('success', 'Email deleted successfully');
-    
+
     // Close the mail viewer if the deleted mail was being viewed
     if (this.selectedMail()?.id === mailId) {
       this.closeMail();

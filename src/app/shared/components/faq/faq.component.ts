@@ -14,30 +14,27 @@ export class FaqComponent {
 
   faqItems = [
     {
-      question: "How long do MinuteMail inboxes live?",
+      question: "How long does a MinuteMail disposable inbox last?",
       answer: "Each inbox self-destructs exactly 60 minutes after creation—no action required. Custom expiry options are planned for the near future."
     },
     {
-      question: "Do you store my emails or logs?",
+      question: "Does MinuteMail store any of my emails or logs?",
       answer: "Messages are kept in memory only. Once the 60-minute timer ends, all data is wiped. We keep zero server logs—no IPs, user agents, or tracking cookies."
     },
     {
-      question: "Do attachments work?",
+      question: "Can I receive and download attachments with MinuteMail?",
       answer: "Yes. We accept common file types and show a download link right in the inbox. The current soft limit is 10 MB per email."
     },
     {
-      question: "Is there an API?",
-      answer: "Absolutely—everything in the UI is available via REST. Visit https://minutemail.co/api for full docs or import our Postman collection to automate inbox creation and message retrieval."
+      question: "Does MinuteMail provide an API for developers?",
+      answer: "Absolutely—everything in the UI is available via REST. Visit our API page for full docs or import our Postman collection to automate inbox creation and message retrieval."
     },
     {
-      question: "Can I use my own domain?",
+      question: "Can I use my own domain with MinuteMail?",
       answer: "Coming soon! You'll be able to point your MX record at MinuteMail and run disposable addresses under your own domain (e.g., you@yourdomain.com). Perfect for power users and dev teams."
-    },
-    {
-      question: "How is this free?",
-      answer: "We keep the lights on through small affiliate links to privacy tools like NordVPN or domain registrars. Clicking is optional—your experience stays ad-free."
     }
   ];
+
 
   toggleItem(index: number) {
     if (this.expandedItems.has(index)) {

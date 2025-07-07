@@ -29,18 +29,18 @@
                 {{ item.question }}
               </h3>
               <div class="flex-shrink-0">
-                <app-icon 
-                  [name]="isExpanded($index) ? 'x' : 'chevron-right'" 
-                  [size]="20" 
+                <app-icon
+                  [name]="isExpanded($index) ? 'x' : 'chevron-right'"
+                  [size]="20"
                   class="text-gray-500 dark:text-gray-400 transition-transform duration-200"
                   [class.rotate-90]="isExpanded($index) && !isExpanded($index)"
                 ></app-icon>
               </div>
             </div>
           </button>
-          
+
           @if (isExpanded($index)) {
-            <div 
+            <div
               [id]="'faq-answer-' + $index"
               class="px-4 py-4 sm:px-6 sm:py-5 bg-white dark:bg-dark-900 border-t border-gray-200 dark:border-dark-700 animate-fade-in"
             >
@@ -51,19 +51,6 @@
           }
         </div>
       }
-    </div>
-
-    <!-- CTA -->
-    <div class="mt-8 sm:mt-12 text-center">
-      <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
-        Have more questions?
-      </p>
-      <div class="inline-flex items-center px-4 py-2 bg-primary-50 dark:bg-primary-900/20 rounded-lg">
-        <app-icon name="mail" [size]="16" class="text-primary-600 dark:text-primary-400 mr-2"></app-icon>
-        <span class="text-sm text-primary-700 dark:text-primary-300">
-          Generate a temporary email and contact us!
-        </span>
-      </div>
     </div>
   </div>
 </div>
