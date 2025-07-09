@@ -99,6 +99,10 @@ export class ThemeService {
 
     try {
       localStorage.setItem(this.STORAGE_KEY, themeValue);
+      // Also save to cookie for SSR
+      const expires = new Date();
+      expires.setTime(expires.getTime() + (365 * 24 * 60 * 60 * 1000));
+      document.cookie = `minutemail_theme=${themeValue};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
     } catch (error) {
       console.warn('localStorage not available:', error);
     }

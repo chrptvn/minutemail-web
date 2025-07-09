@@ -14,6 +14,7 @@ import { ButtonComponent } from '../../shared/components/ui/button.component';
 import { TablerIconComponent } from '../../shared/components/icons/tabler-icons.component';
 import { ToastComponent } from '../../shared/components/ui/toast.component';
 import { SpinnerComponent } from '../../shared/components/ui/spinner.component';
+import { ProfileMenuComponent } from '../../shared/components/profile-menu/profile-menu.component';
 import {VpnBannerComponent} from "../../shared/components/vpn-banner/vpn-banner.component";
 
 @Component({
@@ -28,6 +29,7 @@ import {VpnBannerComponent} from "../../shared/components/vpn-banner/vpn-banner.
         TablerIconComponent,
         ToastComponent,
         SpinnerComponent,
+        ProfileMenuComponent,
         VpnBannerComponent
     ],
   templateUrl: './inbox.component.html',

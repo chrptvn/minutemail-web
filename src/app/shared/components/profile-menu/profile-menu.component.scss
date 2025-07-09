@@ -1,0 +1,108 @@
+/* Profile menu specific styles */
+.profile-menu {
+  position: relative;
+}
+
+/* Avatar styles */
+.profile-avatar {
+  background: linear-gradient(135deg, var(--primary-color) 0%, rgba(36, 200, 219, 0.8) 100%);
+  box-shadow: 0 2px 4px rgba(36, 200, 219, 0.2);
+  transition: all 0.2s ease;
+}
+
+.profile-avatar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(36, 200, 219, 0.3);
+}
+
+/* Dropdown menu styles */
+.profile-dropdown {
+  animation: slideDown 0.2s ease-out;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.dark .profile-dropdown {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Menu item hover effects */
+.menu-item {
+  transition: all 0.15s ease;
+}
+
+.menu-item:hover {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.1) 0%, rgba(36, 200, 219, 0.05) 100%);
+}
+
+.dark .menu-item:hover {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.15) 0%, rgba(36, 200, 219, 0.08) 100%);
+}
+
+/* User info section */
+.user-info {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.05) 0%, rgba(36, 200, 219, 0.02) 100%);
+}
+
+.dark .user-info {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.1) 0%, rgba(36, 200, 219, 0.05) 100%);
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  .profile-dropdown {
+    width: 12rem; /* Slightly smaller on mobile */
+    right: -0.5rem; /* Adjust positioning */
+  }
+  
+  .user-info {
+    padding: 0.75rem 1rem;
+  }
+  
+  .menu-item {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Ensure proper z-index for dropdown */
+.profile-dropdown {
+  z-index: 1000;
+}
+
+/* Focus styles for accessibility */
+.menu-item:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: -2px;
+}
+
+/* Loading state for avatar */
+.avatar-loading {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+.dark .avatar-loading {
+  background: linear-gradient(90deg, #2a2a2a 25%, #3a3a3a 50%, #2a2a2a 75%);
+  background-size: 200% 100%;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

@@ -10,6 +10,7 @@ import { FaqComponent } from '../../shared/components/faq/faq.component';
 import { ButtonComponent } from '../../shared/components/ui/button.component';
 import { TablerIconComponent } from '../../shared/components/icons/tabler-icons.component';
 import { ToastComponent } from '../../shared/components/ui/toast.component';
+import { ProfileMenuComponent } from '../../shared/components/profile-menu/profile-menu.component';
 import {ApiService} from '../../core/services/api.service';
 
 @Component({
@@ -23,6 +24,7 @@ import {ApiService} from '../../core/services/api.service';
     ButtonComponent,
     TablerIconComponent,
     ToastComponent,
+    ProfileMenuComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'

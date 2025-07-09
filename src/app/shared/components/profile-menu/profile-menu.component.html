@@ -1,0 +1,79 @@
+<div class="relative profile-menu" (document:click)="onDocumentClick($event)">
+  <!-- Profile Button -->
+  <app-button
+    variant="ghost"
+    size="sm"
+    (onClick)="toggleMenu()"
+    [ariaLabel]="authService.isAuthenticated() ? 'Open profile menu' : 'Login or signup'"
+    class="relative"
+  >
+    @if (authService.isAuthenticated()) {
+      <!-- Authenticated User Avatar -->
+      <div class="w-6 h-6 sm:w-7 sm:h-7 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex items-center justify-center text-white text-xs font-semibold">
+        {{ authService.getUserInitials() }}
+      </div>
+    } @else {
+      <!-- Unauthenticated User Icon -->
+      <app-icon name="user" [size]="18" class="text-gray-700 dark:text-gray-300 sm:w-5 sm:h-5"></app-icon>
+    }
+  </app-button>
+
+  <!-- Dropdown Menu -->
+  @if (isOpen()) {
+    <div class="absolute right-0 mt-2 w-48 bg-white dark:bg-dark-900 rounded-lg shadow-lg border border-gray-200 dark:border-dark-700 py-1 z-50 animate-fade-in">
+      @if (authService.isAuthenticated()) {
+        <!-- Authenticated Menu -->
+        <div class="px-4 py-3 border-b border-gray-200 dark:border-dark-700">
+          <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex items-center justify-center text-white text-sm font-semibold">
+              {{ authService.getUserInitials() }}
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
+                {{ authService.getUserDisplayName() }}
+              </p>
+              @if (authService.userProfile()?.email) {
+                <p class="text-xs text-gray-500 dark:text-gray-400 truncate">
+                  {{ authService.userProfile()?.email }}
+                </p>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Profile Actions -->
+        <div class="py-1">
+          <button
+            type="button"
+            class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-800 flex items-center space-x-2"
+            (click)="logout()"
+          >
+            <app-icon name="logout" [size]="16" class="text-gray-500 dark:text-gray-400"></app-icon>
+            <span>Sign out</span>
+          </button>
+        </div>
+      } @else {
+        <!-- Unauthenticated Menu -->
+        <div class="py-1">
+          <button
+            type="button"
+            class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-800 flex items-center space-x-2"
+            (click)="login()"
+          >
+            <app-icon name="login" [size]="16" class="text-gray-500 dark:text-gray-400"></app-icon>
+            <span>Sign in</span>
+          </button>
+          
+          <button
+            type="button"
+            class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-800 flex items-center space-x-2"
+            (click)="register()"
+          >
+            <app-icon name="user-plus" [size]="16" class="text-gray-500 dark:text-gray-400"></app-icon>
+            <span>Sign up</span>
+          </button>
+        </div>
+      }
+    </div>
+  }
+</div>
