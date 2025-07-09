@@ -236,6 +236,24 @@ import { Component, Input } from '@angular/core';
           </g>
         }
 
+        @case('user-hook') {
+          <g>
+            <!-- original user icon -->
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+
+            <circle cx="17" cy="14" r="6" fill="rgb(14,165,233)"/>
+            <path
+              d="M14 14l4 4l5-6"
+              stroke="#fff"
+              stroke-width="2"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </g>
+        }
+
         @case('login') {
           <g>
             <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
