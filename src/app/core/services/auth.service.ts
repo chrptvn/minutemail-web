@@ -49,9 +49,13 @@ export class AuthService {
       const authenticated = await this.keycloak.init({
         onLoad: 'check-sso',
         silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
-        checkLoginIframe: false,
+        checkLoginIframe: true,
+        silentCheckSsoFallback: false,
         pkceMethod: 'S256'
       });
+
+      console.log('Keycloak initialized, authenticated:', authenticated);
+      console.log('Keycloak token:', this.keycloak.token ? 'present' : 'not present');
 
       if (authenticated) {
         await this.loadUserProfile();
@@ -62,6 +66,28 @@ export class AuthService {
 
       // Set up token refresh
       this.setupTokenRefresh();
+
+      // Set up event listeners for auth state changes
+      this.keycloak.onAuthSuccess = () => {
+        console.log('Auth success event');
+        this.isAuthenticated.set(true);
+        this.authSubject.next(true);
+        this.loadUserProfile();
+      };
+
+      this.keycloak.onAuthError = () => {
+        console.log('Auth error event');
+        this.isAuthenticated.set(false);
+        this.authSubject.next(false);
+        this.userProfile.set(null);
+      };
+
+      this.keycloak.onAuthLogout = () => {
+        console.log('Auth logout event');
+        this.isAuthenticated.set(false);
+        this.authSubject.next(false);
+        this.userProfile.set(null);
+      };
 
       return authenticated;
     } catch (error) {
@@ -75,6 +101,7 @@ export class AuthService {
 
     try {
       const profile = await this.keycloak.loadUserProfile();
+      console.log('Loaded user profile:', profile);
       this.userProfile.set({
         id: profile.id,
         username: profile.username,
@@ -95,6 +122,11 @@ export class AuthService {
       this.keycloak.updateToken(70).then((refreshed: boolean) => {
         if (refreshed) {
           console.log('Token refreshed');
+          // Ensure auth state is still correct after refresh
+          if (this.keycloak.authenticated !== this.isAuthenticated()) {
+            this.isAuthenticated.set(this.keycloak.authenticated || false);
+            this.authSubject.next(this.keycloak.authenticated || false);
+          }
         }
       }).catch(() => {
         console.log('Failed to refresh token');
@@ -106,6 +138,7 @@ export class AuthService {
   login(): void {
     if (!this.isBrowser || !this.keycloak) return;
     
+    console.log('Initiating login');
     this.keycloak.login({
       redirectUri: window.location.origin
     });
@@ -114,6 +147,7 @@ export class AuthService {
   register(): void {
     if (!this.isBrowser || !this.keycloak) return;
     
+    console.log('Initiating registration');
     this.keycloak.register({
       redirectUri: window.location.origin
     });
@@ -122,17 +156,22 @@ export class AuthService {
   logout(): void {
     if (!this.isBrowser || !this.keycloak) return;
     
+    console.log('Initiating logout');
     this.keycloak.logout({
       redirectUri: window.location.origin
     });
   }
 
   getToken(): string | null {
-    return this.keycloak?.token || null;
+    const token = this.keycloak?.token || null;
+    console.log('Getting token:', token ? 'present' : 'not present');
+    return token;
   }
 
   isTokenExpired(): boolean {
-    return this.keycloak?.isTokenExpired() || true;
+    const expired = this.keycloak?.isTokenExpired() || true;
+    console.log('Token expired:', expired);
+    return expired;
   }
 
   hasRole(role: string): boolean {

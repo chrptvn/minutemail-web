@@ -7,6 +7,11 @@
     [ariaLabel]="authService.isAuthenticated() ? 'Open profile menu' : 'Login or signup'"
     class="relative"
   >
+    <!-- Debug info (remove in production) -->
+    <!-- <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 rounded">
+      {{ authService.isAuthenticated() ? 'Auth' : 'No Auth' }}
+    </span> -->
+    
     @if (authService.isAuthenticated()) {
       <!-- Authenticated User Avatar -->
       <div class="w-6 h-6 sm:w-7 sm:h-7 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex items-center justify-center text-white text-xs font-semibold">

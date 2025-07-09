@@ -2,6 +2,7 @@ import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 import { ThemeService } from './core/services/theme.service';
+import { AuthService } from './core/services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +13,7 @@ import { ThemeService } from './core/services/theme.service';
 export class App implements OnInit {
   constructor(
     private themeService: ThemeService,
+    private authService: AuthService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
@@ -21,6 +23,13 @@ export class App implements OnInit {
       // Force theme application immediately without delay
       const currentTheme = this.themeService.isDarkMode();
       this.themeService.isDarkMode.set(currentTheme);
+      
+      // Initialize Keycloak authentication
+      this.authService.initKeycloak().then(authenticated => {
+        console.log('App - Keycloak initialized, authenticated:', authenticated);
+      }).catch(error => {
+        console.error('App - Keycloak initialization failed:', error);
+      });
     }
   }
 }
