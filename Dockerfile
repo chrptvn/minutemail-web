@@ -13,6 +13,7 @@ RUN npm ci --legacy-peer-deps
 
 # Copy the rest of the source code
 COPY . .
+RUN mv src/index-prod.html src/index.html
 
 # Build the SSR output
 RUN npm run build:ssr
