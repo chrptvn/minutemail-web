@@ -1,6 +1,6 @@
 import { Injectable, Inject, PLATFORM_ID, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 declare var Keycloak: any;
 
@@ -44,7 +44,7 @@ export class AuthService {
         url: 'https://keycloak.minutemail.co',
         realm: 'minutemail',
         clientId: 'minutemail-web'
-      });
+      } as any);
 
       const authenticated = await this.keycloak.init({
         onLoad: 'check-sso',

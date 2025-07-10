@@ -1,26 +1,8 @@
-<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between px-6 py-5 rounded-lg bg-gradient-to-r from-blue-600 to-violet-600 text-white shadow-lg">
-  <div class="flex items-start space-x-3">
-    <div class="flex-shrink-0">
-      <app-icon name="shield" [size]="20" class="text-blue-200 sm:w-6 sm:h-6"></app-icon>
-    </div>
-
-    <div>
-      <h3 class="text-lg font-semibold">Lock-Down Your Privacy</h3>
-      <p class="mt-0.5 text-sm opacity-90 leading-snug">
-        Your throw-away inbox hides spam. <br class="hidden sm:block">
-        NordVPN hides <em>everything&nbsp;else</em> – IP, location, and traffic.
-      </p>
-    </div>
-  </div>
-
-  <a
-    href="https://go.nordvpn.net/aff_c?offer_id=15&aff_id=126542"
-    target="_blank"
-    rel="noopener noreferrer"
-    class="inline-flex items-center px-3 py-2 sm:px-4 sm:py-2 bg-white text-blue-600 font-medium rounded-lg hover:bg-blue-50 transition-colors duration-200 focus-ring text-sm"
-    aria-label="Get NordVPN - Opens in new tab"
-  >
-    Get NordVPN
-    <app-icon name="external-link" [size]="14" class="ml-2 sm:w-4 sm:h-4"></app-icon>
-  </a>
-</div>
+<app-banner
+  [title]="'Lock-Down Your Privacy'"
+  [description]="'Your throw-away inbox hides spam. NordVPN hides everything else – IP, location, and traffic.'"
+  [linkText]="'Get NordVPN'"
+  [link]="'https://go.nordvpn.net/aff_c?offer_id=15&aff_id=126542'"
+  [ariaLabel]="'Get NordVPN - Opens in new tab'"
+  [icon]="'shield'"
+></app-banner>

@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import {BannerComponent} from '../banner/banner.component';
 
 @Component({
-  selector: 'app-vpn-banner',
+  selector: 'app-dns-banner',
   standalone: true,
   imports: [CommonModule, BannerComponent],
-  templateUrl: './vpn-banner.component.html'
+  templateUrl: './dns-banner.component.html'
 })
-export class VpnBannerComponent {}
+export class DnsBannerComponent {}

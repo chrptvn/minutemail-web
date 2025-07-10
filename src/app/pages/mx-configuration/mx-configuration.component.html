@@ -44,42 +44,14 @@
 
   <!-- Main Content -->
   <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12 mobile-scroll-content">
-    <!-- GoDaddy Banner -->
-    <div class="mb-8">
-      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between px-6 py-5 rounded-lg bg-gradient-to-r from-blue-600 to-violet-600 text-white shadow-lg">
-        <div class="flex items-start space-x-3">
-          <div class="flex-shrink-0">
-            <app-icon name="globe" [size]="20" class="text-blue-200 sm:w-6 sm:h-6"></app-icon>
-          </div>
+    <app-dns-banner></app-dns-banner>
 
-          <div>
-            <h3 class="text-lg font-semibold">Need a Domain for Your Custom Email?</h3>
-            <p class="mt-0.5 text-sm opacity-90 leading-snug">
-              Get your perfect domain name with GoDaddy. <br class="hidden sm:block">
-              Easy DNS management and <em>reliable&nbsp;hosting</em> included.
-            </p>
-          </div>
-        </div>
-
-        <a
-          href="https://www.godaddy.com/domains"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center px-3 py-2 sm:px-4 sm:py-2 bg-white text-blue-600 font-medium rounded-lg hover:bg-blue-50 transition-colors duration-200 focus-ring text-sm"
-          aria-label="Get Domain with GoDaddy - Opens in new tab"
-        >
-          Find Your Domain
-          <app-icon name="external-link" [size]="14" class="ml-2 sm:w-4 sm:h-4"></app-icon>
-        </a>
-      </div>
-    </div>
-
-    <div class="bg-white dark:bg-dark-900 rounded-xl border border-gray-200 dark:border-dark-700 shadow-sm mobile-scroll-card">
+    <div class="mt-6 bg-white dark:bg-dark-900 rounded-xl border border-gray-200 dark:border-dark-700 shadow-sm mobile-scroll-card">
       <div class="px-6 py-8 sm:px-8 sm:py-12 mobile-scroll-inner">
         <!-- Header -->
         <div class="text-center mb-8 sm:mb-12">
           <div class="w-16 h-16 mx-auto bg-primary-100 dark:bg-primary-900 rounded-xl flex items-center justify-center mb-4">
-            <app-icon name="dns" [size]="32" class="text-primary-600 dark:text-primary-400"></app-icon>
+            <app-icon name="globe" [size]="32" class="text-primary-600 dark:text-primary-400"></app-icon>
           </div>
           <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
             Using Your Own Domain with MinuteMail (Receive‑Only)
@@ -351,7 +323,7 @@
               Back to MinuteMail
             </app-button>
           </div>
-          
+
           <div class="text-center mt-6">
             <p class="text-sm text-gray-500 dark:text-gray-400">
               <em>Last updated 2025‑01‑09</em>
