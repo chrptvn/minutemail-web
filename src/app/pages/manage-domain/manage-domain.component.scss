@@ -1,56 +1,158 @@
 /* Manage Domain page specific styles */
-.domain-feature-card {
+.domain-card {
   transition: all 0.2s ease-in-out;
 }
 
-.domain-feature-card:hover {
-  transform: translateY(-2px);
+.domain-card:hover {
+  transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(36, 200, 219, 0.1);
 }
 
-.dark .domain-feature-card:hover {
+.dark .domain-card:hover {
   box-shadow: 0 4px 12px rgba(36, 200, 219, 0.2);
 }
 
-.feature-icon {
+.domain-icon {
   background: linear-gradient(135deg, var(--primary-color) 0%, rgba(36, 200, 219, 0.8) 100%);
+}
+
+/* Form styling */
+.domain-form {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.05) 0%, rgba(36, 200, 219, 0.02) 100%);
+}
+
+.dark .domain-form {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.1) 0%, rgba(36, 200, 219, 0.05) 100%);
+}
+
+/* Input focus styling */
+input:focus {
+  box-shadow: 0 0 0 3px rgba(36, 200, 219, 0.1);
+}
+
+/* MX test result animations */
+.mx-result {
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Empty state styling */
+.empty-state {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.05) 0%, rgba(36, 200, 219, 0.02) 100%);
+}
+
+.dark .empty-state {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.1) 0%, rgba(36, 200, 219, 0.05) 100%);
 }
 
 /* Mobile optimizations */
 @media (max-width: 768px) {
-  .domain-features {
-    grid-template-columns: 1fr;
+  .domain-actions {
+    flex-direction: column;
+    width: 100%;
   }
   
-  .feature-card {
+  .domain-actions button {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .domain-card {
     padding: 1rem;
   }
   
-  .feature-card h3 {
-    font-size: 0.875rem;
+  .domain-form {
+    padding: 1rem;
   }
   
-  .feature-card p {
-    font-size: 0.75rem;
+  .domain-form .flex {
+    flex-direction: column;
+    space-y: 3;
+  }
+  
+  .domain-form input {
+    margin-bottom: 0.75rem;
   }
 }
 
-/* Coming soon badge */
-.coming-soon-badge {
-  background: linear-gradient(135deg, rgba(36, 200, 219, 0.1) 0%, rgba(36, 200, 219, 0.05) 100%);
-  border: 1px solid rgba(36, 200, 219, 0.2);
+@media (max-width: 640px) {
+  .domain-header {
+    text-align: center;
+  }
+  
+  .domain-info {
+    text-align: center;
+  }
+  
+  .domain-info h3 {
+    font-size: 1rem;
+  }
+  
+  .domain-info p {
+    font-size: 0.875rem;
+  }
 }
 
-.dark .coming-soon-badge {
-  background: linear-gradient(135deg, rgba(36, 200, 219, 0.15) 0%, rgba(36, 200, 219, 0.08) 100%);
-  border: 1px solid rgba(36, 200, 219, 0.3);
+/* Button loading states */
+.btn-loading {
+  position: relative;
 }
 
-/* Placeholder content styling */
-.placeholder-content {
-  background: linear-gradient(135deg, rgba(36, 200, 219, 0.05) 0%, rgba(36, 200, 219, 0.02) 100%);
+.btn-loading::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  margin: auto;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
-.dark .placeholder-content {
-  background: linear-gradient(135deg, rgba(36, 200, 219, 0.1) 0%, rgba(36, 200, 219, 0.05) 100%);
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Toast positioning for mobile */
+@media (max-width: 640px) {
+  .toast-container {
+    left: 1rem !important;
+    right: 1rem !important;
+    bottom: 1rem !important;
+  }
+}
+
+/* Accessibility improvements */
+.domain-card:focus-within {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Success/Error state colors */
+.status-success {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%);
+}
+
+.status-error {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
+}
+
+.dark .status-success {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.08) 100%);
+}
+
+.dark .status-error {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.08) 100%);
 }
