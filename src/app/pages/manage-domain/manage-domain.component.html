@@ -1,0 +1,164 @@
+<div class="min-h-screen bg-gray-50 dark:bg-dark-950 mobile-scroll-container">
+  <!-- Header -->
+  <header class="bg-white dark:bg-dark-900 border-b border-gray-200 dark:border-dark-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14 sm:h-16">
+        <div class="flex items-center space-x-2 sm:space-x-4">
+          <app-button
+            variant="ghost"
+            size="sm"
+            (onClick)="goHome()"
+            ariaLabel="Go back to home"
+            class="flex-shrink-0"
+          >
+            <app-icon name="arrow-left" [size]="18" class="text-gray-700 dark:text-gray-300 sm:w-5 sm:h-5"></app-icon>
+          </app-button>
+
+          <div class="flex items-center space-x-2 sm:space-x-3">
+            <img src="/minutemail64x64.png" alt="MinuteMail" class="w-8 h-8 sm:w-10 sm:h-10" />
+            <h1 class="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100">
+              MinuteMail
+            </h1>
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-2 sm:space-x-3">
+          <app-button
+            variant="ghost"
+            size="sm"
+            (onClick)="goToApi()"
+            ariaLabel="View API documentation"
+            class="hidden sm:inline-flex"
+          >
+            <app-icon name="code" [size]="18" class="mr-2"></app-icon>
+            API
+          </app-button>
+
+          <app-button
+            variant="ghost"
+            size="sm"
+            (onClick)="goToPrivacy()"
+            ariaLabel="View privacy policy"
+            class="hidden sm:inline-flex"
+          >
+            <app-icon name="shield" [size]="18" class="mr-2"></app-icon>
+            Privacy Policy
+          </app-button>
+
+          <app-button
+            variant="ghost"
+            size="sm"
+            (onClick)="toggleTheme()"
+            [ariaLabel]="themeService.isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
+          >
+            @if (themeService.isDarkMode()) {
+              <app-icon name="sun" [size]="18" class="sm:w-5 sm:h-5"></app-icon>
+            } @else {
+              <app-icon name="moon" [size]="18" class="sm:w-5 sm:h-5"></app-icon>
+            }
+          </app-button>
+
+          <app-profile-menu></app-profile-menu>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12 mobile-scroll-content">
+    <div class="bg-white dark:bg-dark-900 rounded-xl border border-gray-200 dark:border-dark-700 shadow-sm mobile-scroll-card">
+      <div class="px-6 py-8 sm:px-8 sm:py-12 mobile-scroll-inner">
+        <!-- Header -->
+        <div class="text-center mb-8 sm:mb-12">
+          <div class="w-16 h-16 mx-auto bg-primary-100 dark:bg-primary-900 rounded-xl flex items-center justify-center mb-4">
+            <app-icon name="external-link" [size]="32" class="text-primary-600 dark:text-primary-400"></app-icon>
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+            Manage Domain
+          </h1>
+          <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">
+            Configure and manage your custom domain settings
+          </p>
+        </div>
+
+        <!-- Content Placeholder -->
+        <div class="text-center py-12">
+          <div class="w-24 h-24 mx-auto bg-gray-100 dark:bg-dark-800 rounded-full flex items-center justify-center mb-6">
+            <app-icon name="external-link" [size]="48" class="text-gray-400 dark:text-gray-500"></app-icon>
+          </div>
+          <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
+            Domain Management
+          </h2>
+          <p class="text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">
+            This feature is coming soon. You'll be able to configure custom domains for your temporary email addresses.
+          </p>
+          
+          <!-- Placeholder Features -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto text-left">
+            <div class="p-4 border border-gray-200 dark:border-dark-700 rounded-lg">
+              <div class="flex items-center space-x-3 mb-2">
+                <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900 rounded-lg flex items-center justify-center">
+                  <app-icon name="external-link" [size]="16" class="text-primary-600 dark:text-primary-400"></app-icon>
+                </div>
+                <h3 class="font-medium text-gray-900 dark:text-gray-100">Custom Domain</h3>
+              </div>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                Use your own domain for temporary email addresses
+              </p>
+            </div>
+
+            <div class="p-4 border border-gray-200 dark:border-dark-700 rounded-lg">
+              <div class="flex items-center space-x-3 mb-2">
+                <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900 rounded-lg flex items-center justify-center">
+                  <app-icon name="shield" [size]="16" class="text-primary-600 dark:text-primary-400"></app-icon>
+                </div>
+                <h3 class="font-medium text-gray-900 dark:text-gray-100">DNS Configuration</h3>
+              </div>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                Easy DNS setup with guided configuration
+              </p>
+            </div>
+
+            <div class="p-4 border border-gray-200 dark:border-dark-700 rounded-lg">
+              <div class="flex items-center space-x-3 mb-2">
+                <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900 rounded-lg flex items-center justify-center">
+                  <app-icon name="code" [size]="16" class="text-primary-600 dark:text-primary-400"></app-icon>
+                </div>
+                <h3 class="font-medium text-gray-900 dark:text-gray-100">API Integration</h3>
+              </div>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                Programmatic domain management via API
+              </p>
+            </div>
+
+            <div class="p-4 border border-gray-200 dark:border-dark-700 rounded-lg">
+              <div class="flex items-center space-x-3 mb-2">
+                <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900 rounded-lg flex items-center justify-center">
+                  <app-icon name="clock" [size]="16" class="text-primary-600 dark:text-primary-400"></app-icon>
+                </div>
+                <h3 class="font-medium text-gray-900 dark:text-gray-100">Custom TTL</h3>
+              </div>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                Set custom expiration times for your domains
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer Actions -->
+        <div class="mt-12 pt-8 border-t border-gray-200 dark:border-dark-700">
+          <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6">
+            <app-button
+              variant="primary"
+              (onClick)="goHome()"
+              class="w-full sm:w-auto"
+            >
+              <app-icon name="arrow-left" [size]="16" class="mr-2"></app-icon>
+              Back to MinuteMail
+            </app-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

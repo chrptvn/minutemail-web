@@ -1,5 +1,6 @@
 import { Component, OnInit, signal, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { TablerIconComponent } from '../icons/tabler-icons.component';
 import { ButtonComponent } from '../ui/button.component';
@@ -17,6 +18,7 @@ export class ProfileMenuComponent implements OnInit {
 
   constructor(
     public authService: AuthService,
+    private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
@@ -64,6 +66,11 @@ export class ProfileMenuComponent implements OnInit {
 
   logout() {
     this.authService.logout();
+    this.closeMenu();
+  }
+
+  manageDomain() {
+    this.router.navigate(['/manage-domain']);
     this.closeMenu();
   }
 

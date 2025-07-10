@@ -22,6 +22,11 @@ export const routes: Routes = [
     title: 'Inbox - MinuteMail'
   },
   {
+    path: 'manage-domain',
+    loadComponent: () => import('./pages/manage-domain/manage-domain.component').then(m => m.ManageDomainComponent),
+    title: 'Manage Domain - MinuteMail'
+  },
+  {
     path: '**',
     redirectTo: ''
   }
