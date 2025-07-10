@@ -52,7 +52,7 @@
             <app-icon name="dns" [size]="32" class="text-primary-600 dark:text-primary-400"></app-icon>
           </div>
           <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-            MX Record Configuration
+            Using Your Own Domain with MinuteMail (Receive‑Only)
           </h1>
           @if (domainName()) {
             <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">
@@ -60,212 +60,148 @@
             </p>
           } @else {
             <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">
-              Learn how to configure MX records for your custom domain
+              This guide shows you how to route incoming mail for your own domain to MinuteMail's disposable‑mail service by publishing an MX record.
             </p>
           }
         </div>
 
         <!-- Content -->
         <div class="prose prose-sm sm:prose max-w-none dark:prose-invert mobile-scroll-prose">
-          <!-- Overview Section -->
+          <!-- Prerequisites Section -->
           <section class="mb-8">
-            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">What are MX Records?</h2>
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">1. Prerequisites</h2>
+            <ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2">
+              <li>Access to the DNS console for the domain you want to use (Cloudflare, GoDaddy, Namecheap, Route 53, etc.).</li>
+              <li>A MinuteMail account (custom‑domain support is currently <strong>free</strong>).</li>
+            </ul>
+          </section>
+
+          <!-- Why MX Record Section -->
+          <section class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">2. Why an MX Record?</h2>
             <p class="text-gray-700 dark:text-gray-300 mb-4">
-              MX (Mail Exchange) records are DNS records that specify which mail servers are responsible for receiving email messages for your domain. To use your custom domain with MinuteMail, you need to configure these records to point to our mail servers.
+              An <strong>MX (Mail Exchange) record</strong> tells other mail servers <em>where</em> to deliver messages for a domain. Once you publish the record below, any message sent to <code>anything@yourdomain.com</code> will be routed to MinuteMail and displayed in your disposable inboxes.
             </p>
           </section>
 
-          <!-- Required MX Records Section -->
+          <!-- Required MX Record Section -->
           <section class="mb-8">
-            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Required MX Records</h2>
-            <p class="text-gray-700 dark:text-gray-300 mb-4">
-              Add the following MX records to your domain's DNS configuration:
-            </p>
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">3. Required MX Record</h2>
 
             <div class="bg-gray-50 dark:bg-dark-800 rounded-lg p-4 sm:p-6 border border-gray-200 dark:border-dark-700 mb-4">
-              <div class="space-y-4">
-                <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 sm:gap-4 text-sm">
-                  <div class="font-semibold text-gray-700 dark:text-gray-300">Priority</div>
-                  <div class="font-semibold text-gray-700 dark:text-gray-300">Type</div>
-                  <div class="font-semibold text-gray-700 dark:text-gray-300">Name</div>
-                  <div class="font-semibold text-gray-700 dark:text-gray-300">Value</div>
-                </div>
-                <hr class="border-gray-200 dark:border-dark-700">
-                <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 sm:gap-4 text-sm font-mono">
-                  <div class="text-gray-900 dark:text-gray-100">10</div>
-                  <div class="text-gray-900 dark:text-gray-100">MX</div>
-                  <div class="text-gray-900 dark:text-gray-100">&#64;</div>
-                  <div class="text-gray-900 dark:text-gray-100">mx1.minutemail.co</div>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 sm:gap-4 text-sm font-mono">
-                  <div class="text-gray-900 dark:text-gray-100">20</div>
-                  <div class="text-gray-900 dark:text-gray-100">MX</div>
-                  <div class="text-gray-900 dark:text-gray-100">&#64;</div>
-                  <div class="text-gray-900 dark:text-gray-100">mx2.minutemail.co</div>
-                </div>
+              <div class="overflow-x-auto">
+                <table class="min-w-full">
+                  <thead>
+                    <tr class="border-b border-gray-200 dark:border-dark-700">
+                      <th class="text-left py-2 px-3 font-semibold text-gray-700 dark:text-gray-300">Priority</th>
+                      <th class="text-left py-2 px-3 font-semibold text-gray-700 dark:text-gray-300">Type</th>
+                      <th class="text-left py-2 px-3 font-semibold text-gray-700 dark:text-gray-300">Name</th>
+                      <th class="text-left py-2 px-3 font-semibold text-gray-700 dark:text-gray-300">Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="py-2 px-3 font-mono font-bold text-gray-900 dark:text-gray-100">10</td>
+                      <td class="py-2 px-3 font-mono text-gray-900 dark:text-gray-100">MX</td>
+                      <td class="py-2 px-3 font-mono text-gray-900 dark:text-gray-100">&#64;</td>
+                      <td class="py-2 px-3 font-mono font-bold text-gray-900 dark:text-gray-100">mail.minutemail.co</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
 
-            <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+            <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-4">
+              <h4 class="font-semibold text-blue-900 dark:text-blue-100 mb-2">Why only one record?</h4>
+              <p class="text-sm text-blue-800 dark:text-blue-200">
+                MinuteMail currently operates a single inbound host (<code>mail.minutemail.co</code>). When redundancy is added later, we'll announce additional hosts such as <code>mx2.minutemail.co</code>; you'll simply add a second MX record with a higher priority number (e.g., 20).
+              </p>
+            </div>
+
+            <ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2 text-sm">
+              <li><code>&#64;</code> means the <em>root</em> of your domain. Some DNS UIs ask you to leave the <strong>Host/Name</strong> field empty or type the domain itself.</li>
+              <li>If your DNS UI shows a <strong>TTL</strong> column, leave it at the default (usually 300–3600 s). MinuteMail has no specific TTL requirement.</li>
+            </ul>
+          </section>
+
+          <!-- Step-by-Step Configuration -->
+          <section class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">4. Step‑by‑Step Configuration</h2>
+
+            <div class="space-y-4">
               <div class="flex items-start space-x-3">
-                <app-icon name="info" [size]="16" class="text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0"></app-icon>
-                <div>
-                  <p class="text-sm text-blue-800 dark:text-blue-200">
-                    <strong>Note:</strong> The "&#64;" symbol represents your root domain. Some DNS providers may require you to leave the name field empty or use your domain name instead.
+                <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center flex-shrink-0">
+                  <span class="text-sm font-semibold text-primary-600 dark:text-primary-400">1</span>
+                </div>
+                <div class="flex-1">
+                  <p class="text-gray-700 dark:text-gray-300">
+                    <strong>Sign in to your DNS provider</strong> and open the DNS / Zone / Records page for <code>yourdomain.com</code>.
                   </p>
                 </div>
               </div>
-            </div>
-          </section>
 
-          <!-- Step-by-Step Instructions -->
-          <section class="mb-8">
-            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Step-by-Step Configuration</h2>
-
-            <div class="space-y-6">
-              <div class="border border-gray-200 dark:border-dark-700 rounded-lg p-4 sm:p-6">
-                <div class="flex items-start space-x-3">
-                  <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span class="text-sm font-semibold text-primary-600 dark:text-primary-400">1</span>
-                  </div>
-                  <div class="flex-1">
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">Access Your DNS Provider</h3>
-                    <p class="text-gray-700 dark:text-gray-300 mb-3">
-                      Log in to your domain registrar or DNS hosting provider (e.g., Cloudflare, GoDaddy, Namecheap, Route 53).
-                    </p>
-                  </div>
+              <div class="flex items-start space-x-3">
+                <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center flex-shrink-0">
+                  <span class="text-sm font-semibold text-primary-600 dark:text-primary-400">2</span>
+                </div>
+                <div class="flex-1">
+                  <p class="text-gray-700 dark:text-gray-300 mb-2">
+                    <strong>Remove existing MX records</strong> <em>only if MinuteMail should handle <strong>all</strong> mail for the domain.</em>
+                  </p>
+                  <p class="text-sm text-gray-600 dark:text-gray-400">
+                    • If you already run a production mailbox elsewhere, stop here and instead publish the MX record on a sub‑domain such as <code>temp.yourdomain.com</code>.
+                  </p>
                 </div>
               </div>
 
-              <div class="border border-gray-200 dark:border-dark-700 rounded-lg p-4 sm:p-6">
-                <div class="flex items-start space-x-3">
-                  <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span class="text-sm font-semibold text-primary-600 dark:text-primary-400">2</span>
-                  </div>
-                  <div class="flex-1">
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">Navigate to DNS Management</h3>
-                    <p class="text-gray-700 dark:text-gray-300 mb-3">
-                      Find the DNS management section for your domain. This might be called "DNS Records", "DNS Zone", or "Manage DNS".
-                    </p>
-                  </div>
+              <div class="flex items-start space-x-3">
+                <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center flex-shrink-0">
+                  <span class="text-sm font-semibold text-primary-600 dark:text-primary-400">3</span>
+                </div>
+                <div class="flex-1">
+                  <p class="text-gray-700 dark:text-gray-300">
+                    <strong>Create the MX record</strong> exactly as shown in the table (priority 10 → <code>mail.minutemail.co</code>).
+                  </p>
                 </div>
               </div>
 
-              <div class="border border-gray-200 dark:border-dark-700 rounded-lg p-4 sm:p-6">
-                <div class="flex items-start space-x-3">
-                  <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span class="text-sm font-semibold text-primary-600 dark:text-primary-400">3</span>
-                  </div>
-                  <div class="flex-1">
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">Remove Existing MX Records</h3>
-                    <p class="text-gray-700 dark:text-gray-300 mb-3">
-                      Delete any existing MX records for your domain to avoid conflicts. Make sure to backup your current configuration if needed.
-                    </p>
-                  </div>
+              <div class="flex items-start space-x-3">
+                <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center flex-shrink-0">
+                  <span class="text-sm font-semibold text-primary-600 dark:text-primary-400">4</span>
+                </div>
+                <div class="flex-1">
+                  <p class="text-gray-700 dark:text-gray-300">
+                    <strong>Save</strong> the zone file. DNS propagation usually finishes within 15–60 minutes, but may take up to 48 hours worldwide.
+                  </p>
                 </div>
               </div>
 
-              <div class="border border-gray-200 dark:border-dark-700 rounded-lg p-4 sm:p-6">
-                <div class="flex items-start space-x-3">
-                  <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span class="text-sm font-semibold text-primary-600 dark:text-primary-400">4</span>
+              <div class="flex items-start space-x-3">
+                <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center flex-shrink-0">
+                  <span class="text-sm font-semibold text-primary-600 dark:text-primary-400">5</span>
+                </div>
+                <div class="flex-1">
+                  <p class="text-gray-700 dark:text-gray-300 mb-3">
+                    <strong>Verify the change:</strong>
+                  </p>
+                  <div class="bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm font-mono overflow-x-auto">
+                    <div>nslookup -type=MX {{ domainName() || 'yourdomain.com' }}</div>
+                    <div class="mt-1">dig MX {{ domainName() || 'yourdomain.com' }} +short</div>
                   </div>
-                  <div class="flex-1">
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">Add MinuteMail MX Records</h3>
-                    <p class="text-gray-700 dark:text-gray-300 mb-3">
-                      Create two new MX records using the values shown in the table above. Make sure to set the correct priorities (10 and 20).
-                    </p>
-                  </div>
+                  <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                    You should see <code>mail.minutemail.co.</code> in the output.
+                  </p>
                 </div>
               </div>
 
-              <div class="border border-gray-200 dark:border-dark-700 rounded-lg p-4 sm:p-6">
-                <div class="flex items-start space-x-3">
-                  <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span class="text-sm font-semibold text-primary-600 dark:text-primary-400">5</span>
-                  </div>
-                  <div class="flex-1">
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">Save and Wait for Propagation</h3>
-                    <p class="text-gray-700 dark:text-gray-300 mb-3">
-                      Save your changes and wait for DNS propagation. This can take anywhere from a few minutes to 48 hours, but typically completes within 1-2 hours.
-                    </p>
-                  </div>
+              <div class="flex items-start space-x-3">
+                <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center flex-shrink-0">
+                  <span class="text-sm font-semibold text-primary-600 dark:text-primary-400">6</span>
                 </div>
-              </div>
-            </div>
-          </section>
-
-          <!-- Provider-Specific Instructions -->
-          <section class="mb-8">
-            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Provider-Specific Instructions</h2>
-
-            <div class="space-y-4">
-              <!-- Cloudflare -->
-              <div class="border border-gray-200 dark:border-dark-700 rounded-lg p-4">
-                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2 flex items-center">
-                  <app-icon name="globe" [size]="16" class="mr-2 text-orange-500"></app-icon>
-                  Cloudflare
-                </h3>
-                <p class="text-sm text-gray-700 dark:text-gray-300">
-                  Go to your domain → DNS → Records → Add record → Select "MX" type → Leave Name field empty or use "&#64;" → Enter mail server and priority.
-                </p>
-              </div>
-
-              <!-- GoDaddy -->
-              <div class="border border-gray-200 dark:border-dark-700 rounded-lg p-4">
-                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2 flex items-center">
-                  <app-icon name="globe" [size]="16" class="mr-2 text-green-500"></app-icon>
-                  GoDaddy
-                </h3>
-                <p class="text-sm text-gray-700 dark:text-gray-300">
-                  My Products → Domain → Manage DNS → Add → Select "MX" → Leave Host field empty → Enter Points to and Priority values.
-                </p>
-              </div>
-
-              <!-- Namecheap -->
-              <div class="border border-gray-200 dark:border-dark-700 rounded-lg p-4">
-                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2 flex items-center">
-                  <app-icon name="globe" [size]="16" class="mr-2 text-blue-500"></app-icon>
-                  Namecheap
-                </h3>
-                <p class="text-sm text-gray-700 dark:text-gray-300">
-                  Domain List → Manage → Advanced DNS → Add New Record → Select "MX Record" → Leave Host field as "&#64;" → Enter Value and Priority.
-                </p>
-              </div>
-            </div>
-          </section>
-
-          <!-- Verification Section -->
-          <section class="mb-8">
-            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Verify Your Configuration</h2>
-            <p class="text-gray-700 dark:text-gray-300 mb-4">
-              After configuring your MX records, you can verify the setup using these methods:
-            </p>
-
-            <div class="space-y-4">
-              <div class="bg-gray-50 dark:bg-dark-800 rounded-lg p-4 border border-gray-200 dark:border-dark-700">
-                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">1. Use MinuteMail's Test Feature</h3>
-                <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
-                  Go back to the Manage Domain page and click "Test MX" next to your domain to verify the configuration.
-                </p>
-                <app-button
-                  variant="primary"
-                  size="sm"
-                  (onClick)="goToManageDomain()"
-                >
-                  <app-icon name="arrow-left" [size]="14" class="mr-2"></app-icon>
-                  Back to Manage Domain
-                </app-button>
-              </div>
-
-              <div class="bg-gray-50 dark:bg-dark-800 rounded-lg p-4 border border-gray-200 dark:border-dark-700">
-                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">2. Use Command Line Tools</h3>
-                <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
-                  You can also verify MX records using command line tools:
-                </p>
-                <div class="bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm font-mono overflow-x-auto">
-                  <div>nslookup -type=MX {{ domainName() || 'yourdomain.com' }}</div>
-                  <div class="mt-2">dig MX {{ domainName() || 'yourdomain.com' }}</div>
+                <div class="flex-1">
+                  <p class="text-gray-700 dark:text-gray-300">
+                    <strong>Return to MinuteMail</strong> → <strong>Manage Domain</strong> → <strong>Test MX</strong> to confirm we can receive mail for your domain.
+                  </p>
                 </div>
               </div>
             </div>
@@ -273,33 +209,96 @@
 
           <!-- Troubleshooting Section -->
           <section class="mb-8">
-            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Troubleshooting</h2>
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">5. Troubleshooting</h2>
 
-            <div class="space-y-4">
-              <div class="border-l-4 border-yellow-400 bg-yellow-50 dark:bg-yellow-900/20 p-4">
-                <h3 class="text-lg font-medium text-yellow-800 dark:text-yellow-200 mb-2">Common Issues</h3>
-                <ul class="list-disc pl-6 text-sm text-yellow-700 dark:text-yellow-300 space-y-1">
-                  <li>DNS propagation can take up to 48 hours - be patient</li>
-                  <li>Make sure to remove all existing MX records before adding new ones</li>
-                  <li>Check that priority values are set correctly (10 and 20)</li>
-                  <li>Verify that the mail server names are spelled correctly</li>
-                  <li>Some providers require a trailing dot (.) after the mail server name</li>
-                </ul>
-              </div>
-
-              <div class="border-l-4 border-red-400 bg-red-50 dark:bg-red-900/20 p-4">
-                <h3 class="text-lg font-medium text-red-800 dark:text-red-200 mb-2">Still Having Issues?</h3>
-                <p class="text-sm text-red-700 dark:text-red-300 mb-3">
-                  If you're still experiencing problems after following these instructions, please check:
-                </p>
-                <ul class="list-disc pl-6 text-sm text-red-700 dark:text-red-300 space-y-1">
-                  <li>Your DNS provider's specific documentation</li>
-                  <li>Contact your domain registrar's support team</li>
-                  <li>Use online MX record checker tools to verify propagation</li>
-                </ul>
+            <div class="bg-gray-50 dark:bg-dark-800 rounded-lg p-4 sm:p-6 border border-gray-200 dark:border-dark-700">
+              <div class="overflow-x-auto">
+                <table class="min-w-full">
+                  <thead>
+                    <tr class="border-b border-gray-200 dark:border-dark-700">
+                      <th class="text-left py-2 px-3 font-semibold text-gray-700 dark:text-gray-300">Symptom</th>
+                      <th class="text-left py-2 px-3 font-semibold text-gray-700 dark:text-gray-300">Checks</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-200 dark:divide-dark-700">
+                    <tr>
+                      <td class="py-3 px-3 text-sm text-gray-900 dark:text-gray-100 font-medium">Mail never arrives</td>
+                      <td class="py-3 px-3 text-sm text-gray-700 dark:text-gray-300">
+                        • MX record still points elsewhere.<br>
+                        • Propagation not complete yet.<br>
+                        • Typo in hostname (<code>mail.minutemail.co</code>).
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="py-3 px-3 text-sm text-gray-900 dark:text-gray-100 font-medium">Mixed mail providers needed</td>
+                      <td class="py-3 px-3 text-sm text-gray-700 dark:text-gray-300">
+                        Use a <em>sub‑domain</em> for disposable mail so your primary MX records remain untouched.
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="py-3 px-3 text-sm text-gray-900 dark:text-gray-100 font-medium">Provider demands a trailing dot</td>
+                      <td class="py-3 px-3 text-sm text-gray-700 dark:text-gray-300">
+                        Add a dot after the hostname (<code>mail.minutemail.co.</code>) if required.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </section>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="mt-12">
+          <div class="text-center mb-8">
+            <div class="w-16 h-16 mx-auto bg-primary-100 dark:bg-primary-900 rounded-xl flex items-center justify-center mb-4">
+              <app-icon name="info" [size]="32" class="text-primary-600 dark:text-primary-400"></app-icon>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+              Frequently Asked Questions
+            </h2>
+            <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">
+              Common questions about using your own domain with MinuteMail
+            </p>
+          </div>
+
+          <div class="space-y-4">
+            @for (item of faqItems; track $index) {
+              <div class="border border-gray-200 dark:border-dark-700 rounded-lg overflow-hidden">
+                <button
+                  type="button"
+                  class="w-full px-4 py-4 sm:px-6 sm:py-5 text-left bg-gray-50 dark:bg-dark-800 hover:bg-gray-100 dark:hover:bg-dark-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-inset"
+                  (click)="toggleFaqItem($index)"
+                  [attr.aria-expanded]="isFaqExpanded($index)"
+                  [attr.aria-controls]="'faq-answer-' + $index"
+                >
+                  <div class="flex items-center justify-between">
+                    <h3 class="text-sm sm:text-base font-semibold text-gray-900 dark:text-gray-100 pr-4">
+                      {{ item.question }}
+                    </h3>
+                    <div class="flex-shrink-0">
+                      <app-icon
+                        [name]="isFaqExpanded($index) ? 'x' : 'chevron-right'"
+                        [size]="20"
+                        class="text-gray-500 dark:text-gray-400 transition-transform duration-200"
+                      ></app-icon>
+                    </div>
+                  </div>
+                </button>
+
+                @if (isFaqExpanded($index)) {
+                  <div
+                    [id]="'faq-answer-' + $index"
+                    class="px-4 py-4 sm:px-6 sm:py-5 bg-white dark:bg-dark-900 border-t border-gray-200 dark:border-dark-700 animate-fade-in"
+                  >
+                    <p class="text-sm sm:text-base text-gray-700 dark:text-gray-300 leading-relaxed">
+                      {{ item.answer }}
+                    </p>
+                  </div>
+                }
+              </div>
+            }
+          </div>
         </div>
 
         <!-- Footer Actions -->
@@ -321,6 +320,12 @@
               <app-icon name="arrow-left" [size]="16" class="mr-2"></app-icon>
               Back to MinuteMail
             </app-button>
+          </div>
+          
+          <div class="text-center mt-6">
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+              <em>Last updated 2025‑01‑09</em>
+            </p>
           </div>
         </div>
       </div>

@@ -15,6 +15,22 @@ import {ButtonComponent} from '../../shared/components/ui/button.component';
 })
 export class MxConfigurationComponent implements OnInit {
   domainName = signal<string | null>(null);
+  expandedFaqItems = new Set<number>();
+
+  faqItems = [
+    {
+      question: "Does MinuteMail send mail from my domain?",
+      answer: "No. MinuteMail is receive‑only. There is no outbound mail, so SPF, DKIM and DMARC are unnecessary."
+    },
+    {
+      question: "Can I set a custom TTL?",
+      answer: "MinuteMail has no TTL requirement. Use the default value offered by your DNS provider."
+    },
+    {
+      question: "Will I need to update this later?",
+      answer: "If we add extra inbound hosts (mx2.minutemail.co, etc.) for redundancy, we'll let you know. You'll simply add another MX record with a higher priority number."
+    }
+  ];
 
   constructor(
     private route: ActivatedRoute,
@@ -29,6 +45,18 @@ export class MxConfigurationComponent implements OnInit {
         this.domainName.set(params['domain']);
       }
     });
+  }
+
+  toggleFaqItem(index: number) {
+    if (this.expandedFaqItems.has(index)) {
+      this.expandedFaqItems.delete(index);
+    } else {
+      this.expandedFaqItems.add(index);
+    }
+  }
+
+  isFaqExpanded(index: number): boolean {
+    return this.expandedFaqItems.has(index);
   }
 
   goBack() {
