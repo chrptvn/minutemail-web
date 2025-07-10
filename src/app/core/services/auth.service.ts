@@ -18,11 +18,11 @@ export interface UserProfile {
 export class AuthService {
   private keycloak: any;
   private isBrowser: boolean;
-  
+
   // Reactive state
   isAuthenticated = signal(false);
   userProfile = signal<UserProfile | null>(null);
-  
+
   private authSubject = new BehaviorSubject<boolean>(false);
   public isAuthenticated$ = this.authSubject.asObservable();
 
@@ -105,9 +105,7 @@ export class AuthService {
       this.userProfile.set({
         id: profile.id,
         username: profile.username,
-        email: profile.email,
-        firstName: profile.firstName,
-        lastName: profile.lastName
+        email: profile.email
       });
     } catch (error) {
       console.error('Failed to load user profile:', error);
@@ -137,7 +135,7 @@ export class AuthService {
 
   login(): void {
     if (!this.isBrowser || !this.keycloak) return;
-    
+
     console.log('Initiating login');
     this.keycloak.login({
       redirectUri: window.location.origin
@@ -146,7 +144,7 @@ export class AuthService {
 
   register(): void {
     if (!this.isBrowser || !this.keycloak) return;
-    
+
     console.log('Initiating registration');
     this.keycloak.register({
       redirectUri: window.location.origin
@@ -155,7 +153,7 @@ export class AuthService {
 
   logout(): void {
     if (!this.isBrowser || !this.keycloak) return;
-    
+
     console.log('Initiating logout');
     this.keycloak.logout({
       redirectUri: window.location.origin
@@ -181,30 +179,30 @@ export class AuthService {
   getUserDisplayName(): string {
     const profile = this.userProfile();
     if (!profile) return '';
-    
+
     if (profile.firstName && profile.lastName) {
       return `${profile.firstName} ${profile.lastName}`;
     }
-    
+
     return profile.username || profile.email || '';
   }
 
   getUserInitials(): string {
     const profile = this.userProfile();
     if (!profile) return '';
-    
+
     if (profile.firstName && profile.lastName) {
       return `${profile.firstName.charAt(0)}${profile.lastName.charAt(0)}`.toUpperCase();
     }
-    
+
     if (profile.username) {
       return profile.username.substring(0, 2).toUpperCase();
     }
-    
+
     if (profile.email) {
       return profile.email.substring(0, 2).toUpperCase();
     }
-    
+
     return '';
   }
 }

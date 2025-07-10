@@ -4,12 +4,12 @@
     variant="ghost"
     size="sm"
     (onClick)="toggleMenu()"
-    [ariaLabel]="authService.isAuthenticated() ? 'Open profile menu' : 'Login or signup'"
+    [ariaLabel]="this.isAuthenticated() ? 'Open profile menu' : 'Login or signup'"
     class="relative"
   >
     <!-- Debug info (remove in production) -->
 
-    @if (authService.isAuthenticated()) {
+    @if (this.isAuthenticated()) {
       <!-- Authenticated User Avatar -->
       <app-icon name="user-hook" [size]="18" class="text-gray-700 dark:text-gray-300 sm:w-5 sm:h-5"></app-icon>
     } @else {
@@ -21,7 +21,7 @@
   <!-- Dropdown Menu -->
   @if (isOpen()) {
     <div class="absolute right-0 mt-2 w-48 bg-white dark:bg-dark-900 rounded-lg shadow-lg border border-gray-200 dark:border-dark-700 py-1 z-50 animate-fade-in">
-      @if (authService.isAuthenticated()) {
+      @if (this.isAuthenticated()) {
         <!-- Profile Actions -->
         <div class="py-1">
           <button
