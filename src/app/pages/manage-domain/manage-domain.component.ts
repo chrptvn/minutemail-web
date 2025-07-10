@@ -12,6 +12,7 @@ interface Domain {
   id: string;
   name: string;
   createdAt: Date;
+  isConfigured: boolean;
   mxTestResult?: {
     status: 'success' | 'error';
     message: string;
@@ -69,7 +70,8 @@ export class ManageDomainComponent {
       const newDomainObj: Domain = {
         id: this.generateId(),
         name: this.newDomain.trim(),
-        createdAt: new Date()
+        createdAt: new Date(),
+        isConfigured: Math.random() > 0.5 // Randomize for now
       };
 
       this.domains.push(newDomainObj);

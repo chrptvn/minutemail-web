@@ -143,6 +143,25 @@
                   <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
                     <div class="flex-1">
                       <div class="flex items-center space-x-3">
+                        <!-- Status Icon -->
+                        <div class="flex-shrink-0">
+                          @if (domain.isConfigured) {
+                            <app-icon 
+                              name="check-circle" 
+                              [size]="20" 
+                              class="text-green-500 dark:text-green-400"
+                              title="Domain is properly configured"
+                            ></app-icon>
+                          } @else {
+                            <app-icon 
+                              name="alert-triangle-filled" 
+                              [size]="20" 
+                              class="text-yellow-500 dark:text-yellow-400"
+                              title="Domain configuration needs attention"
+                            ></app-icon>
+                          }
+                        </div>
+                        
                         <div>
                           <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
                             {{ domain.name }}

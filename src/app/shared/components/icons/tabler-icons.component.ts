@@ -279,6 +279,21 @@ import { Component, Input } from '@angular/core';
           </g>
         }
 
+        @case('check-circle') {
+          <g>
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22,4 12,14.01 9,11.01"/>
+          </g>
+        }
+
+        @case('alert-triangle-filled') {
+          <g>
+            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" fill="currentColor"/>
+            <path d="M12 9v4" stroke="white" stroke-width="2"/>
+            <path d="M12 17h.01" stroke="white" stroke-width="2"/>
+          </g>
+        }
+
         @case('globe') {
           <g>
             <circle cx="12" cy="12" r="10"/>
