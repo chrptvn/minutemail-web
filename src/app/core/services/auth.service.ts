@@ -20,7 +20,7 @@ export class AuthService {
   private isBrowser: boolean;
   
   // Reactive state
-  isAuthenticated = signal(false);
+  isAuthenticated = signal(true);
   userProfile = signal<UserProfile | null>(null);
   
   private authSubject = new BehaviorSubject<boolean>(false);
