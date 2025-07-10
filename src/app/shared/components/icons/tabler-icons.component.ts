@@ -278,7 +278,7 @@ import { Component, Input } from '@angular/core';
             <line x1="22" x2="16" y1="11" y2="11"/>
           </g>
         }
-      }
+
         @case('globe') {
           <g>
             <circle cx="12" cy="12" r="10"/>
@@ -295,6 +295,7 @@ import { Component, Input } from '@angular/core';
             <path d="M12 2v20"/>
           </g>
         }
+      }
     </svg>
   `
 })
