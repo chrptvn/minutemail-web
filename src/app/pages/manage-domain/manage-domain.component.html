@@ -162,7 +162,7 @@
                       <app-button
                         variant="secondary"
                         size="sm"
-                        [loading]="testingMX === domain.id"
+                        [loading]="testingMX() === domain.id"
                         (onClick)="testMXRecord(domain)"
                         ariaLabel="Test MX record for {{ domain.name }}"
                         class="flex-1 sm:flex-none"
@@ -175,7 +175,7 @@
                       <app-button
                         variant="danger"
                         size="sm"
-                        [loading]="removingDomain === domain.id"
+                        [loading]="removingDomain() === domain.id"
                         (onClick)="removeDomain(domain)"
                         ariaLabel="Remove {{ domain.name }}"
                         class="flex-1 sm:flex-none"
