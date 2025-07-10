@@ -49,8 +49,8 @@ export class AuthService {
       const authenticated = await this.keycloak.init({
         onLoad: 'check-sso',
         silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
-        checkLoginIframe: true,
-        silentCheckSsoFallback: true,
+        checkLoginIframe: false,
+        silentCheckSsoFallback: false,
         pkceMethod: 'S256'
       });
 
