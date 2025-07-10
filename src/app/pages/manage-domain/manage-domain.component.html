@@ -181,7 +181,7 @@
                           size="sm"
                           (onClick)="helpConfigure(domain)"
                           ariaLabel="Help configure {{ domain.name }}"
-                          class="flex-1 sm:flex-none"
+                          class="flex-1 sm:flex-none hover:bg-gray-100 dark:hover:bg-dark-700 transition-colors"
                         >
                           <app-icon name="info" [size]="14" class="mr-2"></app-icon>
                           Help me configure
@@ -195,7 +195,7 @@
                         [loading]="testingMX() === domain.id"
                         (onClick)="testMXRecord(domain)"
                         ariaLabel="Test MX record for {{ domain.name }}"
-                        class="flex-1 sm:flex-none"
+                        class="flex-1 sm:flex-none hover:bg-gray-200 dark:hover:bg-dark-600 transition-colors"
                       >
                         <app-icon name="shield" [size]="14" class="mr-2"></app-icon>
                         Test MX

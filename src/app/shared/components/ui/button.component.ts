@@ -51,7 +51,7 @@ export class ButtonComponent {
     const variants = {
       primary:   'bg-primary-500 hover:bg-primary-600 text-white shadow-sm hover:shadow-md',
       secondary: 'bg-gray-200 hover:bg-gray-300 dark:bg-dark-800 dark:hover:bg-dark-700 text-gray-900 dark:text-gray-100',
-      ghost:     'hover:bg-gray-100 dark:hover:bg-dark-800 text-gray-700 dark:text-gray-300',
+      ghost:     'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-800',
       danger:    'bg-red-500 hover:bg-red-600 text-white shadow-sm hover:shadow-md',
     };
     const sizes = {

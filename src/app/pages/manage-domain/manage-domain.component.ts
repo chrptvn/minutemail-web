@@ -158,6 +158,14 @@ export class ManageDomainComponent {
     // Navigate to MX configuration documentation page
     this.router.navigate(['/mx-configuration'], { 
       queryParams: { domain: domain.name } 
+    }).then(success => {
+      if (!success) {
+        console.error('Navigation to MX configuration failed');
+        this.showToastMessage('error', 'Failed to navigate to configuration page');
+      }
+    }).catch(error => {
+      console.error('Navigation error:', error);
+      this.showToastMessage('error', 'Failed to navigate to configuration page');
     });
   }
 
