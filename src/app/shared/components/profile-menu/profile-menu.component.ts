@@ -74,6 +74,11 @@ export class ProfileMenuComponent implements OnInit {
     this.closeMenu();
   }
 
+  mxConfiguration() {
+    this.router.navigate(['/mx-configuration']);
+    this.closeMenu();
+  }
+
   // Close menu when clicking outside
   onDocumentClick(event: Event) {
     if (!this.isBrowser) return;
