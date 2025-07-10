@@ -200,6 +200,10 @@ export class ManageDomainComponent {
     this.router.navigate(['/privacy']);
   }
 
+  goToMxConfiguration() {
+    this.router.navigate(['/mx-configuration']);
+  }
+
   toggleTheme() {
     this.themeService.toggleTheme();
   }

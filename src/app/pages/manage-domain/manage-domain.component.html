@@ -251,6 +251,14 @@
         <div class="mt-12 pt-8 border-t border-gray-200 dark:border-dark-700">
           <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6">
             <app-button
+              variant="secondary"
+              (onClick)="goToMxConfiguration()"
+              class="w-full sm:w-auto"
+            >
+              <app-icon name="dns" [size]="16" class="mr-2"></app-icon>
+              MX Configuration Guide
+            </app-button>
+            <app-button
               variant="primary"
               (onClick)="goHome()"
               class="w-full sm:w-auto"
