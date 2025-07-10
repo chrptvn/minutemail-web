@@ -87,6 +87,33 @@
             <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
               Add New Domain
             </h2>
+            
+            <!-- Help Section -->
+            <div class="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+              <div class="flex items-start space-x-3">
+                <div class="flex-shrink-0">
+                  <app-icon name="info" [size]="20" class="text-blue-600 dark:text-blue-400"></app-icon>
+                </div>
+                <div class="flex-1">
+                  <h3 class="text-sm font-medium text-blue-900 dark:text-blue-100 mb-2">
+                    Need help setting up your domain?
+                  </h3>
+                  <p class="text-sm text-blue-800 dark:text-blue-200 mb-3">
+                    To receive emails at your custom domain, you'll need to configure DNS settings. Don't worry - we'll guide you through it step by step.
+                  </p>
+                  <app-button
+                    variant="ghost"
+                    size="sm"
+                    (onClick)="goToMxConfiguration()"
+                    class="text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-800/50 border border-blue-300 dark:border-blue-600"
+                  >
+                    <app-icon name="dns" [size]="16" class="mr-2"></app-icon>
+                    View Setup Guide
+                  </app-button>
+                </div>
+              </div>
+            </div>
+
             <form (ngSubmit)="addDomain()" #domainForm="ngForm" class="space-y-4">
               <div>
                 <label for="domain" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -184,7 +211,7 @@
                           class="flex-1 sm:flex-none hover:bg-gray-100 dark:hover:bg-dark-700 transition-colors"
                         >
                           <app-icon name="info" [size]="14" class="mr-2"></app-icon>
-                          Help me configure
+                          Setup Guide
                         </app-button>
                       }
 
@@ -250,14 +277,6 @@
         <!-- Footer Actions -->
         <div class="mt-12 pt-8 border-t border-gray-200 dark:border-dark-700">
           <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6">
-            <app-button
-              variant="secondary"
-              (onClick)="goToMxConfiguration()"
-              class="w-full sm:w-auto"
-            >
-              <app-icon name="dns" [size]="16" class="mr-2"></app-icon>
-              MX Configuration Guide
-            </app-button>
             <app-button
               variant="primary"
               (onClick)="goHome()"
