@@ -154,6 +154,13 @@ export class ManageDomainComponent {
       : 'text-red-500 dark:text-red-400';
   }
 
+  helpConfigure(domain: Domain) {
+    // Navigate to MX configuration documentation page
+    this.router.navigate(['/mx-configuration'], { 
+      queryParams: { domain: domain.name } 
+    });
+  }
+
   private generateId(): string {
     return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
   }

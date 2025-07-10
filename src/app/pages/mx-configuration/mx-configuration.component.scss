@@ -1,0 +1,275 @@
+/* MX Configuration page specific styles */
+.mx-config-content {
+  line-height: 1.7;
+}
+
+.mx-config-section {
+  margin-bottom: 2rem;
+}
+
+.mx-config-section h2 {
+  color: var(--text-color);
+  border-bottom: 2px solid rgba(36, 200, 219, 0.2);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.mx-config-section h3 {
+  color: var(--text-color);
+  margin-bottom: 0.75rem;
+}
+
+.mx-config-section h4 {
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+}
+
+/* Code blocks */
+.mx-config-section pre {
+  background: #1a1a1a !important;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  overflow-x: auto !important;
+  overflow-y: hidden;
+  white-space: pre;
+  max-width: 100%;
+  box-sizing: border-box;
+  word-wrap: normal;
+  word-break: normal;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(36, 200, 219, 0.5) transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+}
+
+.mx-config-section pre code {
+  white-space: pre;
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Scrollbar styling */
+.mx-config-section pre::-webkit-scrollbar {
+  height: 8px;
+}
+
+.mx-config-section pre::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.mx-config-section pre::-webkit-scrollbar-thumb {
+  background: rgba(36, 200, 219, 0.6);
+  border-radius: 4px;
+}
+
+.mx-config-section pre::-webkit-scrollbar-thumb:hover {
+  background: rgba(36, 200, 219, 0.8);
+}
+
+/* Inline code styling */
+.mx-config-section code:not(pre code) {
+  background: rgba(36, 200, 219, 0.1);
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  white-space: nowrap;
+}
+
+/* Step indicators */
+.step-indicator {
+  background: linear-gradient(135deg, var(--primary-color) 0%, rgba(36, 200, 219, 0.8) 100%);
+  box-shadow: 0 2px 4px rgba(36, 200, 219, 0.2);
+}
+
+/* Provider cards */
+.provider-card {
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+}
+
+.provider-card:hover {
+  border-left-color: var(--primary-color);
+  transform: translateX(2px);
+}
+
+/* MX record table */
+.mx-table {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.05) 0%, rgba(36, 200, 219, 0.02) 100%);
+}
+
+.dark .mx-table {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.1) 0%, rgba(36, 200, 219, 0.05) 100%);
+}
+
+/* Alert boxes */
+.alert-info {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
+  border-left: 4px solid #3b82f6;
+}
+
+.alert-warning {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%);
+  border-left: 4px solid #f59e0b;
+}
+
+.alert-error {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
+  border-left: 4px solid #ef4444;
+}
+
+/* Mobile containment for code blocks */
+@media (max-width: 768px) {
+  .mx-config-section pre {
+    font-size: 0.75rem;
+    padding: 0.75rem;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+  }
+
+  .mx-config-section pre code {
+    font-size: 0.75rem;
+    max-width: 100%;
+  }
+
+  .step-indicator {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  .step-indicator span {
+    font-size: 0.75rem;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 640px) {
+  .mx-config-section pre {
+    font-size: 0.7rem;
+    padding: 0.5rem;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+  }
+
+  .mx-config-section pre code {
+    font-size: 0.7rem;
+    max-width: 100%;
+  }
+
+  .provider-card {
+    padding: 0.75rem;
+  }
+
+  .mx-table {
+    padding: 0.75rem;
+  }
+}
+
+/* Prose styling for better readability */
+.prose {
+  color: inherit;
+}
+
+.prose h2 {
+  color: var(--text-color) !important;
+  border-bottom: 2px solid rgba(36, 200, 219, 0.2);
+  padding-bottom: 0.5rem;
+}
+
+.prose h3 {
+  color: var(--text-color) !important;
+}
+
+.prose p {
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+
+.prose ul {
+  margin: 1rem 0;
+}
+
+.prose li {
+  margin: 0.5rem 0;
+  line-height: 1.6;
+}
+
+.prose strong {
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+/* Dark mode contrast enhancements */
+.dark .prose {
+  color: rgb(229 231 235);
+}
+
+.dark .prose h2 {
+  color: rgb(229 231 235) !important;
+}
+
+.dark .prose h3 {
+  color: rgb(229 231 235) !important;
+}
+
+.dark .prose strong {
+  color: rgb(229 231 235);
+}
+
+.dark .prose li {
+  color: rgb(209 213 219);
+}
+
+.dark .prose p {
+  color: rgb(209 213 219);
+}
+
+/* Accessibility focus improvements */
+.prose a {
+  color: var(--primary-color);
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.prose a:hover {
+  color: rgba(36, 200, 219, 0.8);
+}
+
+.prose a:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Animation for step cards */
+.step-card {
+  animation: slideInUp 0.3s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Verification section styling */
+.verification-card {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.05) 0%, rgba(34, 197, 94, 0.02) 100%);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.dark .verification-card {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
