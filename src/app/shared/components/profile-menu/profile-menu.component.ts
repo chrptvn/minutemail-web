@@ -74,6 +74,11 @@ export class ProfileMenuComponent implements OnInit {
     this.closeMenu();
   }
 
+  manageDomain() {
+    this.router.navigate(['/manage-domain']);
+    this.closeMenu();
+  }
+
   // Close menu when clicking outside
   onDocumentClick(event: Event) {
     if (!this.isBrowser) return;
