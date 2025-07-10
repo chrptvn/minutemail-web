@@ -71,7 +71,7 @@
         <!-- Header -->
         <div class="text-center mb-8 sm:mb-12">
           <div class="w-16 h-16 mx-auto bg-primary-100 dark:bg-primary-900 rounded-xl flex items-center justify-center mb-4">
-            <app-icon name="external-link" [size]="32" class="text-primary-600 dark:text-primary-400"></app-icon>
+            <app-icon name="globe" [size]="32" class="text-primary-600 dark:text-primary-400"></app-icon>
           </div>
           <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
             Manage Domain
@@ -109,7 +109,7 @@
                     [loading]="addingDomain"
                     ariaLabel="Add domain"
                   >
-                    <app-icon name="external-link" [size]="16" class="mr-2"></app-icon>
+                    <app-icon name="globe" [size]="16" class="mr-2"></app-icon>
                     Add Domain
                   </app-button>
                 </div>
@@ -127,7 +127,7 @@
           @if (domains.length === 0) {
             <div class="text-center py-12 bg-gray-50 dark:bg-dark-800 rounded-lg border border-gray-200 dark:border-dark-700">
               <div class="w-16 h-16 mx-auto bg-gray-100 dark:bg-dark-700 rounded-full flex items-center justify-center mb-4">
-                <app-icon name="external-link" [size]="24" class="text-gray-400 dark:text-gray-500"></app-icon>
+                <app-icon name="globe" [size]="24" class="text-gray-400 dark:text-gray-500"></app-icon>
               </div>
               <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
                 No domains added yet
@@ -143,9 +143,6 @@
                   <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
                     <div class="flex-1">
                       <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-primary-100 dark:bg-primary-900 rounded-lg flex items-center justify-center">
-                          <app-icon name="external-link" [size]="20" class="text-primary-600 dark:text-primary-400"></app-icon>
-                        </div>
                         <div>
                           <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
                             {{ domain.name }}
