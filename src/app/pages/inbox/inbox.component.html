@@ -40,13 +40,7 @@
           </div>
         </div>
 
-        <div class="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
-          @if (expiresAt()) {
-            <div class="hidden sm:flex items-center space-x-2 px-3 py-1.5 bg-gray-100 dark:bg-dark-800 rounded-lg">
-              <app-countdown [expiresAt]="expiresAt()" class="text-sm"></app-countdown>
-            </div>
-          }
-
+        <div class="flex items-center space-x-2 sm:space-x-3">
           <app-button
             variant="ghost"
             size="sm"
@@ -56,7 +50,7 @@
           >
             <app-icon name="refresh" [size]="18" class="text-gray-700 dark:text-gray-300 sm:w-5 sm:h-5"></app-icon>
           </app-button>
-
+          
           <app-button
             variant="ghost"
             size="sm"
@@ -64,7 +58,8 @@
             ariaLabel="View API documentation"
             class="hidden sm:inline-flex"
           >
-            <app-icon name="code" [size]="18" class="text-gray-700 dark:text-gray-300 sm:w-5 sm:h-5"></app-icon>
+            <app-icon name="code" [size]="18" class="mr-2"></app-icon>
+            API
           </app-button>
 
           <app-button
@@ -74,10 +69,12 @@
             ariaLabel="View privacy policy"
             class="hidden sm:inline-flex"
           >
-            <app-icon name="shield" [size]="18" class="text-gray-700 dark:text-gray-300 sm:w-5 sm:h-5"></app-icon>
+            <app-icon name="shield" [size]="18" class="mr-2"></app-icon>
+            Privacy Policy
           </app-button>
-
+          @if (false) {
           <app-profile-menu></app-profile-menu>
+          }
         </div>
       </div>
     </div>
@@ -128,6 +125,11 @@
                 <h2 class="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100">
                   Inbox
                 </h2>
+                @if (expiresAt()) {
+                <div class="hidden sm:flex items-center space-x-2 px-3 py-1.5 bg-gray-100 dark:bg-dark-800 rounded-lg mt-2 mb-2">
+                  <app-countdown [expiresAt]="expiresAt()" class="text-sm"></app-countdown>
+                </div>
+                }
                 <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 flex items-center">
                   <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 mr-2">
                     {{ mails().length }}

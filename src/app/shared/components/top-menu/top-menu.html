@@ -1,6 +1,17 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
   <div class="flex justify-between items-center h-14 sm:h-16">
     <div class="flex items-center space-x-2 sm:space-x-3">
+      @if (!isHome()) {
+      <app-button
+        variant="ghost"
+        size="sm"
+        (onClick)="goHome()"
+        ariaLabel="Go back to home"
+        class="flex-shrink-0"
+      >
+        <app-icon name="arrow-left" [size]="18" class="text-gray-700 dark:text-gray-300 sm:w-5 sm:h-5"></app-icon>
+      </app-button>
+      }
       <img src="/minutemail64x64.png" alt="MinuteMail" class="w-8 h-8 sm:w-10 sm:h-10" />
       <h1 class="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100">
         MinuteMail
@@ -30,7 +41,9 @@
         Privacy Policy
       </app-button>
 
+      @if (false) {
       <app-profile-menu></app-profile-menu>
+      }
     </div>
   </div>
 </div>

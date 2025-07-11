@@ -27,4 +27,12 @@ export class TopMenu {
   goToPrivacy() {
     this.router.navigate(['/privacy']);
   }
+
+  goHome() {
+    this.router.navigate(['/']);
+  }
+
+  isHome(): boolean {
+    return this.router.url === '/';
+  }
 }

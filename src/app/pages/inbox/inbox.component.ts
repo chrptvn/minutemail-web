@@ -1,12 +1,16 @@
-import { Component, OnInit, OnDestroy, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, PLATFORM_ID, signal } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { timer, Subject, switchMap, takeUntil, catchError, of } from 'rxjs';
+
 import { ApiService } from '../../core/services/api.service';
 import { AliasService } from '../../core/services/alias.service';
 import { ClipboardService } from '../../core/services/clipboard.service';
 import { ThemeService } from '../../core/services/theme.service';
+
 import { Mail } from '../../core/models/mail.model';
+
 import { MailTableComponent } from '../../shared/components/mail-table/mail-table.component';
 import { MailViewerComponent } from '../../shared/components/mail-viewer/mail-viewer.component';
 import { CountdownComponent } from '../../shared/components/ui/countdown.component';
@@ -15,25 +19,25 @@ import { TablerIconComponent } from '../../shared/components/icons/tabler-icons.
 import { ToastComponent } from '../../shared/components/ui/toast.component';
 import { SpinnerComponent } from '../../shared/components/ui/spinner.component';
 import { ProfileMenuComponent } from '../../shared/components/profile-menu/profile-menu.component';
-import {VpnBannerComponent} from "../../shared/components/vpn-banner/vpn-banner.component";
+import { VpnBannerComponent } from '../../shared/components/vpn-banner/vpn-banner.component';
 
 @Component({
   selector: 'app-inbox',
   standalone: true,
-    imports: [
-        CommonModule,
-        MailTableComponent,
-        MailViewerComponent,
-        CountdownComponent,
-        ButtonComponent,
-        TablerIconComponent,
-        ToastComponent,
-        SpinnerComponent,
-        ProfileMenuComponent,
-        VpnBannerComponent
-    ],
+  imports: [
+    CommonModule,
+    MailTableComponent,
+    MailViewerComponent,
+    CountdownComponent,
+    ButtonComponent,
+    TablerIconComponent,
+    ToastComponent,
+    SpinnerComponent,
+    ProfileMenuComponent,
+    VpnBannerComponent
+  ],
   templateUrl: './inbox.component.html',
-  styleUrl: './inbox.component.scss'
+  styleUrls: ['./inbox.component.scss']
 })
 export class InboxComponent implements OnInit, OnDestroy {
   alias = signal<string>('');
@@ -47,11 +51,8 @@ export class InboxComponent implements OnInit, OnDestroy {
   expiresAt = signal<string | undefined | null>(undefined);
   lastUpdated = signal<Date>(new Date());
 
-  // Copy functionality
   copying = signal(false);
   copied = signal(false);
-
-  // Delete functionality
   deletingMailId = signal<string | undefined>(undefined);
 
   showToast = signal(false);
@@ -59,33 +60,36 @@ export class InboxComponent implements OnInit, OnDestroy {
   toastMessage = signal('');
 
   private destroy$ = new Subject<void>();
-  private readonly POLL_INTERVAL = 5000; // 5 seconds
+  private readonly POLL_INTERVAL = 5000;
+  private isBrowser: boolean;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private route: ActivatedRoute,
     private router: Router,
     private apiService: ApiService,
     private aliasService: AliasService,
     private clipboardService: ClipboardService,
     public themeService: ThemeService
-  ) {}
+  ) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+  }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       const alias = params['alias'];
-      if (alias) {
-        this.alias.set(alias);
-        this.fullAlias.set(`${alias}@minutemail.co`);
-        this.aliasService.setCurrentAlias(this.fullAlias());
+      if (!alias) {
+        this.router.navigate(['/']);
+        return;
+      }
 
-        // Set a default expiration time (1 hour from now) as fallback
-        const defaultExpiration = new Date(Date.now() + 60 * 60 * 1000).toISOString();
-        this.expiresAt.set(defaultExpiration);
+      this.alias.set(alias);
+      this.fullAlias.set(`${alias}@minutemail.co`);
+      this.aliasService.setCurrentAlias(this.fullAlias());
 
+      if (this.isBrowser) {
         this.loadMails(false);
         this.startPolling();
-      } else {
-        this.router.navigate(['/']);
       }
     });
   }
@@ -96,39 +100,32 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   private startPolling() {
+    // initial load
     this.loadMails(true);
 
-    // Start polling every 5 seconds
     timer(this.POLL_INTERVAL, this.POLL_INTERVAL)
       .pipe(
         switchMap(() => this.apiService.getMails(this.alias())),
         takeUntil(this.destroy$),
-        catchError(error => {
-          console.error('Polling error:', error);
+        catchError(err => {
+          console.error('Polling error:', err);
           return of({ mails: [], expireAt: undefined });
         })
       )
       .subscribe(response => {
-
         const newMails = response.mails || [];
         const currentMails = this.mails();
+        const hasNew = newMails.some(m => !currentMails.find(c => c.id === m.id));
 
-        // Check for new mails
-        const newMailIds = new Set(newMails.map(m => m.id));
-        const currentMailIds = new Set(currentMails.map(m => m.id));
-
-        const hasNewMails = newMails.some(mail => !currentMailIds.has(mail.id));
-
-        if (hasNewMails) {
+        if (hasNew) {
           this.showToastMessage('info', 'New email received!');
         }
 
         this.mails.set(newMails);
         this.lastUpdated.set(new Date());
-        // Update expiration time if provided by API
+
         if (response.expireAt) {
           this.expiresAt.set(response.expireAt);
-          console.log('Updated expiresAt from API:', response.expireAt);
         }
       });
   }
@@ -142,56 +139,45 @@ export class InboxComponent implements OnInit, OnDestroy {
     this.apiService.getMails(this.alias())
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (response) => {
-          this.mails.set(response.mails || []);
+        next: resp => {
+          this.mails.set(resp.mails || []);
           this.lastUpdated.set(new Date());
 
-          // Handle expiration time from API response
-          if (response.expireAt) {
-            this.expiresAt.set(response.expireAt);
-          } else {
-            // If API doesn't provide expiration, calculate based on typical email service behavior
-            // Most temporary email services expire after 1 hour
-            const calculatedExpiration = new Date(Date.now() + 60 * 60 * 1000).toISOString();
-            this.expiresAt.set(calculatedExpiration);
-            console.log('Set calculated expiresAt:', calculatedExpiration);
+          if (resp.expireAt) {
+            this.expiresAt.set(resp.expireAt);
           }
 
           this.loading.set(false);
         },
-        error: (error) => {
-          this.error.set(error.message);
+        error: err => {
+          this.error.set(err.message);
           this.loading.set(false);
-          this.showToastMessage('error', error.message);
+          this.showToastMessage('error', err.message);
         }
       });
   }
 
   refreshMails() {
-    window.location.reload();
+    if (this.isBrowser) {
+      window.location.reload();
+    }
   }
 
   async copyEmailAddress() {
-    const email = this.fullAlias();
-    if (!email) return;
+    if (!this.isBrowser) return;
 
+    const email = this.fullAlias();
     this.copying.set(true);
 
     try {
       const success = await this.clipboardService.copyToClipboard(email);
+      this.copied.set(success);
 
-      if (success) {
-        this.copied.set(true);
-
-        // Reset copied state after 2 seconds
-        setTimeout(() => {
-          this.copied.set(false);
-        }, 2000);
-      } else {
+      if (!success) {
         this.showToastMessage('error', 'Failed to copy to clipboard');
       }
-    } catch (error) {
-      this.showToastMessage('error', 'Failed to copy to clipboard');
+
+      setTimeout(() => this.copied.set(false), 2000);
     } finally {
       this.copying.set(false);
     }
@@ -231,11 +217,7 @@ export class InboxComponent implements OnInit, OnDestroy {
     this.toastType.set(type);
     this.toastMessage.set(message);
     this.showToast.set(true);
-
-    // Auto-hide after 5 seconds
-    setTimeout(() => {
-      this.hideToast();
-    }, 5000);
+    setTimeout(() => this.hideToast(), 5000);
   }
 
   hideToast() {
@@ -243,8 +225,8 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   deleteMail(mail: Mail) {
-    if (this.deletingMailId()) {
-      return; // Prevent multiple simultaneous deletions
+    if (!this.isBrowser || this.deletingMailId()) {
+      return;
     }
 
     this.deletingMailId.set(mail.id);
@@ -252,34 +234,25 @@ export class InboxComponent implements OnInit, OnDestroy {
     this.apiService.deleteMail(this.alias(), mail.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (response) => {
-          // Remove the mail from the local array
-          const currentMails = this.mails();
-          const updatedMails = currentMails.filter(m => m.id !== mail.id);
-          this.mails.set(updatedMails);
-
+        next: () => {
+          this.mails.set(this.mails().filter(m => m.id !== mail.id));
           this.showToastMessage('success', 'Email deleted successfully');
           this.deletingMailId.set(undefined);
         },
-        error: (error) => {
-          console.error('Error deleting mail:', error);
-          this.showToastMessage('error', 'Failed to delete email. Please try again.');
+        error: err => {
+          console.error('Error deleting mail:', err);
+          this.showToastMessage('error', 'Failed to delete email');
           this.deletingMailId.set(undefined);
         }
       });
   }
 
   onMailDeleted(mailId: string) {
-    // Remove the mail from the local array
-    const currentMails = this.mails();
-    const updatedMails = currentMails.filter(m => m.id !== mailId);
-    this.mails.set(updatedMails);
+    this.mails.set(this.mails().filter(m => m.id !== mailId));
 
-    this.showToastMessage('success', 'Email deleted successfully');
-
-    // Close the mail viewer if the deleted mail was being viewed
     if (this.selectedMail()?.id === mailId) {
       this.closeMail();
     }
+    this.showToastMessage('success', 'Email deleted successfully');
   }
 }
