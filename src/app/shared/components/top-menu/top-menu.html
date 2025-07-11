@@ -24,26 +24,12 @@
         size="sm"
         (onClick)="goToApi()"
         ariaLabel="View API documentation"
-        class="hidden sm:inline-flex"
       >
         <app-icon name="code" [size]="18" class="mr-2"></app-icon>
         API
       </app-button>
 
-      <app-button
-        variant="ghost"
-        size="sm"
-        (onClick)="goToPrivacy()"
-        ariaLabel="View privacy policy"
-        class="hidden sm:inline-flex"
-      >
-        <app-icon name="shield" [size]="18" class="mr-2"></app-icon>
-        Privacy Policy
-      </app-button>
-
-      @if (false) {
       <app-profile-menu></app-profile-menu>
-      }
     </div>
   </div>
 </div>

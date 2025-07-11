@@ -5,11 +5,12 @@ import { ThemeService } from '../../core/services/theme.service';
 import { TablerIconComponent } from '../../shared/components/icons/tabler-icons.component';
 import {DnsBannerComponent} from '../../shared/components/dns-banner/dns-banner.component';
 import {TopMenu} from '../../shared/components/top-menu/top-menu';
+import {FooterComponent} from '../../shared/components/footer/footer.component';
 
 @Component({
   selector: 'app-mx-configuration',
   standalone: true,
-  imports: [CommonModule, TablerIconComponent, DnsBannerComponent, TopMenu],
+  imports: [CommonModule, TablerIconComponent, DnsBannerComponent, TopMenu, FooterComponent],
   templateUrl: './mx-configuration.component.html',
   styleUrl: './mx-configuration.component.scss'
 })

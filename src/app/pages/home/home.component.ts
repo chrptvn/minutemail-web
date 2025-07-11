@@ -7,12 +7,11 @@ import { ThemeService } from '../../core/services/theme.service';
 import { AddressCardComponent } from '../../shared/components/address-card/address-card.component';
 import { VpnBannerComponent } from '../../shared/components/vpn-banner/vpn-banner.component';
 import { FaqComponent } from '../../shared/components/faq/faq.component';
-import { ButtonComponent } from '../../shared/components/ui/button.component';
 import { TablerIconComponent } from '../../shared/components/icons/tabler-icons.component';
 import { ToastComponent } from '../../shared/components/ui/toast.component';
-import { ProfileMenuComponent } from '../../shared/components/profile-menu/profile-menu.component';
 import {ApiService} from '../../core/services/api.service';
 import {TopMenu} from '../../shared/components/top-menu/top-menu';
+import {FooterComponent} from '../../shared/components/footer/footer.component';
 
 @Component({
   selector: 'app-home',
@@ -22,10 +21,10 @@ import {TopMenu} from '../../shared/components/top-menu/top-menu';
     AddressCardComponent,
     VpnBannerComponent,
     FaqComponent,
-    ButtonComponent,
     TablerIconComponent,
     ToastComponent,
     TopMenu,
+    FooterComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
@@ -127,10 +126,6 @@ export class HomeComponent implements OnInit {
 
   goToApi() {
     this.router.navigate(['/api']);
-  }
-
-  goToPrivacy() {
-    this.router.navigate(['/privacy']);
   }
 
   toggleTheme() {

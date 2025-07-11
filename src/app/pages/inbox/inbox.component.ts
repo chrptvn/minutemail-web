@@ -20,6 +20,7 @@ import { ToastComponent } from '../../shared/components/ui/toast.component';
 import { SpinnerComponent } from '../../shared/components/ui/spinner.component';
 import { ProfileMenuComponent } from '../../shared/components/profile-menu/profile-menu.component';
 import { VpnBannerComponent } from '../../shared/components/vpn-banner/vpn-banner.component';
+import {FooterComponent} from '../../shared/components/footer/footer.component';
 
 @Component({
   selector: 'app-inbox',
@@ -34,7 +35,8 @@ import { VpnBannerComponent } from '../../shared/components/vpn-banner/vpn-banne
     ToastComponent,
     SpinnerComponent,
     ProfileMenuComponent,
-    VpnBannerComponent
+    VpnBannerComponent,
+    FooterComponent
   ],
   templateUrl: './inbox.component.html',
   styleUrls: ['./inbox.component.scss']

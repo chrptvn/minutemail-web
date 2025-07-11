@@ -83,29 +83,8 @@
         <app-faq></app-faq>
       </div>
 
-      <!-- Mobile Navigation Links -->
-      <div class="sm:hidden text-center mt-8 space-y-2">
-        <app-button
-          variant="ghost"
-          size="sm"
-          (onClick)="goToApi()"
-          ariaLabel="View API documentation"
-          class="w-full"
-        >
-          <app-icon name="code" [size]="16" class="mr-2"></app-icon>
-          API Documentation
-        </app-button>
-        <app-button
-          variant="ghost"
-          size="sm"
-          (onClick)="goToPrivacy()"
-          ariaLabel="View privacy policy"
-          class="w-full"
-        >
-          <app-icon name="shield" [size]="16" class="mr-2"></app-icon>
-          Privacy Policy
-        </app-button>
-      </div>
+      <app-footer></app-footer>
+
     </div>
   </main>
 

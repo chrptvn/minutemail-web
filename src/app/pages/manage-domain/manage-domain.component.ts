@@ -7,6 +7,7 @@ import { ButtonComponent } from '../../shared/components/ui/button.component';
 import { TablerIconComponent } from '../../shared/components/icons/tabler-icons.component';
 import { ToastComponent } from '../../shared/components/ui/toast.component';
 import {TopMenu} from '../../shared/components/top-menu/top-menu';
+import {FooterComponent} from "../../shared/components/footer/footer.component";
 
 interface Domain {
   id: string;
@@ -29,7 +30,8 @@ interface Domain {
     ButtonComponent,
     TablerIconComponent,
     ToastComponent,
-    TopMenu
+    TopMenu,
+    FooterComponent
   ],
   templateUrl: './manage-domain.component.html',
   styleUrl: './manage-domain.component.scss'
