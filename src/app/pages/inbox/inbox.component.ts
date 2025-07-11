@@ -21,6 +21,7 @@ import { SpinnerComponent } from '../../shared/components/ui/spinner.component';
 import { ProfileMenuComponent } from '../../shared/components/profile-menu/profile-menu.component';
 import { VpnBannerComponent } from '../../shared/components/vpn-banner/vpn-banner.component';
 import {FooterComponent} from '../../shared/components/footer/footer.component';
+import {DocsMenuComponent} from '../../shared/components/docs-menu/docs-menu.component';
 
 @Component({
   selector: 'app-inbox',
@@ -36,7 +37,8 @@ import {FooterComponent} from '../../shared/components/footer/footer.component';
     SpinnerComponent,
     ProfileMenuComponent,
     VpnBannerComponent,
-    FooterComponent
+    FooterComponent,
+    DocsMenuComponent
   ],
   templateUrl: './inbox.component.html',
   styleUrls: ['./inbox.component.scss']
