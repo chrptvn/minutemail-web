@@ -16,7 +16,7 @@
             <app-icon name="globe" [size]="32" class="text-primary-600 dark:text-primary-400"></app-icon>
           </div>
           <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-            Using Your Own Domain with MinuteMail (Receive‑Only)
+            Using Your Own Domain with MinuteMail
           </h1>
           @if (domainName()) {
             <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">
@@ -36,7 +36,7 @@
             <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">1. Prerequisites</h2>
             <ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2">
               <li>Access to the DNS console for the domain you want to use (Cloudflare, GoDaddy, Namecheap, Route 53, etc.).</li>
-              <li>A MinuteMail account (custom‑domain support is currently <strong>free</strong>).</li>
+              <li>A MinuteMail account.</li>
             </ul>
           </section>
 
@@ -73,13 +73,6 @@
                   </tbody>
                 </table>
               </div>
-            </div>
-
-            <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-4">
-              <h4 class="font-semibold text-blue-900 dark:text-blue-100 mb-2">Why only one record?</h4>
-              <p class="text-sm text-blue-800 dark:text-blue-200">
-                MinuteMail currently operates a single inbound host (<code>mail.minutemail.co</code>). When redundancy is added later, we'll announce additional hosts such as <code>mx2.minutemail.co</code>; you'll simply add a second MX record with a higher priority number (e.g., 20).
-              </p>
             </div>
 
             <ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2 text-sm">
@@ -170,46 +163,6 @@
               </div>
             </div>
           </section>
-
-          <!-- Troubleshooting Section -->
-          <section class="mb-8">
-            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">5. Troubleshooting</h2>
-
-            <div class="bg-gray-50 dark:bg-dark-800 rounded-lg p-4 sm:p-6 border border-gray-200 dark:border-dark-700">
-              <div class="overflow-x-auto">
-                <table class="min-w-full">
-                  <thead>
-                    <tr class="border-b border-gray-200 dark:border-dark-700">
-                      <th class="text-left py-2 px-3 font-semibold text-gray-700 dark:text-gray-300">Symptom</th>
-                      <th class="text-left py-2 px-3 font-semibold text-gray-700 dark:text-gray-300">Checks</th>
-                    </tr>
-                  </thead>
-                  <tbody class="divide-y divide-gray-200 dark:divide-dark-700">
-                    <tr>
-                      <td class="py-3 px-3 text-sm text-gray-900 dark:text-gray-100 font-medium">Mail never arrives</td>
-                      <td class="py-3 px-3 text-sm text-gray-700 dark:text-gray-300">
-                        • MX record still points elsewhere.<br>
-                        • Propagation not complete yet.<br>
-                        • Typo in hostname (<code>mail.minutemail.co</code>).
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="py-3 px-3 text-sm text-gray-900 dark:text-gray-100 font-medium">Mixed mail providers needed</td>
-                      <td class="py-3 px-3 text-sm text-gray-700 dark:text-gray-300">
-                        Use a <em>sub‑domain</em> for disposable mail so your primary MX records remain untouched.
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="py-3 px-3 text-sm text-gray-900 dark:text-gray-100 font-medium">Provider demands a trailing dot</td>
-                      <td class="py-3 px-3 text-sm text-gray-700 dark:text-gray-300">
-                        Add a dot after the hostname (<code>mail.minutemail.co.</code>) if required.
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </section>
         </div>
 
         <!-- FAQ Section -->
@@ -262,34 +215,6 @@
                 }
               </div>
             }
-          </div>
-        </div>
-
-        <!-- Footer Actions -->
-        <div class="mt-12 pt-8 border-t border-gray-200 dark:border-dark-700">
-          <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6">
-            <app-button
-              variant="primary"
-              (onClick)="goToManageDomain()"
-              class="w-full sm:w-auto"
-            >
-              <app-icon name="arrow-left" [size]="16" class="mr-2"></app-icon>
-              Back to Manage Domain
-            </app-button>
-            <app-button
-              variant="secondary"
-              (onClick)="goHome()"
-              class="w-full sm:w-auto"
-            >
-              <app-icon name="arrow-left" [size]="16" class="mr-2"></app-icon>
-              Back to MinuteMail
-            </app-button>
-          </div>
-
-          <div class="text-center mt-6">
-            <p class="text-sm text-gray-500 dark:text-gray-400">
-              <em>Last updated 2025‑01‑09</em>
-            </p>
           </div>
         </div>
       </div>

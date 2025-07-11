@@ -28,31 +28,6 @@
               Add New Domain
             </h2>
 
-            <!-- Help Section -->
-            <div class="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-              <div class="flex items-start space-x-3">
-                <div class="flex-shrink-0">
-                  <app-icon name="info" [size]="20" class="text-blue-600 dark:text-blue-400"></app-icon>
-                </div>
-                <div class="flex-1">
-                  <h3 class="text-sm font-medium text-blue-900 dark:text-blue-100 mb-2">
-                    Need help setting up your domain?
-                  </h3>
-                  <p class="text-sm text-blue-800 dark:text-blue-200 mb-3">
-                    To receive emails at your custom domain, you'll need to configure DNS settings. Don't worry - we'll guide you through it step by step.
-                  </p>
-                  <app-button
-                    variant="ghost"
-                    size="sm"
-                    (onClick)="goToMxConfiguration()"
-                  >
-                    <app-icon name="dns" [size]="16" class="mr-2"></app-icon>
-                    View Setup Guide
-                  </app-button>
-                </div>
-              </div>
-            </div>
-
             <form (ngSubmit)="addDomain()" #domainForm="ngForm" class="space-y-4">
               <div>
                 <label for="domain" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -75,14 +50,27 @@
                     [loading]="addingDomain"
                     ariaLabel="Add domain"
                   >
-                    <app-icon name="globe" [size]="16" class="mr-2"></app-icon>
+                    <app-icon name="plus" [size]="16" class="mr-2"></app-icon>
                     Add Domain
                   </app-button>
                 </div>
               </div>
             </form>
+
+            <!-- wrap the guide button in a flex container and push it to the right with mt -->
+            <div class="mt-4 flex">
+              <app-button
+                variant="primary"
+                size="sm"
+                (onClick)="goToMxConfiguration()"
+              >
+                <app-icon name="info" [size]="16" class="mr-2"></app-icon>
+                View Setup Guide
+              </app-button>
+            </div>
           </div>
         </div>
+
 
         <!-- Domains List -->
         <div class="space-y-4">

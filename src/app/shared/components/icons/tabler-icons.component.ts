@@ -101,6 +101,13 @@ import { Component, Input } from '@angular/core';
           </g>
         }
 
+        @case('plus') {
+          <g>
+            <line x1="12" x2="12" y1="5" y2="19"/>
+            <line x1="5" x2="19" y1="12" y2="12"/>
+          </g>
+        }
+
         @case('menu') {
           <g>
             <line x1="4" x2="20" y1="12" y2="12"/>

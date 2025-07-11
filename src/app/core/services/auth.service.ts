@@ -2,8 +2,6 @@ import { Injectable, Inject, PLATFORM_ID, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
 
-declare var Keycloak: any;
-
 export interface UserProfile {
   id?: string;
   username?: string;
@@ -16,10 +14,9 @@ export interface UserProfile {
   providedIn: 'root'
 })
 export class AuthService {
-  public keycloak: any; // Make public so components can check if initialized
+  public keycloak: any;
   private isBrowser: boolean;
 
-  // Reactive state
   isAuthenticated = signal(false);
   userProfile = signal<UserProfile | null>(null);
 
@@ -36,7 +33,6 @@ export class AuthService {
     }
 
     try {
-      // Dynamically import Keycloak only in browser
       const KeycloakModule = await import('keycloak-js');
       const KeycloakConstructor = KeycloakModule.default;
 
@@ -46,7 +42,7 @@ export class AuthService {
         clientId: 'minutemail-web'
       } as any);
 
-      const authenticated = await this.keycloak.init({
+      const initOptions: any = {
         onLoad: 'check-sso',
         silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
         checkLoginIframe: false,
@@ -54,57 +50,68 @@ export class AuthService {
         pkceMethod: 'S256',
         enableLogging: true,
         checkLoginIframeInterval: 5
-      });
+      };
+
+      // restore tokens from localStorage if present
+      const storedToken = localStorage.getItem('kc_token');
+      const storedRefresh = localStorage.getItem('kc_refreshToken');
+      const storedId = localStorage.getItem('kc_idToken');
+      if (storedToken)   initOptions.token = storedToken;
+      if (storedRefresh) initOptions.refreshToken = storedRefresh;
+      if (storedId)      initOptions.idToken = storedId;
+
+      const authenticated = await this.keycloak.init(initOptions);
 
       console.log('Keycloak initialized, authenticated:', authenticated);
-      console.log('Keycloak token:', this.keycloak.token ? 'present' : 'not present');
 
       if (authenticated) {
+        // persist tokens
+        localStorage.setItem('kc_token', this.keycloak.token);
+        localStorage.setItem('kc_refreshToken', this.keycloak.refreshToken);
+        localStorage.setItem('kc_idToken', this.keycloak.idToken);
+
         await this.loadUserProfile();
       }
 
       this.isAuthenticated.set(authenticated);
       this.authSubject.next(authenticated);
 
-      // Set up token refresh
       this.setupTokenRefresh();
 
-      // Set up event listeners for auth state changes
       this.keycloak.onAuthSuccess = () => {
-        console.log('Auth success event');
         this.isAuthenticated.set(true);
         this.authSubject.next(true);
         this.loadUserProfile();
       };
 
       this.keycloak.onAuthError = () => {
-        console.log('Auth error event');
+        this.clearStoredTokens();
         this.isAuthenticated.set(false);
         this.authSubject.next(false);
         this.userProfile.set(null);
       };
 
       this.keycloak.onAuthLogout = () => {
-        console.log('Auth logout event');
+        this.clearStoredTokens();
         this.isAuthenticated.set(false);
         this.authSubject.next(false);
         this.userProfile.set(null);
       };
 
-      // Set up token expired handler
       this.keycloak.onTokenExpired = () => {
-        console.log('Token expired, attempting refresh');
         this.keycloak.updateToken(30).then((refreshed: boolean) => {
           if (refreshed) {
-            console.log('Token refreshed successfully');
+            localStorage.setItem('kc_token', this.keycloak.token);
+            localStorage.setItem('kc_refreshToken', this.keycloak.refreshToken);
+            localStorage.setItem('kc_idToken', this.keycloak.idToken);
           } else {
             console.log('Token still valid');
           }
         }).catch(() => {
-          console.log('Failed to refresh token, logging out');
           this.logout();
         });
       };
+
       return authenticated;
     } catch (error) {
       console.error('Keycloak initialization failed:', error);
@@ -117,11 +124,12 @@ export class AuthService {
 
     try {
       const profile = await this.keycloak.loadUserProfile();
-      console.log('Loaded user profile:', profile);
       this.userProfile.set({
         id: profile.id,
         username: profile.username,
-        email: profile.email
+        email: profile.email,
+        firstName: profile.firstName,
+        lastName: profile.lastName
       });
     } catch (error) {
       console.error('Failed to load user profile:', error);
@@ -131,113 +139,61 @@ export class AuthService {
   private setupTokenRefresh(): void {
     if (!this.keycloak) return;
 
-    // Refresh token more frequently and with better error handling
     setInterval(() => {
       if (this.keycloak.authenticated) {
         this.keycloak.updateToken(30).then((refreshed: boolean) => {
           if (refreshed) {
-            console.log('Token refreshed');
-            // Ensure auth state is still correct after refresh
+            // update persisted tokens
+            localStorage.setItem('kc_token', this.keycloak.token);
+            localStorage.setItem('kc_refreshToken', this.keycloak.refreshToken);
+            localStorage.setItem('kc_idToken', this.keycloak.idToken);
+            // sync reactive state
             if (this.keycloak.authenticated !== this.isAuthenticated()) {
-              this.isAuthenticated.set(this.keycloak.authenticated || false);
-              this.authSubject.next(this.keycloak.authenticated || false);
+              this.isAuthenticated.set(this.keycloak.authenticated);
+              this.authSubject.next(this.keycloak.authenticated);
             }
-          } else {
-            console.log('Token still valid');
           }
         }).catch(() => {
-          console.log('Failed to refresh token, logging out');
           this.logout();
         });
       }
-    }, 60000); // Check every minute
+    }, 60000);
   }
 
   login(): void {
     if (!this.isBrowser || !this.keycloak) return;
-
-    console.log('Initiating login');
-    this.keycloak.login({
-      redirectUri: window.location.origin
-    });
+    this.keycloak.login({ redirectUri: window.location.origin });
   }
 
   register(): void {
     if (!this.isBrowser || !this.keycloak) return;
-
-    console.log('Initiating registration');
-    this.keycloak.register({
-      redirectUri: window.location.origin
-    });
+    this.keycloak.register({ redirectUri: window.location.origin });
   }
 
   logout(): void {
     if (!this.isBrowser || !this.keycloak) return;
+    this.clearStoredTokens();
+    this.keycloak.logout({ redirectUri: window.location.origin });
+  }
 
-    console.log('Initiating logout');
-    this.keycloak.logout({
-      redirectUri: window.location.origin
-    });
+  private clearStoredTokens(): void {
+    localStorage.removeItem('kc_token');
+    localStorage.removeItem('kc_refreshToken');
+    localStorage.removeItem('kc_idToken');
   }
 
   getToken(): string | null {
-    // Check if token is valid before returning it
     if (!this.keycloak || !this.keycloak.authenticated) {
       return null;
     }
-    
-    // If token is expired, try to refresh it
     if (this.keycloak.isTokenExpired()) {
-      console.log('Token expired, attempting refresh in getToken');
-      this.keycloak.updateToken(30).catch(() => {
-        console.log('Token refresh failed in getToken');
-        this.logout();
-      });
+      this.keycloak.updateToken(30).catch(() => this.logout());
       return null;
     }
-    
-    const token = this.keycloak.token || null;
-    console.log('Getting token:', token ? 'present' : 'not present');
-    return token;
+    return this.keycloak.token;
   }
 
   isTokenExpired(): boolean {
-    const expired = this.keycloak?.isTokenExpired() || true;
-    console.log('Token expired:', expired);
-    return expired;
-  }
-
-  hasRole(role: string): boolean {
-    return this.keycloak?.hasRealmRole(role) || false;
-  }
-
-  getUserDisplayName(): string {
-    const profile = this.userProfile();
-    if (!profile) return '';
-
-    if (profile.firstName && profile.lastName) {
-      return `${profile.firstName} ${profile.lastName}`;
-    }
-
-    return profile.username || profile.email || '';
-  }
-
-  getUserInitials(): string {
-    const profile = this.userProfile();
-    if (!profile) return '';
-
-    if (profile.firstName && profile.lastName) {
-      return `${profile.firstName.charAt(0)}${profile.lastName.charAt(0)}`.toUpperCase();
-    }
-
-    if (profile.username) {
-      return profile.username.substring(0, 2).toUpperCase();
-    }
-
-    if (profile.email) {
-      return profile.email.substring(0, 2).toUpperCase();
-    }
-
-    return '';
+    return this.keycloak?.isTokenExpired() ?? true;
   }
 }
