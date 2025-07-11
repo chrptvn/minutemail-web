@@ -24,12 +24,14 @@ export class App implements OnInit {
       const currentTheme = this.themeService.isDarkMode();
       this.themeService.isDarkMode.set(currentTheme);
       
-      // Initialize Keycloak authentication
-      this.authService.initKeycloak().then(authenticated => {
-        console.log('App - Keycloak initialized, authenticated:', authenticated);
-      }).catch(error => {
-        console.error('App - Keycloak initialization failed:', error);
-      });
+      // Initialize Keycloak authentication only once
+      if (!this.authService.keycloak) {
+        this.authService.initKeycloak().then(authenticated => {
+          console.log('App - Keycloak initialized, authenticated:', authenticated);
+        }).catch(error => {
+          console.error('App - Keycloak initialization failed:', error);
+        });
+      }
     }
   }
 }

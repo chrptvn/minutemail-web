@@ -27,14 +27,22 @@ export class ProfileMenuComponent implements OnInit {
   async ngOnInit() {
     if (this.isBrowser) {
       try {
-        const authenticated = await this.authService.initKeycloak();
-        console.log('Profile menu - Keycloak init result:', authenticated);
+        // Only initialize if not already initialized
+        if (!this.authService.keycloak) {
+          const authenticated = await this.authService.initKeycloak();
+          console.log('Profile menu - Keycloak init result:', authenticated);
+        } else {
+          console.log('Profile menu - Keycloak already initialized');
+        }
 
-        // Force update the component state
-        setTimeout(() => {
-          console.log('Profile menu - Auth state:', this.authService.isAuthenticated());
-          console.log('Profile menu - User profile:', this.authService.userProfile());
-        }, 100);
+        // Subscribe to auth state changes
+        this.authService.isAuthenticated$.subscribe(authenticated => {
+          console.log('Profile menu - Auth state changed:', authenticated);
+          // Force change detection
+          setTimeout(() => {
+            console.log('Profile menu - Current auth state:', this.authService.isAuthenticated());
+          }, 0);
+        });
       } catch (error) {
         console.error('Profile menu - Keycloak init error:', error);
       }

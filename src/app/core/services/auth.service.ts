@@ -16,7 +16,7 @@ export interface UserProfile {
   providedIn: 'root'
 })
 export class AuthService {
-  private keycloak: any;
+  public keycloak: any; // Make public so components can check if initialized
   private isBrowser: boolean;
 
   // Reactive state
@@ -51,7 +51,9 @@ export class AuthService {
         silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
         checkLoginIframe: false,
         silentCheckSsoFallback: false,
-        pkceMethod: 'S256'
+        pkceMethod: 'S256',
+        enableLogging: true,
+        checkLoginIframeInterval: 5
       });
 
       console.log('Keycloak initialized, authenticated:', authenticated);
@@ -89,6 +91,20 @@ export class AuthService {
         this.userProfile.set(null);
       };
 
+      // Set up token expired handler
+      this.keycloak.onTokenExpired = () => {
+        console.log('Token expired, attempting refresh');
+        this.keycloak.updateToken(30).then((refreshed: boolean) => {
+          if (refreshed) {
+            console.log('Token refreshed successfully');
+          } else {
+            console.log('Token still valid');
+          }
+        }).catch(() => {
+          console.log('Failed to refresh token, logging out');
+          this.logout();
+        });
+      };
       return authenticated;
     } catch (error) {
       console.error('Keycloak initialization failed:', error);
@@ -115,22 +131,26 @@ export class AuthService {
   private setupTokenRefresh(): void {
     if (!this.keycloak) return;
 
-    // Refresh token every 5 minutes
+    // Refresh token more frequently and with better error handling
     setInterval(() => {
-      this.keycloak.updateToken(70).then((refreshed: boolean) => {
-        if (refreshed) {
-          console.log('Token refreshed');
-          // Ensure auth state is still correct after refresh
-          if (this.keycloak.authenticated !== this.isAuthenticated()) {
-            this.isAuthenticated.set(this.keycloak.authenticated || false);
-            this.authSubject.next(this.keycloak.authenticated || false);
+      if (this.keycloak.authenticated) {
+        this.keycloak.updateToken(30).then((refreshed: boolean) => {
+          if (refreshed) {
+            console.log('Token refreshed');
+            // Ensure auth state is still correct after refresh
+            if (this.keycloak.authenticated !== this.isAuthenticated()) {
+              this.isAuthenticated.set(this.keycloak.authenticated || false);
+              this.authSubject.next(this.keycloak.authenticated || false);
+            }
+          } else {
+            console.log('Token still valid');
           }
-        }
-      }).catch(() => {
-        console.log('Failed to refresh token');
-        this.logout();
-      });
-    }, 300000); // 5 minutes
+        }).catch(() => {
+          console.log('Failed to refresh token, logging out');
+          this.logout();
+        });
+      }
+    }, 60000); // Check every minute
   }
 
   login(): void {
@@ -161,7 +181,22 @@ export class AuthService {
   }
 
   getToken(): string | null {
-    const token = this.keycloak?.token || null;
+    // Check if token is valid before returning it
+    if (!this.keycloak || !this.keycloak.authenticated) {
+      return null;
+    }
+    
+    // If token is expired, try to refresh it
+    if (this.keycloak.isTokenExpired()) {
+      console.log('Token expired, attempting refresh in getToken');
+      this.keycloak.updateToken(30).catch(() => {
+        console.log('Token refresh failed in getToken');
+        this.logout();
+      });
+      return null;
+    }
+    
+    const token = this.keycloak.token || null;
     console.log('Getting token:', token ? 'present' : 'not present');
     return token;
   }
