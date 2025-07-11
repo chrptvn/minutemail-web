@@ -1,0 +1,62 @@
+/* Documentation menu specific styles */
+.docs-menu {
+  position: relative;
+}
+
+/* Dropdown menu styles */
+.docs-dropdown {
+  animation: slideDown 0.2s ease-out;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.dark .docs-dropdown {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Menu item hover effects */
+.menu-item {
+  transition: all 0.15s ease;
+}
+
+.menu-item:hover {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.1) 0%, rgba(36, 200, 219, 0.05) 100%);
+}
+
+.dark .menu-item:hover {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.15) 0%, rgba(36, 200, 219, 0.08) 100%);
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  .docs-dropdown {
+    width: 12rem; /* Slightly smaller on mobile */
+    right: -0.5rem; /* Adjust positioning */
+  }
+  
+  .menu-item {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Ensure proper z-index for dropdown */
+.docs-dropdown {
+  z-index: 1000;
+}
+
+/* Focus styles for accessibility */
+.menu-item:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: -2px;
+}

@@ -1,0 +1,38 @@
+<div class="relative docs-menu" (document:click)="onDocumentClick($event)">
+  <!-- Documentation Button -->
+  <app-button
+    variant="ghost"
+    size="sm"
+    (onClick)="toggleMenu()"
+    [ariaLabel]="'Open documentation menu'"
+    class="relative"
+  >
+    <app-icon name="code" [size]="18" class="text-gray-700 dark:text-gray-300 sm:w-5 sm:h-5 mr-2"></app-icon>
+    <span class="hidden sm:inline">Docs</span>
+  </app-button>
+
+  <!-- Dropdown Menu -->
+  @if (isOpen()) {
+    <div class="absolute right-0 mt-2 w-48 bg-white dark:bg-dark-900 rounded-lg shadow-lg border border-gray-200 dark:border-dark-700 py-1 z-50 animate-fade-in">
+      <div class="py-1">
+        <button
+          type="button"
+          class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-800 flex items-center space-x-2 transition-colors"
+          (click)="goToApi()"
+        >
+          <app-icon name="code" [size]="16" class="text-gray-500 dark:text-gray-400"></app-icon>
+          <span>API Documentation</span>
+        </button>
+
+        <button
+          type="button"
+          class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-800 flex items-center space-x-2 transition-colors"
+          (click)="goToMxConfiguration()"
+        >
+          <app-icon name="globe" [size]="16" class="text-gray-500 dark:text-gray-400"></app-icon>
+          <span>MX Configuration</span>
+        </button>
+      </div>
+    </div>
+  }
+</div>
