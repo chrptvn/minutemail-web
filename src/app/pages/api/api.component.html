@@ -1,45 +1,7 @@
 <div class="min-h-screen bg-gray-50 dark:bg-dark-950 mobile-scroll-container">
   <!-- Header -->
   <header class="bg-white dark:bg-dark-900 border-b border-gray-200 dark:border-dark-700">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between items-center h-14 sm:h-16">
-        <div class="flex items-center space-x-2 sm:space-x-4">
-          <app-button
-            variant="ghost"
-            size="sm"
-            (onClick)="goHome()"
-            ariaLabel="Go back to home"
-            class="flex-shrink-0"
-          >
-            <app-icon name="arrow-left" [size]="18" class="text-gray-700 dark:text-gray-300 sm:w-5 sm:h-5"></app-icon>
-          </app-button>
-
-          <div class="flex items-center space-x-2 sm:space-x-3">
-            <img src="/minutemail64x64.png" alt="MinuteMail" class="w-8 h-8 sm:w-10 sm:h-10" />
-            <h1 class="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100">
-              MinuteMail
-            </h1>
-          </div>
-        </div>
-
-        <div class="flex items-center space-x-2 sm:space-x-3">
-          <app-button
-            variant="ghost"
-            size="sm"
-            (onClick)="toggleTheme()"
-            [ariaLabel]="themeService.isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
-          >
-            @if (themeService.isDarkMode()) {
-              <app-icon name="sun" [size]="18" class="sm:w-5 sm:h-5"></app-icon>
-            } @else {
-              <app-icon name="moon" [size]="18" class="sm:w-5 sm:h-5"></app-icon>
-            }
-          </app-button>
-
-          <app-profile-menu></app-profile-menu>
-        </div>
-      </div>
-    </div>
+    <app-top-menu></app-top-menu>
   </header>
 
   <!-- Main Content -->
@@ -448,20 +410,6 @@
               </p>
             </div>
           </section>
-        </div>
-
-        <!-- Footer Actions -->
-        <div class="mt-12 pt-8 border-t border-gray-200 dark:border-dark-700">
-          <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6">
-            <app-button
-              variant="primary"
-              (onClick)="goHome()"
-              class="w-full sm:w-auto"
-            >
-              <app-icon name="arrow-left" [size]="16" class="mr-2"></app-icon>
-              Back to MinuteMail
-            </app-button>
-          </div>
         </div>
       </div>
     </div>

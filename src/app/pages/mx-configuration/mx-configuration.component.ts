@@ -3,14 +3,14 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ThemeService } from '../../core/services/theme.service';
 import { TablerIconComponent } from '../../shared/components/icons/tabler-icons.component';
-import { ProfileMenuComponent } from '../../shared/components/profile-menu/profile-menu.component';
 import {ButtonComponent} from '../../shared/components/ui/button.component';
 import {DnsBannerComponent} from '../../shared/components/dns-banner/dns-banner.component';
+import {TopMenu} from '../../shared/components/top-menu/top-menu';
 
 @Component({
   selector: 'app-mx-configuration',
   standalone: true,
-  imports: [CommonModule, TablerIconComponent, ProfileMenuComponent, ButtonComponent, DnsBannerComponent],
+  imports: [CommonModule, TablerIconComponent, ButtonComponent, DnsBannerComponent, TopMenu],
   templateUrl: './mx-configuration.component.html',
   styleUrl: './mx-configuration.component.scss'
 })

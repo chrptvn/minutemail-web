@@ -12,6 +12,7 @@ import { TablerIconComponent } from '../../shared/components/icons/tabler-icons.
 import { ToastComponent } from '../../shared/components/ui/toast.component';
 import { ProfileMenuComponent } from '../../shared/components/profile-menu/profile-menu.component';
 import {ApiService} from '../../core/services/api.service';
+import {TopMenu} from '../../shared/components/top-menu/top-menu';
 
 @Component({
   selector: 'app-home',
@@ -24,7 +25,7 @@ import {ApiService} from '../../core/services/api.service';
     ButtonComponent,
     TablerIconComponent,
     ToastComponent,
-    ProfileMenuComponent,
+    TopMenu,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'

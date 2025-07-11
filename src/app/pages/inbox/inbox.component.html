@@ -77,19 +77,6 @@
             <app-icon name="shield" [size]="18" class="text-gray-700 dark:text-gray-300 sm:w-5 sm:h-5"></app-icon>
           </app-button>
 
-          <app-button
-            variant="ghost"
-            size="sm"
-            (onClick)="toggleTheme()"
-            [ariaLabel]="themeService.isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
-          >
-            @if (themeService.isDarkMode()) {
-              <app-icon name="sun" [size]="18" class="text-gray-700 dark:text-gray-300 sm:w-5 sm:h-5"></app-icon>
-            } @else {
-              <app-icon name="moon" [size]="18" class="text-gray-700 dark:text-gray-300 sm:w-5 sm:h-5"></app-icon>
-            }
-          </app-button>
-
           <app-profile-menu></app-profile-menu>
         </div>
       </div>
@@ -181,30 +168,6 @@
           (onMailClick)="openMail($event)"
           (onDeleteMail)="deleteMail($event)"
         ></app-mail-table>
-
-        <!-- Mobile Navigation Links - Unwrapped, like homepage -->
-        <div class="sm:hidden text-center mt-8 space-y-2">
-          <app-button
-            variant="ghost"
-            size="sm"
-            (onClick)="goToApi()"
-            ariaLabel="View API documentation"
-            class="w-full"
-          >
-            <app-icon name="code" [size]="16" class="mr-2"></app-icon>
-            API Documentation
-          </app-button>
-          <app-button
-            variant="ghost"
-            size="sm"
-            (onClick)="goToPrivacy()"
-            ariaLabel="View privacy policy"
-            class="w-full"
-          >
-            <app-icon name="shield" [size]="16" class="mr-2"></app-icon>
-            Privacy Policy
-          </app-button>
-        </div>
       </div>
     }
     <!-- VPN Banner -->
@@ -221,6 +184,30 @@
     (onClose)="closeMail()"
     (onMailDeleted)="onMailDeleted($event)"
   ></app-mail-viewer>
+
+  <!-- Mobile Navigation Links - Unwrapped, like homepage -->
+  <div class="sm:hidden text-center mt-8 space-y-2">
+    <app-button
+      variant="ghost"
+      size="sm"
+      (onClick)="goToApi()"
+      ariaLabel="View API documentation"
+      class="w-full"
+    >
+      <app-icon name="code" [size]="16" class="mr-2"></app-icon>
+      API Documentation
+    </app-button>
+    <app-button
+      variant="ghost"
+      size="sm"
+      (onClick)="goToPrivacy()"
+      ariaLabel="View privacy policy"
+      class="w-full"
+    >
+      <app-icon name="shield" [size]="16" class="mr-2"></app-icon>
+      Privacy Policy
+    </app-button>
+  </div>
 
   <!-- Toast Notifications -->
   @if (showToast()) {

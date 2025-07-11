@@ -1,67 +1,7 @@
 <div class="min-h-screen bg-gray-50 dark:bg-dark-950 mobile-scroll-container">
   <!-- Header -->
   <header class="bg-white dark:bg-dark-900 border-b border-gray-200 dark:border-dark-700">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between items-center h-14 sm:h-16">
-        <div class="flex items-center space-x-2 sm:space-x-4">
-          <app-button
-            variant="ghost"
-            size="sm"
-            (onClick)="goHome()"
-            ariaLabel="Go back to home"
-            class="flex-shrink-0"
-          >
-            <app-icon name="arrow-left" [size]="18" class="text-gray-700 dark:text-gray-300 sm:w-5 sm:h-5"></app-icon>
-          </app-button>
-
-          <div class="flex items-center space-x-2 sm:space-x-3">
-            <img src="/minutemail64x64.png" alt="MinuteMail" class="w-8 h-8 sm:w-10 sm:h-10" />
-            <h1 class="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100">
-              MinuteMail
-            </h1>
-          </div>
-        </div>
-
-        <div class="flex items-center space-x-2 sm:space-x-3">
-          <app-button
-            variant="ghost"
-            size="sm"
-            (onClick)="goToApi()"
-            ariaLabel="View API documentation"
-            class="hidden sm:inline-flex"
-          >
-            <app-icon name="code" [size]="18" class="mr-2"></app-icon>
-            API
-          </app-button>
-
-          <app-button
-            variant="ghost"
-            size="sm"
-            (onClick)="goToPrivacy()"
-            ariaLabel="View privacy policy"
-            class="hidden sm:inline-flex"
-          >
-            <app-icon name="shield" [size]="18" class="mr-2"></app-icon>
-            Privacy Policy
-          </app-button>
-
-          <app-button
-            variant="ghost"
-            size="sm"
-            (onClick)="toggleTheme()"
-            [ariaLabel]="themeService.isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
-          >
-            @if (themeService.isDarkMode()) {
-              <app-icon name="sun" [size]="18" class="sm:w-5 sm:h-5"></app-icon>
-            } @else {
-              <app-icon name="moon" [size]="18" class="sm:w-5 sm:h-5"></app-icon>
-            }
-          </app-button>
-
-          <app-profile-menu></app-profile-menu>
-        </div>
-      </div>
-    </div>
+    <app-top-menu></app-top-menu>
   </header>
 
   <!-- Main Content -->
@@ -87,7 +27,7 @@
             <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
               Add New Domain
             </h2>
-            
+
             <!-- Help Section -->
             <div class="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
               <div class="flex items-start space-x-3">
@@ -172,22 +112,22 @@
                         <!-- Status Icon -->
                         <div class="flex-shrink-0">
                           @if (domain.isConfigured) {
-                            <app-icon 
-                              name="check-circle" 
-                              [size]="20" 
+                            <app-icon
+                              name="check-circle"
+                              [size]="20"
                               class="text-green-500 dark:text-green-400"
                               title="Domain is properly configured"
                             ></app-icon>
                           } @else {
-                            <app-icon 
-                              name="alert-triangle-filled" 
-                              [size]="20" 
+                            <app-icon
+                              name="alert-triangle-filled"
+                              [size]="20"
                               class="text-yellow-500 dark:text-yellow-400"
                               title="Domain configuration needs attention"
                             ></app-icon>
                           }
                         </div>
-                        
+
                         <div>
                           <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
                             {{ domain.name }}
@@ -247,9 +187,9 @@
                     <div class="mt-4 pt-4 border-t border-gray-200 dark:border-dark-700">
                       <div [class]="getMXResultClasses(domain.mxTestResult.status)">
                         <div class="flex items-start space-x-3">
-                          <app-icon 
-                            [name]="domain.mxTestResult.status === 'success' ? 'check' : 'alert-circle'" 
-                            [size]="16" 
+                          <app-icon
+                            [name]="domain.mxTestResult.status === 'success' ? 'check' : 'alert-circle'"
+                            [size]="16"
                             [class]="getMXResultIconClasses(domain.mxTestResult.status)"
                           ></app-icon>
                           <div class="flex-1">
@@ -271,20 +211,6 @@
               }
             </div>
           }
-        </div>
-
-        <!-- Footer Actions -->
-        <div class="mt-12 pt-8 border-t border-gray-200 dark:border-dark-700">
-          <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6">
-            <app-button
-              variant="primary"
-              (onClick)="goHome()"
-              class="w-full sm:w-auto"
-            >
-              <app-icon name="arrow-left" [size]="16" class="mr-2"></app-icon>
-              Back to MinuteMail
-            </app-button>
-          </div>
         </div>
       </div>
     </div>

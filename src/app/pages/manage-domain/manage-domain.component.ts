@@ -5,8 +5,8 @@ import { Router } from '@angular/router';
 import { ThemeService } from '../../core/services/theme.service';
 import { ButtonComponent } from '../../shared/components/ui/button.component';
 import { TablerIconComponent } from '../../shared/components/icons/tabler-icons.component';
-import { ProfileMenuComponent } from '../../shared/components/profile-menu/profile-menu.component';
 import { ToastComponent } from '../../shared/components/ui/toast.component';
+import {TopMenu} from '../../shared/components/top-menu/top-menu';
 
 interface Domain {
   id: string;
@@ -24,12 +24,12 @@ interface Domain {
   selector: 'app-manage-domain',
   standalone: true,
   imports: [
-    CommonModule, 
-    FormsModule, 
-    ButtonComponent, 
-    TablerIconComponent, 
-    ProfileMenuComponent,
-    ToastComponent
+    CommonModule,
+    FormsModule,
+    ButtonComponent,
+    TablerIconComponent,
+    ToastComponent,
+    TopMenu
   ],
   templateUrl: './manage-domain.component.html',
   styleUrl: './manage-domain.component.scss'
@@ -77,7 +77,7 @@ export class ManageDomainComponent {
       this.domains.push(newDomainObj);
       this.newDomain = '';
       this.addingDomain = false;
-      
+
       this.showToastMessage('success', `Domain "${newDomainObj.name}" added successfully`);
     }, 1000);
   }
@@ -89,17 +89,17 @@ export class ManageDomainComponent {
     setTimeout(() => {
       // Randomly simulate success or failure for demo
       const isSuccess = Math.random() > 0.3;
-      
+
       domain.mxTestResult = {
         status: isSuccess ? 'success' : 'error',
-        message: isSuccess 
+        message: isSuccess
           ? 'MX record is correctly configured and pointing to MinuteMail servers'
           : 'MX record not found or not pointing to MinuteMail servers. Please check your DNS configuration.',
         testedAt: new Date()
       };
 
       this.testingMX.set(null);
-      
+
       this.showToastMessage(
         isSuccess ? 'success' : 'error',
         `MX test ${isSuccess ? 'passed' : 'failed'} for ${domain.name}`
@@ -114,7 +114,7 @@ export class ManageDomainComponent {
     setTimeout(() => {
       this.domains = this.domains.filter(d => d.id !== domain.id);
       this.removingDomain.set(null);
-      
+
       this.showToastMessage('success', `Domain "${domain.name}" removed successfully`);
     }, 1000);
   }
@@ -131,8 +131,8 @@ export class ManageDomainComponent {
     } else if (diffInHours < 48) {
       return 'Yesterday';
     } else {
-      return date.toLocaleDateString(undefined, { 
-        month: 'short', 
+      return date.toLocaleDateString(undefined, {
+        month: 'short',
         day: 'numeric',
         year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
       });
@@ -149,15 +149,15 @@ export class ManageDomainComponent {
   }
 
   getMXResultIconClasses(status: 'success' | 'error'): string {
-    return status === 'success' 
-      ? 'text-green-500 dark:text-green-400' 
+    return status === 'success'
+      ? 'text-green-500 dark:text-green-400'
       : 'text-red-500 dark:text-red-400';
   }
 
   helpConfigure(domain: Domain) {
     // Navigate to MX configuration documentation page
-    this.router.navigate(['/mx-configuration'], { 
-      queryParams: { domain: domain.name } 
+    this.router.navigate(['/mx-configuration'], {
+      queryParams: { domain: domain.name }
     }).then(success => {
       if (!success) {
         console.error('Navigation to MX configuration failed');

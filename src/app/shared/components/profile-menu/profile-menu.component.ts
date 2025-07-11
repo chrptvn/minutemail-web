@@ -46,8 +46,7 @@ export class ProfileMenuComponent implements OnInit {
   }
 
   isAuthenticated() {
-    // return this.authService.isAuthenticated();
-    return true;
+    return this.authService.isAuthenticated();
   }
 
   closeMenu() {
