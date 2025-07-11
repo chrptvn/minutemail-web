@@ -35,6 +35,12 @@ export class AuthService {
       return false;
     }
 
+    // If already initialized, just return current auth state
+    if (this.keycloak) {
+      console.log('Keycloak already initialized, returning current state:', this.keycloak.authenticated);
+      return this.keycloak.authenticated || false;
+    }
+
     try {
       // Dynamically import Keycloak only in browser
       const KeycloakModule = await import('keycloak-js');
@@ -48,6 +54,159 @@ export class AuthService {
 
       const authenticated = await this.keycloak.init({
         onLoad: 'check-sso',
+        silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
+        checkLoginIframe: true,
+        silentCheckSsoFallback: true,
+        pkceMethod: 'S256',
+        enableLogging: true,
+        checkLoginIframeInterval: 5,
+        // These options help with session restoration on page refresh
+        flow: 'standard',
+        responseMode: 'fragment',
+        // Try to restore session from stored tokens
+        token: this.getStoredToken(),
+        refreshToken: this.getStoredRefreshToken(),
+        idToken: this.getStoredIdToken()
+      });
+
+      console.log('Keycloak initialized, authenticated:', authenticated);
+      console.log('Keycloak token:', this.keycloak.token ? 'present' : 'not present');
+
+      if (authenticated) {
+        // Store tokens for session restoration
+        this.storeTokens();
+        await this.loadUserProfile();
+      } else {
+        // Clear any stale tokens
+        this.clearStoredTokens();
+      }
+
+      this.isAuthenticated.set(authenticated);
+      this.authSubject.next(authenticated);
+
+      // Set up token refresh
+      this.setupTokenRefresh();
+
+      // Set up event listeners for auth state changes
+      this.keycloak.onAuthSuccess = () => {
+        console.log('Auth success event');
+        this.storeTokens();
+        this.isAuthenticated.set(true);
+        this.authSubject.next(true);
+        this.loadUserProfile();
+      };
+
+      this.keycloak.onAuthError = () => {
+        console.log('Auth error event');
+        this.clearStoredTokens();
+        this.isAuthenticated.set(false);
+        this.authSubject.next(false);
+        this.userProfile.set(null);
+      };
+
+      this.keycloak.onAuthLogout = () => {
+        console.log('Auth logout event');
+        this.clearStoredTokens();
+        this.isAuthenticated.set(false);
+        this.authSubject.next(false);
+        this.userProfile.set(null);
+      };
+
+      // Set up token expired handler
+      this.keycloak.onTokenExpired = () => {
+        console.log('Token expired, attempting refresh');
+        this.keycloak.updateToken(30).then((refreshed: boolean) => {
+          if (refreshed) {
+            console.log('Token refreshed successfully');
+            this.storeTokens();
+          } else {
+            console.log('Token still valid');
+          }
+        }).catch(() => {
+          console.log('Failed to refresh token, logging out');
+          this.logout();
+        });
+      };
+
+      // Set up token refresh success handler
+      this.keycloak.onAuthRefreshSuccess = () => {
+        console.log('Token refresh success');
+        this.storeTokens();
+      };
+
+      // Set up token refresh error handler
+      this.keycloak.onAuthRefreshError = () => {
+        console.log('Token refresh error, clearing session');
+        this.clearStoredTokens();
+        this.logout();
+      };
+
+      return authenticated;
+    } catch (error) {
+      console.error('Keycloak initialization failed:', error);
+      this.clearStoredTokens();
+      return false;
+    }
+  }
+
+  private getStoredToken(): string | undefined {
+    if (!this.isBrowser) return undefined;
+    try {
+      return sessionStorage.getItem('kc-token') || undefined;
+    } catch {
+      return undefined;
+    }
+  }
+
+  private getStoredRefreshToken(): string | undefined {
+    if (!this.isBrowser) return undefined;
+    try {
+      return sessionStorage.getItem('kc-refresh-token') || undefined;
+    } catch {
+      return undefined;
+    }
+  }
+
+  private getStoredIdToken(): string | undefined {
+    if (!this.isBrowser) return undefined;
+    try {
+      return sessionStorage.getItem('kc-id-token') || undefined;
+    } catch {
+      return undefined;
+    }
+  }
+
+  private storeTokens(): void {
+    if (!this.isBrowser || !this.keycloak) return;
+    
+    try {
+      if (this.keycloak.token) {
+        sessionStorage.setItem('kc-token', this.keycloak.token);
+      }
+      if (this.keycloak.refreshToken) {
+        sessionStorage.setItem('kc-refresh-token', this.keycloak.refreshToken);
+      }
+      if (this.keycloak.idToken) {
+        sessionStorage.setItem('kc-id-token', this.keycloak.idToken);
+      }
+      console.log('Tokens stored in sessionStorage');
+    } catch (error) {
+      console.warn('Failed to store tokens:', error);
+    }
+  }
+
+  private clearStoredTokens(): void {
+    if (!this.isBrowser) return;
+    
+    try {
+      sessionStorage.removeItem('kc-token');
+      sessionStorage.removeItem('kc-refresh-token');
+      sessionStorage.removeItem('kc-id-token');
+      console.log('Tokens cleared from sessionStorage');
+    } catch (error) {
+      console.warn('Failed to clear tokens:', error);
+    }
+  }
         silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
         checkLoginIframe: false,
         silentCheckSsoFallback: false,
@@ -137,6 +296,7 @@ export class AuthService {
         this.keycloak.updateToken(30).then((refreshed: boolean) => {
           if (refreshed) {
             console.log('Token refreshed');
+            this.storeTokens();
             // Ensure auth state is still correct after refresh
             if (this.keycloak.authenticated !== this.isAuthenticated()) {
               this.isAuthenticated.set(this.keycloak.authenticated || false);
@@ -175,6 +335,7 @@ export class AuthService {
     if (!this.isBrowser || !this.keycloak) return;
 
     console.log('Initiating logout');
+    this.clearStoredTokens();
     this.keycloak.logout({
       redirectUri: window.location.origin
     });
@@ -191,6 +352,7 @@ export class AuthService {
       console.log('Token expired, attempting refresh in getToken');
       this.keycloak.updateToken(30).catch(() => {
         console.log('Token refresh failed in getToken');
+          this.storeTokens();
         this.logout();
       });
       return null;
