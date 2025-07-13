@@ -1,7 +1,7 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
-import {Observable, of, throwError} from 'rxjs';
+import {defer, Observable, of, throwError} from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { Mail, MailResponse } from '../models/mail.model';
@@ -20,17 +20,22 @@ export class ApiService {
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
-  getMails(alias: string): Observable<MailResponse> {
-    const url = `${this.baseUrl}/mailbox/${alias}`;
-
-    // Get session ID to use as password
-    const sessionId = this.sessionService.getSessionId();
-
-    // Create headers with session ID as X-Mailbox-Password if available
+  private prepareRequestHeaders(): HttpHeaders {
     let headers = new HttpHeaders();
-    if (sessionId) {
+    const sessionId = this.sessionService.getOrCreateSessionId()
+    const jwt: string | null = localStorage.getItem('kc_token')
+    if (jwt) {
+      headers = headers.set('Authorization', `Bearer ${jwt}`);
+    } else if (sessionId) {
       headers = headers.set('X-Mailbox-Password', sessionId);
     }
+
+    return headers;
+  }
+
+  getMails(alias: string): Observable<MailResponse> {
+    const url = `${this.baseUrl}/mailbox/${alias}`;
+    const headers = this.prepareRequestHeaders();
 
     return this.http
       .get<MailResponse>(url, { headers })
@@ -39,33 +44,17 @@ export class ApiService {
       );
   }
 
-  createMailBox(sessionId?: string): Observable<RegisterModel> {
-    const url = `${this.baseUrl}/mailbox/create`;
-
-    // Create request body with session ID as password if provided
-    const requestBody = sessionId ? {
-      password: sessionId,
-      source: 'web'
-    } : {};
-
-    return this.http
-      .post<RegisterModel>(url, requestBody)
-      .pipe(
-        catchError(this.handleError)
-      );
+  createMailBox(): Observable<RegisterModel> {
+    return defer(() => {
+      const url = `https://api.minutemail.co/v2/mailbox/create`;
+      const headers = this.prepareRequestHeaders();
+      return this.http.post<RegisterModel>(url,  {source: 'web'}, { headers })
+    }).pipe(catchError(this.handleError));
   }
 
   deleteMail(alias: string, mailId: string): Observable<{ message: string }> {
     const url = `${this.baseUrl}/mailbox/${alias}/mail/${mailId}`;
-
-    // Get session ID to use as password
-    const sessionId = this.sessionService.getSessionId();
-
-    // Create headers with session ID as X-Mailbox-Password if available
-    let headers = new HttpHeaders();
-    if (sessionId) {
-      headers = headers.set('X-Mailbox-Password', sessionId);
-    }
+    const headers = this.prepareRequestHeaders();
 
     return this.http
       .delete<{ message: string }>(url, { headers })

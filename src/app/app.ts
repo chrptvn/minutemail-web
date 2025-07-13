@@ -23,11 +23,12 @@ export class App implements OnInit {
       // Force theme application immediately without delay
       const currentTheme = this.themeService.isDarkMode();
       this.themeService.isDarkMode.set(currentTheme);
-      
+
       // Initialize Keycloak authentication only once
       if (!this.authService.keycloak) {
         this.authService.initKeycloak().then(authenticated => {
           console.log('App - Keycloak initialized, authenticated:', authenticated);
+          console.log(this.authService.getToken())
         }).catch(error => {
           console.error('App - Keycloak initialization failed:', error);
         });

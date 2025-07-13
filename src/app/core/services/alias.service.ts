@@ -16,10 +16,8 @@ export class AliasService {
    * Generate a new alias and register it with the API using session ID as password
    */
   generateAndRegisterAlias(): Observable<{ alias?: string; ttl?: number }> {
-    // Get or create session ID to use as password
-    const sessionId = this.sessionService.getOrCreateSessionId();
 
-    return this.apiService.createMailBox(sessionId).pipe(
+    return this.apiService.createMailBox().pipe(
       map(response => {
         this.setCurrentAlias(`${response.name}@minutemail.co`);
         return {
