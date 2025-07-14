@@ -81,6 +81,11 @@ export class ProfileMenuComponent implements OnInit {
     this.closeMenu();
   }
 
+  manageApiKeys() {
+    this.router.navigate(['/api-keys']);
+    this.closeMenu();
+  }
+
   mxConfiguration() {
     this.router.navigate(['/mx-configuration']);
     this.closeMenu();

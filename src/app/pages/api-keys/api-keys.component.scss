@@ -1,0 +1,199 @@
+/* API Keys page specific styles */
+.api-key-card {
+  transition: all 0.2s ease-in-out;
+}
+
+.api-key-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(36, 200, 219, 0.1);
+}
+
+.dark .api-key-card:hover {
+  box-shadow: 0 4px 12px rgba(36, 200, 219, 0.2);
+}
+
+.api-key-icon {
+  background: linear-gradient(135deg, var(--primary-color) 0%, rgba(36, 200, 219, 0.8) 100%);
+}
+
+/* Form styling */
+.api-key-form {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.05) 0%, rgba(36, 200, 219, 0.02) 100%);
+}
+
+.dark .api-key-form {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.1) 0%, rgba(36, 200, 219, 0.05) 100%);
+}
+
+/* Input focus styling */
+input:focus {
+  box-shadow: 0 0 0 3px rgba(36, 200, 219, 0.1);
+}
+
+/* API key display */
+.api-key-display {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.05) 0%, rgba(36, 200, 219, 0.02) 100%);
+  border: 1px solid rgba(36, 200, 219, 0.1);
+}
+
+.dark .api-key-display {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.1) 0%, rgba(36, 200, 219, 0.05) 100%);
+  border: 1px solid rgba(36, 200, 219, 0.2);
+}
+
+/* Status indicators */
+.status-active {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%);
+}
+
+.status-expired {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
+}
+
+.dark .status-active {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.08) 100%);
+}
+
+.dark .status-expired {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.08) 100%);
+}
+
+/* Host tags */
+.host-tag {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.1) 0%, rgba(36, 200, 219, 0.05) 100%);
+  border: 1px solid rgba(36, 200, 219, 0.2);
+}
+
+.dark .host-tag {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.15) 0%, rgba(36, 200, 219, 0.08) 100%);
+  border: 1px solid rgba(36, 200, 219, 0.3);
+}
+
+/* Empty state styling */
+.empty-state {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.05) 0%, rgba(36, 200, 219, 0.02) 100%);
+}
+
+.dark .empty-state {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.1) 0%, rgba(36, 200, 219, 0.05) 100%);
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .api-key-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .api-key-actions button {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .api-key-card {
+    padding: 1rem;
+  }
+  
+  .api-key-form {
+    padding: 1rem;
+  }
+  
+  .api-key-form .flex {
+    flex-direction: column;
+    space-y: 3;
+  }
+  
+  .api-key-form input {
+    margin-bottom: 0.75rem;
+  }
+
+  .api-key-display {
+    padding: 0.75rem;
+  }
+
+  .api-key-display code {
+    font-size: 0.75rem;
+    word-break: break-all;
+  }
+}
+
+@media (max-width: 640px) {
+  .api-key-header {
+    text-align: center;
+  }
+  
+  .api-key-info {
+    text-align: center;
+  }
+  
+  .api-key-info h3 {
+    font-size: 1rem;
+  }
+  
+  .api-key-info p {
+    font-size: 0.875rem;
+  }
+
+  .host-tags {
+    justify-content: center;
+  }
+}
+
+/* Button loading states */
+.btn-loading {
+  position: relative;
+}
+
+.btn-loading::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  margin: auto;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Toast positioning for mobile */
+@media (max-width: 640px) {
+  .toast-container {
+    left: 1rem !important;
+    right: 1rem !important;
+    bottom: 1rem !important;
+  }
+}
+
+/* Accessibility improvements */
+.api-key-card:focus-within {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Copy button animation */
+.copy-success {
+  animation: copySuccess 0.3s ease-out;
+}
+
+@keyframes copySuccess {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Smooth transitions */
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}

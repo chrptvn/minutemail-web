@@ -32,6 +32,11 @@ export const routes: Routes = [
     title: 'MX Record Configuration - MinuteMail'
   },
   {
+    path: 'api-keys',
+    loadComponent: () => import('./pages/api-keys/api-keys.component').then(m => m.ApiKeysComponent),
+    title: 'API Keys - MinuteMail'
+  },
+  {
     path: '**',
     redirectTo: ''
   }

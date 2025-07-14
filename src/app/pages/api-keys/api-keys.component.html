@@ -1,0 +1,263 @@
+<div class="min-h-screen bg-gray-50 dark:bg-dark-950 mobile-scroll-container">
+  <!-- Header -->
+  <header class="bg-white dark:bg-dark-900 border-b border-gray-200 dark:border-dark-700">
+    <app-top-menu></app-top-menu>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12 mobile-scroll-content">
+    <div class="bg-white dark:bg-dark-900 rounded-xl border border-gray-200 dark:border-dark-700 shadow-sm mobile-scroll-card">
+      <div class="px-6 py-8 sm:px-8 sm:py-12 mobile-scroll-inner">
+        <!-- Header -->
+        <div class="text-center mb-8 sm:mb-12">
+          <div class="w-16 h-16 mx-auto bg-primary-100 dark:bg-primary-900 rounded-xl flex items-center justify-center mb-4">
+            <app-icon name="code" [size]="32" class="text-primary-600 dark:text-primary-400"></app-icon>
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+            API Keys
+          </h1>
+          <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">
+            Create and manage API keys for programmatic access to MinuteMail
+          </p>
+        </div>
+
+        <!-- Create API Key Form -->
+        <div class="mb-8">
+          <div class="bg-gray-50 dark:bg-dark-800 rounded-lg p-6 border border-gray-200 dark:border-dark-700">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+              Create New API Key
+            </h2>
+
+            <form (ngSubmit)="createApiKey()" #apiKeyForm="ngForm" class="space-y-4">
+              <div>
+                <label for="keyName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Key Name
+                </label>
+                <input
+                  type="text"
+                  id="keyName"
+                  name="keyName"
+                  [(ngModel)]="newApiKey.name"
+                  placeholder="My API Key"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-dark-600 rounded-lg bg-white dark:bg-dark-900 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  required
+                />
+              </div>
+
+              <div>
+                <label for="expiryDate" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Expiry Date
+                </label>
+                <input
+                  type="datetime-local"
+                  id="expiryDate"
+                  name="expiryDate"
+                  [(ngModel)]="expiryDate"
+                  [min]="minDate"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-dark-600 rounded-lg bg-white dark:bg-dark-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  required
+                />
+              </div>
+
+              <div>
+                <label for="hosts" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Allowed Hosts
+                </label>
+                <div class="space-y-2">
+                  @for (host of newApiKey.hosts; track $index; let i = $index) {
+                    <div class="flex items-center space-x-2">
+                      <input
+                        type="text"
+                        [(ngModel)]="newApiKey.hosts[i]"
+                        [name]="'host-' + i"
+                        placeholder="example.com"
+                        class="flex-1 px-3 py-2 border border-gray-300 dark:border-dark-600 rounded-lg bg-white dark:bg-dark-900 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                      />
+                      @if (newApiKey.hosts.length > 1) {
+                        <app-button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          (onClick)="removeHost(i)"
+                          ariaLabel="Remove host"
+                        >
+                          <app-icon name="x" [size]="16"></app-icon>
+                        </app-button>
+                      }
+                    </div>
+                  }
+                  <app-button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    (onClick)="addHost()"
+                    ariaLabel="Add host"
+                  >
+                    <app-icon name="plus" [size]="16" class="mr-2"></app-icon>
+                    Add Host
+                  </app-button>
+                </div>
+              </div>
+
+              <div class="flex justify-end">
+                <app-button
+                  type="submit"
+                  variant="primary"
+                  [disabled]="!newApiKey.name || !expiryDate || creating"
+                  [loading]="creating"
+                  ariaLabel="Create API key"
+                >
+                  <app-icon name="plus" [size]="16" class="mr-2"></app-icon>
+                  Create API Key
+                </app-button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- API Keys List -->
+        <div class="space-y-4">
+          <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+            Your API Keys ({{ apiKeys.length }})
+          </h2>
+
+          @if (loading) {
+            <div class="text-center py-8">
+              <app-spinner size="lg" text="Loading API keys..."></app-spinner>
+            </div>
+          } @else if (apiKeys.length === 0) {
+            <div class="text-center py-12 bg-gray-50 dark:bg-dark-800 rounded-lg border border-gray-200 dark:border-dark-700">
+              <div class="w-16 h-16 mx-auto bg-gray-100 dark:bg-dark-700 rounded-full flex items-center justify-center mb-4">
+                <app-icon name="code" [size]="24" class="text-gray-400 dark:text-gray-500"></app-icon>
+              </div>
+              <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                No API keys created yet
+              </h3>
+              <p class="text-gray-600 dark:text-gray-400">
+                Create your first API key using the form above to get started.
+              </p>
+            </div>
+          } @else {
+            <div class="space-y-3">
+              @for (apiKey of apiKeys; track apiKey.id) {
+                <div class="bg-white dark:bg-dark-800 border border-gray-200 dark:border-dark-700 rounded-lg p-4 sm:p-6">
+                  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
+                    <div class="flex-1">
+                      <div class="flex items-center space-x-3">
+                        <!-- Status Icon -->
+                        <div class="flex-shrink-0">
+                          @if (isApiKeyActive(apiKey)) {
+                            <app-icon
+                              name="check-circle"
+                              [size]="20"
+                              class="text-green-500 dark:text-green-400"
+                              title="API key is active"
+                            ></app-icon>
+                          } @else {
+                            <app-icon
+                              name="alert-triangle-filled"
+                              [size]="20"
+                              class="text-red-500 dark:text-red-400"
+                              title="API key is expired"
+                            ></app-icon>
+                          }
+                        </div>
+
+                        <div>
+                          <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                            {{ apiKey.name }}
+                          </h3>
+                          <p class="text-sm text-gray-600 dark:text-gray-400">
+                            Created {{ formatDate(apiKey.createdAt) }} • 
+                            @if (isApiKeyActive(apiKey)) {
+                              <span class="text-green-600 dark:text-green-400">Expires {{ formatDate(apiKey.expiresAt) }}</span>
+                            } @else {
+                              <span class="text-red-600 dark:text-red-400">Expired {{ formatDate(apiKey.expiresAt) }}</span>
+                            }
+                          </p>
+                        </div>
+                      </div>
+
+                      <!-- API Key Display -->
+                      <div class="mt-3 p-3 bg-gray-50 dark:bg-dark-700 rounded-lg border border-gray-200 dark:border-dark-600">
+                        <div class="flex items-center justify-between">
+                          <code class="text-sm font-mono text-gray-900 dark:text-gray-100 break-all">
+                            {{ showApiKey[apiKey.id] ? apiKey.key : maskApiKey(apiKey.key) }}
+                          </code>
+                          <div class="flex items-center space-x-2 ml-3">
+                            <app-button
+                              variant="ghost"
+                              size="sm"
+                              (onClick)="toggleApiKeyVisibility(apiKey.id)"
+                              [ariaLabel]="showApiKey[apiKey.id] ? 'Hide API key' : 'Show API key'"
+                            >
+                              <app-icon [name]="showApiKey[apiKey.id] ? 'x' : 'info'" [size]="14"></app-icon>
+                            </app-button>
+                            <app-button
+                              variant="ghost"
+                              size="sm"
+                              [loading]="copying[apiKey.id]"
+                              (onClick)="copyApiKey(apiKey.key)"
+                              ariaLabel="Copy API key"
+                            >
+                              @if (copied[apiKey.id]) {
+                                <app-icon name="check" [size]="14" class="text-green-500"></app-icon>
+                              } @else {
+                                <app-icon name="copy" [size]="14"></app-icon>
+                              }
+                            </app-button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Hosts -->
+                      @if (apiKey.hosts && apiKey.hosts.length > 0) {
+                        <div class="mt-3">
+                          <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Allowed Hosts:</p>
+                          <div class="flex flex-wrap gap-1">
+                            @for (host of apiKey.hosts; track host) {
+                              <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200">
+                                {{ host }}
+                              </span>
+                            }
+                          </div>
+                        </div>
+                      }
+                    </div>
+
+                    <div class="flex items-center space-x-2 sm:space-x-3">
+                      <!-- Delete API Key Button -->
+                      <app-button
+                        variant="danger"
+                        size="sm"
+                        [loading]="deleting[apiKey.id]"
+                        (onClick)="deleteApiKey(apiKey)"
+                        ariaLabel="Delete {{ apiKey.name }}"
+                        class="flex-1 sm:flex-none"
+                      >
+                        <app-icon name="trash" [size]="14" class="mr-2"></app-icon>
+                        Delete
+                      </app-button>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+    <app-footer></app-footer>
+  </main>
+
+  <!-- Toast Notifications -->
+  @if (showToast()) {
+    <div class="fixed bottom-4 right-4 left-4 sm:left-auto z-50">
+      <app-toast
+        [type]="toastType()"
+        [message]="toastMessage()"
+        (onClose)="hideToast()"
+      ></app-toast>
+    </div>
+  }
+</div>
