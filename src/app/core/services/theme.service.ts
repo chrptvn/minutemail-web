@@ -99,10 +99,17 @@ export class ThemeService {
 
     try {
       localStorage.setItem(this.STORAGE_KEY, themeValue);
-      // Also save to cookie for SSR
+      // Save to cookie for SSR with updated SameSite policy
       const expires = new Date();
       expires.setTime(expires.getTime() + (365 * 24 * 60 * 60 * 1000));
-      document.cookie = `minutemail_theme=${themeValue};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
+      
+      // Use SameSite=None with Secure for cross-site compatibility
+      if (window.location.protocol === 'https:') {
+        document.cookie = `minutemail_theme=${themeValue};expires=${expires.toUTCString()};path=/;SameSite=None;Secure`;
+      } else {
+        // Fallback for development (http)
+        document.cookie = `minutemail_theme=${themeValue};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
+      }
     } catch (error) {
       console.warn('localStorage not available:', error);
     }
