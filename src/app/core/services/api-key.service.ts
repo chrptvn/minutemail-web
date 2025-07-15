@@ -22,14 +22,14 @@ export class ApiKeyService {
 
   private getAuthHeaders(): HttpHeaders {
     let headers = new HttpHeaders();
-    
+
     if (this.isBrowser) {
       const jwt = localStorage.getItem('kc_token');
       if (jwt) {
         headers = headers.set('Authorization', `Bearer ${jwt}`);
       }
     }
-    
+
     return headers;
   }
 
