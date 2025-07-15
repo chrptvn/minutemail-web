@@ -43,7 +43,7 @@ export class AuthService {
       } as any);
 
       const initOptions: any = {
-        onLoad: 'check-sso',
+        onLoad: 'login-required',
         silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
         checkLoginIframe: false, // Disable to avoid cross-site issues
         silentCheckSsoFallback: false,
@@ -121,7 +121,7 @@ export class AuthService {
         }).catch((error) => {
           console.error('Token refresh failed:', error);
           this.logout();
-        });
+        }) as Promise<boolean>;
       };
 
       return authenticated;
@@ -168,7 +168,7 @@ export class AuthService {
               this.authSubject.next(this.keycloak.authenticated);
             }
           }
-        }).catch((error) => {
+        }).catch((error: unknown) => {
           console.error('Background token refresh failed:', error);
           // Don't logout immediately on refresh failure - let user continue
           // Only logout if token is actually expired and can't be used
