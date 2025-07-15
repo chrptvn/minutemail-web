@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -10,15 +11,25 @@ import { ApiKey, CreateApiKeyRequest, DeleteApiKeyResponse } from '../models/api
 })
 export class ApiKeyService {
   private readonly baseUrl = environment.apiBase;
+  private isBrowser: boolean;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+  }
 
   private getAuthHeaders(): HttpHeaders {
     let headers = new HttpHeaders();
-    const jwt = localStorage.getItem('kc_token');
-    if (jwt) {
-      headers = headers.set('Authorization', `Bearer ${jwt}`);
+    
+    if (this.isBrowser) {
+      const jwt = localStorage.getItem('kc_token');
+      if (jwt) {
+        headers = headers.set('Authorization', `Bearer ${jwt}`);
+      }
     }
+    
     return headers;
   }
 
