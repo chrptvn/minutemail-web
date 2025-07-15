@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { ApiKey, CreateApiKeyRequest, CreateApiKeyResponse, DeleteApiKeyResponse } from '../models/api-key.model';
+import { ApiKey, CreateApiKeyRequest, DeleteApiKeyResponse } from '../models/api-key.model';
 
 @Injectable({
   providedIn: 'root'
@@ -22,12 +22,12 @@ export class ApiKeyService {
     return headers;
   }
 
-  createApiKey(request: CreateApiKeyRequest): Observable<CreateApiKeyResponse> {
+  createApiKey(request: CreateApiKeyRequest): Observable<ApiKey> {
     const url = `${this.baseUrl}/apikey/create`;
     const headers = this.getAuthHeaders();
 
     return this.http
-      .post<CreateApiKeyResponse>(url, request, { headers })
+      .post<ApiKey>(url, request, { headers })
       .pipe(
         catchError(this.handleError)
       );

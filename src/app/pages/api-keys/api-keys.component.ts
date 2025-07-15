@@ -61,7 +61,7 @@ export class ApiKeysComponent implements OnInit {
     // Set minimum date to current time
     const now = new Date();
     this.minDate = now.toISOString().slice(0, 16);
-    
+
     // Set default expiry to 30 days from now
     const defaultExpiry = new Date(now.getTime() + (30 * 24 * 60 * 60 * 1000));
     this.expiryDate = defaultExpiry.toISOString().slice(0, 16);
@@ -118,11 +118,11 @@ export class ApiKeysComponent implements OnInit {
     };
 
     this.apiKeyService.createApiKey(request).subscribe({
-      next: (response) => {
-        this.apiKeys.unshift(response.apiKey);
+      next: (apiKey) => {
+        this.apiKeys.unshift(apiKey);
         this.resetForm();
         this.creating = false;
-        this.showToastMessage('success', `API key "${response.apiKey.name}" created successfully`);
+        this.showToastMessage('success', `API key "${apiKey.name}" created successfully`);
       },
       error: (error) => {
         console.error('Error creating API key:', error);
@@ -137,21 +137,21 @@ export class ApiKeysComponent implements OnInit {
       return;
     }
 
-    this.deleting[apiKey.id] = true;
+    this.deleting[apiKey.api_key] = true;
 
-    this.apiKeyService.deleteApiKey(apiKey.id).subscribe({
+    this.apiKeyService.deleteApiKey(apiKey.api_key).subscribe({
       next: () => {
-        this.apiKeys = this.apiKeys.filter(key => key.id !== apiKey.id);
-        delete this.deleting[apiKey.id];
-        delete this.showApiKey[apiKey.id];
-        delete this.copying[apiKey.id];
-        delete this.copied[apiKey.id];
+        this.apiKeys = this.apiKeys.filter(key => key.api_key !== apiKey.api_key);
+        delete this.deleting[apiKey.api_key];
+        delete this.showApiKey[apiKey.api_key];
+        delete this.copying[apiKey.api_key];
+        delete this.copied[apiKey.api_key];
         this.showToastMessage('success', `API key "${apiKey.name}" deleted successfully`);
       },
       error: (error) => {
         console.error('Error deleting API key:', error);
         this.showToastMessage('error', error.message);
-        delete this.deleting[apiKey.id];
+        delete this.deleting[apiKey.api_key];
       }
     });
   }
@@ -162,11 +162,11 @@ export class ApiKeysComponent implements OnInit {
 
     try {
       const success = await this.clipboardService.copyToClipboard(apiKey);
-      
+
       if (success) {
         this.copied[keyId] = true;
         this.showToastMessage('success', 'API key copied to clipboard!');
-        
+
         // Reset copied state after 2 seconds
         setTimeout(() => {
           this.copied[keyId] = false;
@@ -196,7 +196,7 @@ export class ApiKeysComponent implements OnInit {
   }
 
   isApiKeyActive(apiKey: ApiKey): boolean {
-    return new Date(apiKey.expiresAt) > new Date();
+    return new Date(apiKey.expire_at) > new Date();
   }
 
   addHost() {
@@ -244,7 +244,7 @@ export class ApiKeysComponent implements OnInit {
       ttl: 0,
       hosts: ['minutemail.co']
     };
-    
+
     // Reset expiry date to 30 days from now
     const defaultExpiry = new Date(Date.now() + (30 * 24 * 60 * 60 * 1000));
     this.expiryDate = defaultExpiry.toISOString().slice(0, 16);

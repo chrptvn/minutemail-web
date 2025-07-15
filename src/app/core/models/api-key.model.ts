@@ -1,22 +1,15 @@
 export interface ApiKey {
-  id: string;
+  api_key: string;
   name: string;
-  key: string;
   hosts: string[];
-  createdAt: string;
-  expiresAt: string;
-  isActive: boolean;
+  created_at: string;
+  expire_at: string;
 }
 
 export interface CreateApiKeyRequest {
   name: string;
   ttl: number;
   hosts: string[];
-}
-
-export interface CreateApiKeyResponse {
-  message: string;
-  apiKey: ApiKey;
 }
 
 export interface DeleteApiKeyResponse {

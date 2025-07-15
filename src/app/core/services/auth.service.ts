@@ -118,7 +118,7 @@ export class AuthService {
           } else {
             console.log('Token still valid');
           }
-        }).catch((error) => {
+        }).catch((error: unknown) => {
           console.error('Token refresh failed:', error);
           this.logout();
         }) as Promise<boolean>;
@@ -161,7 +161,7 @@ export class AuthService {
             localStorage.setItem('kc_token', this.keycloak.token);
             localStorage.setItem('kc_refreshToken', this.keycloak.refreshToken);
             localStorage.setItem('kc_idToken', this.keycloak.idToken);
-            
+
             // Sync reactive state
             if (this.keycloak.authenticated !== this.isAuthenticated()) {
               this.isAuthenticated.set(this.keycloak.authenticated);
@@ -206,7 +206,7 @@ export class AuthService {
     if (!this.keycloak || !this.keycloak.authenticated) {
       return localStorage.getItem('kc_token'); // Fallback to stored token
     }
-    
+
     // Check if token is expired
     if (this.keycloak.isTokenExpired()) {
       // Try to refresh token synchronously if possible
@@ -215,7 +215,7 @@ export class AuthService {
       });
       return localStorage.getItem('kc_token'); // Return stored token as fallback
     }
-    
+
     return this.keycloak.token;
   }
 
