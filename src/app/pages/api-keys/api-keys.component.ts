@@ -30,13 +30,13 @@ import { FooterComponent } from '../../shared/components/footer/footer.component
   styleUrl: './api-keys.component.scss'
 })
 export class ApiKeysComponent implements OnInit {
-  apiKeys: ApiKey[] = [];
-  loading = false;
-  creating = false;
-  deleting: { [key: string]: boolean } = {};
-  copying: { [key: string]: boolean } = {};
-  copied: { [key: string]: boolean } = {};
-  showApiKey: { [key: string]: boolean } = {};
+  apiKeys = signal<ApiKey[]>([]);
+  loading = signal(false);
+  creating = signal(false);
+  deleting = signal<{ [key: string]: boolean }>({});
+  copying = signal<{ [key: string]: boolean }>({});
+  copied = signal<{ [key: string]: boolean }>({});
+  showApiKey = signal<{ [key: string]: boolean }>({});
 
   newApiKey: CreateApiKeyRequest = {
     name: '',
@@ -72,16 +72,16 @@ export class ApiKeysComponent implements OnInit {
   }
 
   loadApiKeys() {
-    this.loading = true;
+    this.loading.set(true);
     this.apiKeyService.getApiKeys().subscribe({
       next: (response) => {
-        this.apiKeys = response.apiKeys || [];
-        this.loading = false;
+        this.apiKeys.set(response.apiKeys || []);
+        this.loading.set(false);
       },
       error: (error) => {
         console.error('Error loading API keys:', error);
         this.showToastMessage('error', error.message);
-        this.loading = false;
+        this.loading.set(false);
       }
     });
   }
@@ -109,7 +109,7 @@ export class ApiKeysComponent implements OnInit {
       return;
     }
 
-    this.creating = true;
+    this.creating.set(true);
 
     const request: CreateApiKeyRequest = {
       name: this.newApiKey.name.trim(),
@@ -119,15 +119,15 @@ export class ApiKeysComponent implements OnInit {
 
     this.apiKeyService.createApiKey(request).subscribe({
       next: (apiKey) => {
-        this.apiKeys.unshift(apiKey);
+        this.apiKeys.update(keys => [apiKey, ...keys]);
         this.resetForm();
-        this.creating = false;
+        this.creating.set(false);
         this.showToastMessage('success', `API key "${apiKey.name}" created successfully`);
       },
       error: (error) => {
         console.error('Error creating API key:', error);
         this.showToastMessage('error', error.message);
-        this.creating = false;
+        this.creating.set(false);
       }
     });
   }
@@ -137,50 +137,70 @@ export class ApiKeysComponent implements OnInit {
       return;
     }
 
-    this.deleting[apiKey.api_key] = true;
+    this.deleting.update(state => ({ ...state, [apiKey.api_key]: true }));
 
     this.apiKeyService.deleteApiKey(apiKey.api_key).subscribe({
       next: () => {
-        this.apiKeys = this.apiKeys.filter(key => key.api_key !== apiKey.api_key);
-        delete this.deleting[apiKey.api_key];
-        delete this.showApiKey[apiKey.api_key];
-        delete this.copying[apiKey.api_key];
-        delete this.copied[apiKey.api_key];
+        this.apiKeys.update(keys => keys.filter(key => key.api_key !== apiKey.api_key));
+        this.deleting.update(state => {
+          const newState = { ...state };
+          delete newState[apiKey.api_key];
+          return newState;
+        });
+        this.showApiKey.update(state => {
+          const newState = { ...state };
+          delete newState[apiKey.api_key];
+          return newState;
+        });
+        this.copying.update(state => {
+          const newState = { ...state };
+          delete newState[apiKey.api_key];
+          return newState;
+        });
+        this.copied.update(state => {
+          const newState = { ...state };
+          delete newState[apiKey.api_key];
+          return newState;
+        });
         this.showToastMessage('success', `API key "${apiKey.name}" deleted successfully`);
       },
       error: (error) => {
         console.error('Error deleting API key:', error);
         this.showToastMessage('error', error.message);
-        delete this.deleting[apiKey.api_key];
+        this.deleting.update(state => {
+          const newState = { ...state };
+          delete newState[apiKey.api_key];
+          return newState;
+        });
       }
     });
   }
 
   async copyApiKey(apiKey: string) {
     const keyId = this.getApiKeyId(apiKey);
-    this.copying[keyId] = true;
+    this.copying.update(state => ({ ...state, [keyId]: true }));
 
     try {
       const success = await this.clipboardService.copyToClipboard(apiKey);
 
       if (success) {
-        this.copied[keyId] = true;
+        this.copied.update(state => ({ ...state, [keyId]: true }));
         this.showToastMessage('success', 'API key copied to clipboard!');
 
         // Reset copied state after 2 seconds
         setTimeout(() => {
-          this.copied[keyId] = false;
+          this.copied.update(state => ({ ...state, [keyId]: false }));
         }, 2000);
       } else {
         this.showToastMessage('error', 'Failed to copy to clipboard');
       }
     } finally {
-      this.copying[keyId] = false;
+      this.copying.update(state => ({ ...state, [keyId]: false }));
     }
   }
 
   toggleApiKeyVisibility(keyId: string) {
-    this.showApiKey[keyId] = !this.showApiKey[keyId];
+    this.showApiKey.update(state => ({ ...state, [keyId]: !state[keyId] }));
   }
 
   maskApiKey(apiKey: string): string {
