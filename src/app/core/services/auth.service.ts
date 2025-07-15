@@ -39,40 +39,35 @@ export class AuthService {
       this.keycloak = new KeycloakConstructor({
         url: 'https://keycloak.minutemail.co',
         realm: 'minutemail',
-        clientId: 'minutemail-web',
-        // Add CORS and cookie configuration
-        enableCors: true
+        clientId: 'minutemail-web'
       } as any);
 
       const initOptions: any = {
         onLoad: 'check-sso',
         silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
-        checkLoginIframe: false, // Disable iframe checks to avoid cross-site issues
+        checkLoginIframe: false, // Disable to avoid cross-site issues
         silentCheckSsoFallback: false,
         pkceMethod: 'S256',
-        enableLogging: true,
-        checkLoginIframeInterval: 5,
-        // Add cookie configuration
-        cookieSameSite: 'None',
-        cookieSecure: true,
-        // Reduce token refresh frequency to minimize cross-site requests
+        enableLogging: false, // Reduce console noise
+        // Increase intervals to reduce cross-site requests
+        checkLoginIframeInterval: 300, // 5 minutes instead of 5 seconds
         tokenRefreshInterval: 300 // 5 minutes
       };
 
-      // restore tokens from localStorage if present
+      // Restore tokens from localStorage if present
       const storedToken = localStorage.getItem('kc_token');
       const storedRefresh = localStorage.getItem('kc_refreshToken');
       const storedId = localStorage.getItem('kc_idToken');
-      if (storedToken)   initOptions.token = storedToken;
+      if (storedToken) initOptions.token = storedToken;
       if (storedRefresh) initOptions.refreshToken = storedRefresh;
-      if (storedId)      initOptions.idToken = storedId;
+      if (storedId) initOptions.idToken = storedId;
 
       const authenticated = await this.keycloak.init(initOptions);
 
       console.log('Keycloak initialized, authenticated:', authenticated);
 
       if (authenticated) {
-        // persist tokens
+        // Persist tokens
         localStorage.setItem('kc_token', this.keycloak.token);
         localStorage.setItem('kc_refreshToken', this.keycloak.refreshToken);
         localStorage.setItem('kc_idToken', this.keycloak.idToken);
@@ -85,13 +80,19 @@ export class AuthService {
 
       this.setupTokenRefresh();
 
+      // Event handlers
       this.keycloak.onAuthSuccess = () => {
+        console.log('Keycloak auth success');
+        localStorage.setItem('kc_token', this.keycloak.token);
+        localStorage.setItem('kc_refreshToken', this.keycloak.refreshToken);
+        localStorage.setItem('kc_idToken', this.keycloak.idToken);
         this.isAuthenticated.set(true);
         this.authSubject.next(true);
         this.loadUserProfile();
       };
 
-      this.keycloak.onAuthError = () => {
+      this.keycloak.onAuthError = (error: any) => {
+        console.error('Keycloak auth error:', error);
         this.clearStoredTokens();
         this.isAuthenticated.set(false);
         this.authSubject.next(false);
@@ -99,6 +100,7 @@ export class AuthService {
       };
 
       this.keycloak.onAuthLogout = () => {
+        console.log('Keycloak auth logout');
         this.clearStoredTokens();
         this.isAuthenticated.set(false);
         this.authSubject.next(false);
@@ -106,15 +108,18 @@ export class AuthService {
       };
 
       this.keycloak.onTokenExpired = () => {
-        this.keycloak.updateToken(30).then((refreshed: boolean) => {
+        console.log('Keycloak token expired, attempting refresh...');
+        this.keycloak.updateToken(300).then((refreshed: boolean) => {
           if (refreshed) {
+            console.log('Token refreshed successfully');
             localStorage.setItem('kc_token', this.keycloak.token);
             localStorage.setItem('kc_refreshToken', this.keycloak.refreshToken);
             localStorage.setItem('kc_idToken', this.keycloak.idToken);
           } else {
             console.log('Token still valid');
           }
-        }).catch(() => {
+        }).catch((error) => {
+          console.error('Token refresh failed:', error);
           this.logout();
         });
       };
@@ -146,24 +151,30 @@ export class AuthService {
   private setupTokenRefresh(): void {
     if (!this.keycloak) return;
 
-    // Increase refresh interval to reduce cross-site requests
+    // Reduce refresh frequency to minimize cross-site requests
     setInterval(() => {
       if (this.keycloak.authenticated) {
-        // Increase minimum validity to 5 minutes to reduce refresh frequency
+        // Only refresh if token expires within 5 minutes
         this.keycloak.updateToken(300).then((refreshed: boolean) => {
           if (refreshed) {
-            // update persisted tokens
+            console.log('Background token refresh successful');
             localStorage.setItem('kc_token', this.keycloak.token);
             localStorage.setItem('kc_refreshToken', this.keycloak.refreshToken);
             localStorage.setItem('kc_idToken', this.keycloak.idToken);
-            // sync reactive state
+            
+            // Sync reactive state
             if (this.keycloak.authenticated !== this.isAuthenticated()) {
               this.isAuthenticated.set(this.keycloak.authenticated);
               this.authSubject.next(this.keycloak.authenticated);
             }
           }
-        }).catch(() => {
-          this.logout();
+        }).catch((error) => {
+          console.error('Background token refresh failed:', error);
+          // Don't logout immediately on refresh failure - let user continue
+          // Only logout if token is actually expired and can't be used
+          if (this.keycloak.isTokenExpired()) {
+            this.logout();
+          }
         });
       }
     }, 300000); // Check every 5 minutes instead of 1 minute
@@ -193,12 +204,18 @@ export class AuthService {
 
   getToken(): string | null {
     if (!this.keycloak || !this.keycloak.authenticated) {
-      return null;
+      return localStorage.getItem('kc_token'); // Fallback to stored token
     }
+    
+    // Check if token is expired
     if (this.keycloak.isTokenExpired()) {
-      this.keycloak.updateToken(30).catch(() => this.logout());
-      return null;
+      // Try to refresh token synchronously if possible
+      this.keycloak.updateToken(30).catch(() => {
+        console.warn('Token refresh failed in getToken()');
+      });
+      return localStorage.getItem('kc_token'); // Return stored token as fallback
     }
+    
     return this.keycloak.token;
   }
 

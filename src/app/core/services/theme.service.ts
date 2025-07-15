@@ -99,15 +99,15 @@ export class ThemeService {
 
     try {
       localStorage.setItem(this.STORAGE_KEY, themeValue);
-      // Save to cookie for SSR with updated SameSite policy
+      // Save to cookie for SSR - use SameSite=None for cross-site compatibility
       const expires = new Date();
       expires.setTime(expires.getTime() + (365 * 24 * 60 * 60 * 1000));
       
-      // Use SameSite=None with Secure for cross-site compatibility
+      // Always use SameSite=None with Secure for cross-site compatibility
       if (window.location.protocol === 'https:') {
         document.cookie = `minutemail_theme=${themeValue};expires=${expires.toUTCString()};path=/;SameSite=None;Secure`;
       } else {
-        // Fallback for development (http)
+        // For development (http) - use Lax as None requires Secure
         document.cookie = `minutemail_theme=${themeValue};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
       }
     } catch (error) {

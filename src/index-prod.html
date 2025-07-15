@@ -417,7 +417,9 @@
           if (savedTheme) {
             const expires = new Date();
             expires.setTime(expires.getTime() + (365 * 24 * 60 * 60 * 1000));
-            document.cookie = `minutemail_theme=${savedTheme};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
+            
+            // Use SameSite=None with Secure for production HTTPS
+            document.cookie = `minutemail_theme=${savedTheme};expires=${expires.toUTCString()};path=/;SameSite=None;Secure`;
             localStorage.removeItem('minutemail_theme');
           }
         }

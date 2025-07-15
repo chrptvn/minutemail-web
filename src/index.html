@@ -416,7 +416,13 @@
           if (savedTheme) {
             const expires = new Date();
             expires.setTime(expires.getTime() + (365 * 24 * 60 * 60 * 1000));
-            document.cookie = `minutemail_theme=${savedTheme};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
+            
+            // Use appropriate SameSite policy based on protocol
+            if (window.location.protocol === 'https:') {
+              document.cookie = `minutemail_theme=${savedTheme};expires=${expires.toUTCString()};path=/;SameSite=None;Secure`;
+            } else {
+              document.cookie = `minutemail_theme=${savedTheme};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
+            }
             localStorage.removeItem('minutemail_theme');
           }
         }
@@ -463,6 +469,16 @@
         fixMobileScrolling();
       }
     })();
+
+    // Handle Keycloak cross-site cookie issues
+    // Set document.domain if on same parent domain (not applicable here)
+    // Add error handling for cross-site requests
+    window.addEventListener('unhandledrejection', function(event) {
+      if (event.reason && event.reason.message && event.reason.message.includes('CORS')) {
+        console.warn('CORS error detected, this may be related to Keycloak cross-site issues');
+        // Don't prevent default - let the error be handled normally
+      }
+    });
 
     // Additional iOS fixes
     if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
