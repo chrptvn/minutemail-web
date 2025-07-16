@@ -128,19 +128,19 @@
                     </div>
 
                     <div class="flex items-center space-x-2 sm:space-x-3">
-                      <!-- Help Configure Button (only for unconfigured domains) -->
-                      @if (!domain.isConfigured) {
-                        <app-button
-                          variant="ghost"
-                          size="sm"
-                          (onClick)="helpConfigure(domain)"
-                          ariaLabel="Help configure {{ domain.name }}"
-                          class="flex-1 sm:flex-none hover:bg-gray-100 dark:hover:bg-dark-700 transition-colors"
-                        >
-                          <app-icon name="info" [size]="14" class="mr-2"></app-icon>
-                          Setup Guide
-                        </app-button>
-                      }
+                      <!-- Claim Button (only for configured, unclaimed domains) -->
+                      <app-button
+                        variant="primary"
+                        size="sm"
+                        [disabled]="!domain.isConfigured || domain.isClaimed"
+                        [loading]="claimingDomain() === domain.id"
+                        (onClick)="claimDomain(domain)"
+                        ariaLabel="Claim {{ domain.name }}"
+                        class="flex-1 sm:flex-none"
+                      >
+                        <app-icon name="check" [size]="14" class="mr-2"></app-icon>
+                        {{ domain.isClaimed ? 'Claimed' : 'Claim' }}
+                      </app-button>
 
                       <!-- Test MX Record Button -->
                       <app-button

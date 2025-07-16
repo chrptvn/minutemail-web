@@ -2,7 +2,9 @@ import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import { ThemeService } from '../../core/services/theme.service';
+import { environment } from '../../../environments/environment';
 import { ButtonComponent } from '../../shared/components/ui/button.component';
 import { TablerIconComponent } from '../../shared/components/icons/tabler-icons.component';
 import { ToastComponent } from '../../shared/components/ui/toast.component';
@@ -14,6 +16,7 @@ interface Domain {
   name: string;
   createdAt: Date;
   isConfigured: boolean;
+  isClaimed: boolean;
   mxTestResult?: {
     status: 'success' | 'error';
     message: string;
@@ -41,6 +44,7 @@ export class ManageDomainComponent {
   domains: Domain[] = [];
   addingDomain = false;
   testingMX = signal<string | null>(null);
+  claimingDomain = signal<string | null>(null);
   removingDomain = signal<string | null>(null);
 
   // Toast notifications
@@ -50,8 +54,36 @@ export class ManageDomainComponent {
 
   constructor(
     private router: Router,
-    public themeService: ThemeService
-  ) {}
+    public themeService: ThemeService,
+    private http: HttpClient
+  ) {
+    this.loadUserDomains();
+  }
+
+  private loadUserDomains() {
+    const headers = this.getAuthHeaders();
+    this.http.get<string[]>(`${environment.apiBase}/v1/domains`, { headers })
+      .subscribe({
+        next: (userDomains) => {
+          // Update existing domains to mark which ones are claimed
+          this.domains.forEach(domain => {
+            domain.isClaimed = userDomains.includes(domain.name);
+          });
+        },
+        error: (error) => {
+          console.error('Error loading user domains:', error);
+        }
+      });
+  }
+
+  private getAuthHeaders() {
+    const headers: any = {};
+    const jwt = localStorage.getItem('kc_token');
+    if (jwt) {
+      headers['Authorization'] = `Bearer ${jwt}`;
+    }
+    return headers;
+  }
 
   addDomain() {
     if (!this.newDomain.trim()) {
@@ -73,7 +105,8 @@ export class ManageDomainComponent {
         id: this.generateId(),
         name: this.newDomain.trim(),
         createdAt: new Date(),
-        isConfigured: Math.random() > 0.5 // Randomize for now
+        isConfigured: Math.random() > 0.5, // Randomize for now
+        isClaimed: false
       };
 
       this.domains.push(newDomainObj);
@@ -107,6 +140,31 @@ export class ManageDomainComponent {
         `MX test ${isSuccess ? 'passed' : 'failed'} for ${domain.name}`
       );
     }, 2000);
+  }
+
+  claimDomain(domain: Domain) {
+    if (!domain.isConfigured || this.claimingDomain()) {
+      return;
+    }
+
+    this.claimingDomain.set(domain.id);
+
+    const headers = this.getAuthHeaders();
+    const payload = { domain: domain.name };
+
+    this.http.post(`${environment.apiBase}/v1/domains`, payload, { headers })
+      .subscribe({
+        next: () => {
+          domain.isClaimed = true;
+          this.claimingDomain.set(null);
+          this.showToastMessage('success', `Domain "${domain.name}" claimed successfully`);
+        },
+        error: (error) => {
+          console.error('Error claiming domain:', error);
+          this.claimingDomain.set(null);
+          this.showToastMessage('error', `Failed to claim domain "${domain.name}"`);
+        }
+      });
   }
 
   removeDomain(domain: Domain) {
