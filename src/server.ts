@@ -12,14 +12,13 @@ const browserDistFolder = join(import.meta.dirname, '../browser');
 const app = express();
 const angularApp = new AngularNodeAppEngine();
 
-
 /**
  * Example Express Rest API endpoints can be defined here.
  * Uncomment and define endpoints as necessary.
  *
  * Example:
  * ```ts
- * app.get('/api/{*splat}', (req, res) => {
+ * app.get('/api/users', (req, res) => {
  *   // Handle API request
  * });
  * ```
@@ -37,30 +36,9 @@ app.use(
 );
 
 /**
- * Handle Angular routes - catch all non-API routes and serve the Angular app
- * This ensures that refreshing on any Angular route works correctly
+ * Handle all routes with Angular SSR
  */
 app.get('*', (req, res, next) => {
-  // Skip API routes and static files
-  if (req.url.startsWith('/api/') || 
-      req.url.includes('.') || 
-      req.url.startsWith('/assets/')) {
-    return next();
-  }
-  
-  // Let Angular handle all other routes
-  angularApp
-    .handle(req)
-    .then((response) =>
-      response ? writeResponseToNodeResponse(response, res) : next(),
-    )
-    .catch(next);
-});
-
-/**
- * Fallback handler for any remaining requests
- */
-app.use((req, res, next) => {
   angularApp
     .handle(req)
     .then((response) =>
