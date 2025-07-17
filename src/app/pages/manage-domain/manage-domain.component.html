@@ -128,11 +128,11 @@
                     </div>
 
                     <div class="flex items-center space-x-2 sm:space-x-3">
-                      <!-- Claim Button (only for configured, unclaimed domains) -->
+                      <!-- Claim Button (for unclaimed domains) -->
                       <app-button
                         variant="primary"
                         size="sm"
-                        [disabled]="!domain.isConfigured || domain.isClaimed"
+                        [disabled]="domain.isClaimed"
                         [loading]="claimingDomain() === domain.id"
                         (onClick)="claimDomain(domain)"
                         ariaLabel="Claim {{ domain.domain }}"

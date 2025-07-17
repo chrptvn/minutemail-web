@@ -102,25 +102,26 @@ export class ManageDomainComponent implements OnInit {
 
     this.addingDomain = true;
 
-    const request: AddDomainRequest = {
-      domain: this.newDomain.trim()
-    };
-
-    this.domainService.addDomain(request).subscribe({
-      next: (domain) => {
+    // First verify if the domain is valid
+    this.domainService.verifyDomain(this.newDomain.trim()).subscribe({
+      next: (response) => {
         const newDomainObj: DomainWithStatus = {
-          ...domain,
+          domain: this.newDomain.trim(),
           id: this.generateId(),
           createdAt: new Date(),
-          isConfigured: false, // New domains start as unconfigured
-          isClaimed: true
+          isConfigured: response.valid,
+          isClaimed: false // Not claimed yet, user needs to click claim
         };
 
         this.domains.push(newDomainObj);
         this.newDomain = '';
         this.addingDomain = false;
 
-        this.showToastMessage('success', `Domain "${domain.domain}" added successfully`);
+        if (response.valid) {
+          this.showToastMessage('success', `Domain "${newDomainObj.domain}" is valid and ready to claim`);
+        } else {
+          this.showToastMessage('warning', `Domain "${newDomainObj.domain}" added but MX record not configured. Configure MX record then test and claim.`);
+        }
       },
       error: (error) => {
         console.error('Error adding domain:', error);
@@ -165,7 +166,7 @@ export class ManageDomainComponent implements OnInit {
   }
 
   claimDomain(domain: DomainWithStatus) {
-    if (!domain.isConfigured || this.claimingDomain()) {
+    if (this.claimingDomain()) {
       return;
     }
 
