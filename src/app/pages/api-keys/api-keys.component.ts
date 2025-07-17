@@ -288,8 +288,4 @@ export class ApiKeysComponent implements OnInit {
   goHome() {
     this.router.navigate(['/']);
   }
-
-  toggleTheme() {
-    this.themeService.toggleTheme();
-  }
 }

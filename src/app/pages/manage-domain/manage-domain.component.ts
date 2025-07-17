@@ -263,8 +263,4 @@ export class ManageDomainComponent {
   goToMxConfiguration() {
     this.router.navigate(['/mx-configuration']);
   }
-
-  toggleTheme() {
-    this.themeService.toggleTheme();
-  }
 }
