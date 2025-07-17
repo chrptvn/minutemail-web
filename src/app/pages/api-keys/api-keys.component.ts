@@ -137,29 +137,29 @@ export class ApiKeysComponent implements OnInit {
       return;
     }
 
-    this.deleting.update(state => ({ ...state, [apiKey.api_key]: true }));
+    this.deleting.update(state => ({ ...state, [apiKey.apiKey]: true }));
 
-    this.apiKeyService.deleteApiKey(apiKey.api_key).subscribe({
+    this.apiKeyService.deleteApiKey(apiKey.apiKey).subscribe({
       next: () => {
-        this.apiKeys.update(keys => keys.filter(key => key.api_key !== apiKey.api_key));
+        this.apiKeys.update(keys => keys.filter(key => key.apiKey !== apiKey.apiKey));
         this.deleting.update(state => {
           const newState = { ...state };
-          delete newState[apiKey.api_key];
+          delete newState[apiKey.apiKey];
           return newState;
         });
         this.showApiKey.update(state => {
           const newState = { ...state };
-          delete newState[apiKey.api_key];
+          delete newState[apiKey.apiKey];
           return newState;
         });
         this.copying.update(state => {
           const newState = { ...state };
-          delete newState[apiKey.api_key];
+          delete newState[apiKey.apiKey];
           return newState;
         });
         this.copied.update(state => {
           const newState = { ...state };
-          delete newState[apiKey.api_key];
+          delete newState[apiKey.apiKey];
           return newState;
         });
         this.showToastMessage('success', `API key "${apiKey.name}" deleted successfully`);
@@ -169,7 +169,7 @@ export class ApiKeysComponent implements OnInit {
         this.showToastMessage('error', error.message);
         this.deleting.update(state => {
           const newState = { ...state };
-          delete newState[apiKey.api_key];
+          delete newState[apiKey.apiKey];
           return newState;
         });
       }
@@ -211,12 +211,12 @@ export class ApiKeysComponent implements OnInit {
   }
 
   getApiKeyId(apiKey: string): string {
-    // Use the API key itself as the ID for tracking states  
+    // Use the API key itself as the ID for tracking states
     return apiKey;
   }
 
   isApiKeyActive(apiKey: ApiKey): boolean {
-    return new Date(apiKey.expire_at) > new Date();
+    return new Date(apiKey.expireAt) > new Date();
   }
 
   addHost() {

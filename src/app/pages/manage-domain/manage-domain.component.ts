@@ -62,7 +62,7 @@ export class ManageDomainComponent {
 
   private loadUserDomains() {
     const headers = this.getAuthHeaders();
-    this.http.get<string[]>(`${environment.apiBase}/v1/domains`, { headers })
+    this.http.get<string[]>(`${environment.apiBase}/domains`, { headers })
       .subscribe({
         next: (userDomains) => {
           // Update existing domains to mark which ones are claimed
@@ -152,7 +152,7 @@ export class ManageDomainComponent {
     const headers = this.getAuthHeaders();
     const payload = { domain: domain.name };
 
-    this.http.post(`${environment.apiBase}/v1/domains`, payload, { headers })
+    this.http.post(`${environment.apiBase}/domains`, payload, { headers })
       .subscribe({
         next: () => {
           domain.isClaimed = true;

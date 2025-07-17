@@ -1,9 +1,9 @@
 export interface ApiKey {
-  api_key: string;
+  apiKey: string;
   name: string;
   hosts: string[];
-  created_at: string;
-  expire_at: string;
+  createdAt: string;
+  expireAt: string;
 }
 
 export interface CreateApiKeyRequest {
