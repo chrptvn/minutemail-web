@@ -63,16 +63,6 @@
           "builder": "@angular/build:dev-server",
           "options": {
             "historyApiFallback": true
-          },
-          "configurations": {
-            "production": {
-              "buildTarget": "minutemail-web:build:production"
-            },
-            "development": {
-              "buildTarget": "minutemail-web:build:development"
-            }
-          },
-          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular/build:extract-i18n"
