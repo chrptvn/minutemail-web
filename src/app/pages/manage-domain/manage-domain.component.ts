@@ -1,19 +1,19 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { DomainService } from '../../core/services/domain.service';
 import { ThemeService } from '../../core/services/theme.service';
-import { environment } from '../../../environments/environment';
+import { Domain, AddDomainRequest } from '../../core/models/domain.model';
 import { ButtonComponent } from '../../shared/components/ui/button.component';
 import { TablerIconComponent } from '../../shared/components/icons/tabler-icons.component';
 import { ToastComponent } from '../../shared/components/ui/toast.component';
-import {TopMenu} from '../../shared/components/top-menu/top-menu';
-import {FooterComponent} from "../../shared/components/footer/footer.component";
+import { SpinnerComponent } from '../../shared/components/ui/spinner.component';
+import { TopMenu } from '../../shared/components/top-menu/top-menu';
+import { FooterComponent } from '../../shared/components/footer/footer.component';
 
-interface Domain {
+interface DomainWithStatus extends Domain {
   id: string;
-  name: string;
   createdAt: Date;
   isConfigured: boolean;
   isClaimed: boolean;
@@ -33,15 +33,17 @@ interface Domain {
     ButtonComponent,
     TablerIconComponent,
     ToastComponent,
+    SpinnerComponent,
     TopMenu,
     FooterComponent
   ],
   templateUrl: './manage-domain.component.html',
   styleUrl: './manage-domain.component.scss'
 })
-export class ManageDomainComponent {
+export class ManageDomainComponent implements OnInit {
   newDomain = '';
-  domains: Domain[] = [];
+  domains: DomainWithStatus[] = [];
+  loading = signal(false);
   addingDomain = false;
   testingMX = signal<string | null>(null);
   claimingDomain = signal<string | null>(null);
@@ -55,34 +57,34 @@ export class ManageDomainComponent {
   constructor(
     private router: Router,
     public themeService: ThemeService,
-    private http: HttpClient
-  ) {
-    this.loadUserDomains();
+    private domainService: DomainService
+  ) {}
+
+  ngOnInit() {
+    this.loadDomains();
   }
 
-  private loadUserDomains() {
-    const headers = this.getAuthHeaders();
-    this.http.get<string[]>(`${environment.apiBase}/domains`, { headers })
-      .subscribe({
-        next: (userDomains) => {
-          // Update existing domains to mark which ones are claimed
-          this.domains.forEach(domain => {
-            domain.isClaimed = userDomains.includes(domain.name);
-          });
-        },
-        error: (error) => {
-          console.error('Error loading user domains:', error);
-        }
-      });
-  }
-
-  private getAuthHeaders() {
-    const headers: any = {};
-    const jwt = localStorage.getItem('kc_token');
-    if (jwt) {
-      headers['Authorization'] = `Bearer ${jwt}`;
-    }
-    return headers;
+  private loadDomains() {
+    this.loading.set(true);
+    
+    this.domainService.getDomains().subscribe({
+      next: (response) => {
+        // Convert API response to local format with additional UI properties
+        this.domains = (response.domains || []).map(domain => ({
+          ...domain,
+          id: this.generateId(),
+          createdAt: new Date(), // You might want to get this from the API if available
+          isConfigured: Math.random() > 0.5, // Placeholder - replace with actual verification
+          isClaimed: true // Since these come from the user's list, they're claimed
+        }));
+        this.loading.set(false);
+      },
+      error: (error) => {
+        console.error('Error loading domains:', error);
+        this.showToastMessage('error', error.message);
+        this.loading.set(false);
+      }
+    });
   }
 
   addDomain() {
@@ -92,91 +94,119 @@ export class ManageDomainComponent {
     }
 
     // Check if domain already exists
-    if (this.domains.some(d => d.name.toLowerCase() === this.newDomain.toLowerCase())) {
+    if (this.domains.some(d => d.domain.toLowerCase() === this.newDomain.toLowerCase())) {
       this.showToastMessage('error', 'This domain has already been added');
       return;
     }
 
     this.addingDomain = true;
 
-    // Simulate API call
-    setTimeout(() => {
-      const newDomainObj: Domain = {
-        id: this.generateId(),
-        name: this.newDomain.trim(),
-        createdAt: new Date(),
-        isConfigured: Math.random() > 0.5, // Randomize for now
-        isClaimed: false
-      };
+    const request: AddDomainRequest = {
+      domain: this.newDomain.trim()
+    };
 
-      this.domains.push(newDomainObj);
-      this.newDomain = '';
-      this.addingDomain = false;
+    this.domainService.addDomain(request).subscribe({
+      next: (domain) => {
+        const newDomainObj: DomainWithStatus = {
+          ...domain,
+          id: this.generateId(),
+          createdAt: new Date(),
+          isConfigured: false, // New domains start as unconfigured
+          isClaimed: true
+        };
 
-      this.showToastMessage('success', `Domain "${newDomainObj.name}" added successfully`);
-    }, 1000);
+        this.domains.push(newDomainObj);
+        this.newDomain = '';
+        this.addingDomain = false;
+
+        this.showToastMessage('success', `Domain "${domain.domain}" added successfully`);
+      },
+      error: (error) => {
+        console.error('Error adding domain:', error);
+        this.showToastMessage('error', error.message);
+        this.addingDomain = false;
+      }
+    });
   }
 
-  testMXRecord(domain: Domain) {
+  testMXRecord(domain: DomainWithStatus) {
     this.testingMX.set(domain.id);
 
-    // Simulate MX record test
-    setTimeout(() => {
-      // Randomly simulate success or failure for demo
-      const isSuccess = Math.random() > 0.3;
+    this.domainService.verifyDomain(domain.domain).subscribe({
+      next: (response) => {
+        domain.mxTestResult = {
+          status: response.valid ? 'success' : 'error',
+          message: response.valid
+            ? 'MX record is correctly configured and pointing to MinuteMail servers'
+            : 'MX record not found or not pointing to MinuteMail servers. Please check your DNS configuration.',
+          testedAt: new Date()
+        };
 
-      domain.mxTestResult = {
-        status: isSuccess ? 'success' : 'error',
-        message: isSuccess
-          ? 'MX record is correctly configured and pointing to MinuteMail servers'
-          : 'MX record not found or not pointing to MinuteMail servers. Please check your DNS configuration.',
-        testedAt: new Date()
-      };
+        domain.isConfigured = response.valid;
+        this.testingMX.set(null);
 
-      this.testingMX.set(null);
-
-      this.showToastMessage(
-        isSuccess ? 'success' : 'error',
-        `MX test ${isSuccess ? 'passed' : 'failed'} for ${domain.name}`
-      );
-    }, 2000);
+        this.showToastMessage(
+          response.valid ? 'success' : 'error',
+          `MX test ${response.valid ? 'passed' : 'failed'} for ${domain.domain}`
+        );
+      },
+      error: (error) => {
+        console.error('Error testing MX record:', error);
+        domain.mxTestResult = {
+          status: 'error',
+          message: 'Failed to test MX record. Please try again later.',
+          testedAt: new Date()
+        };
+        this.testingMX.set(null);
+        this.showToastMessage('error', `Failed to test MX record for ${domain.domain}`);
+      }
+    });
   }
 
-  claimDomain(domain: Domain) {
+  claimDomain(domain: DomainWithStatus) {
     if (!domain.isConfigured || this.claimingDomain()) {
       return;
     }
 
     this.claimingDomain.set(domain.id);
 
-    const headers = this.getAuthHeaders();
-    const payload = { domain: domain.name };
+    const request: AddDomainRequest = {
+      domain: domain.domain
+    };
 
-    this.http.post(`${environment.apiBase}/domains`, payload, { headers })
-      .subscribe({
-        next: () => {
-          domain.isClaimed = true;
-          this.claimingDomain.set(null);
-          this.showToastMessage('success', `Domain "${domain.name}" claimed successfully`);
-        },
-        error: (error) => {
-          console.error('Error claiming domain:', error);
-          this.claimingDomain.set(null);
-          this.showToastMessage('error', `Failed to claim domain "${domain.name}"`);
-        }
-      });
+    this.domainService.addDomain(request).subscribe({
+      next: () => {
+        domain.isClaimed = true;
+        this.claimingDomain.set(null);
+        this.showToastMessage('success', `Domain "${domain.domain}" claimed successfully`);
+      },
+      error: (error) => {
+        console.error('Error claiming domain:', error);
+        this.claimingDomain.set(null);
+        this.showToastMessage('error', `Failed to claim domain "${domain.domain}": ${error.message}`);
+      }
+    });
   }
 
-  removeDomain(domain: Domain) {
+  removeDomain(domain: DomainWithStatus) {
+    if (!confirm(`Are you sure you want to remove the domain "${domain.domain}"? This action cannot be undone.`)) {
+      return;
+    }
+
     this.removingDomain.set(domain.id);
 
-    // Simulate API call
-    setTimeout(() => {
-      this.domains = this.domains.filter(d => d.id !== domain.id);
-      this.removingDomain.set(null);
-
-      this.showToastMessage('success', `Domain "${domain.name}" removed successfully`);
-    }, 1000);
+    this.domainService.deleteDomain(domain.domain).subscribe({
+      next: () => {
+        this.domains = this.domains.filter(d => d.id !== domain.id);
+        this.removingDomain.set(null);
+        this.showToastMessage('success', `Domain "${domain.domain}" removed successfully`);
+      },
+      error: (error) => {
+        console.error('Error removing domain:', error);
+        this.removingDomain.set(null);
+        this.showToastMessage('error', `Failed to remove domain "${domain.domain}": ${error.message}`);
+      }
+    });
   }
 
   formatDate(date: Date): string {
@@ -212,21 +242,6 @@ export class ManageDomainComponent {
     return status === 'success'
       ? 'text-green-500 dark:text-green-400'
       : 'text-red-500 dark:text-red-400';
-  }
-
-  helpConfigure(domain: Domain) {
-    // Navigate to MX configuration documentation page
-    this.router.navigate(['/mx-configuration'], {
-      queryParams: { domain: domain.name }
-    }).then(success => {
-      if (!success) {
-        console.error('Navigation to MX configuration failed');
-        this.showToastMessage('error', 'Failed to navigate to configuration page');
-      }
-    }).catch(error => {
-      console.error('Navigation error:', error);
-      this.showToastMessage('error', 'Failed to navigate to configuration page');
-    });
   }
 
   private generateId(): string {
