@@ -118,7 +118,7 @@
 
                         <div>
                           <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                            {{ domain.name }}
+                            {{ domain.domain }}
                           </h3>
                           <p class="text-sm text-gray-600 dark:text-gray-400">
                             Added {{ formatDate(domain.createdAt) }}
@@ -135,7 +135,7 @@
                         [disabled]="!domain.isConfigured || domain.isClaimed"
                         [loading]="claimingDomain() === domain.id"
                         (onClick)="claimDomain(domain)"
-                        ariaLabel="Claim {{ domain.name }}"
+                        ariaLabel="Claim {{ domain.domain }}"
                         class="flex-1 sm:flex-none"
                       >
                         <app-icon name="check" [size]="14" class="mr-2"></app-icon>
@@ -148,7 +148,7 @@
                         size="sm"
                         [loading]="testingMX() === domain.id"
                         (onClick)="testMXRecord(domain)"
-                        ariaLabel="Test MX record for {{ domain.name }}"
+                        ariaLabel="Test MX record for {{ domain.domain }}"
                         class="flex-1 sm:flex-none hover:bg-gray-200 dark:hover:bg-dark-600 transition-colors"
                       >
                         <app-icon name="shield" [size]="14" class="mr-2"></app-icon>
@@ -161,7 +161,7 @@
                         size="sm"
                         [loading]="removingDomain() === domain.id"
                         (onClick)="removeDomain(domain)"
-                        ariaLabel="Remove {{ domain.name }}"
+                        ariaLabel="Remove {{ domain.domain }}"
                         class="flex-1 sm:flex-none"
                       >
                         <app-icon name="trash" [size]="14" class="mr-2"></app-icon>

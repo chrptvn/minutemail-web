@@ -45,6 +45,7 @@ export class AuthService {
       const initOptions: any = {
         onLoad: 'login-required',
         silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
+        silentCheckSso: false,
         checkLoginIframe: false, // Disable to avoid cross-site issues
         silentCheckSsoFallback: false,
         pkceMethod: 'S256',
