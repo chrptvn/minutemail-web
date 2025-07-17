@@ -37,7 +37,28 @@ app.use(
 );
 
 /**
- * Handle all other requests by rendering the Angular application.
+ * Handle Angular routes - catch all non-API routes and serve the Angular app
+ * This ensures that refreshing on any Angular route works correctly
+ */
+app.get('*', (req, res, next) => {
+  // Skip API routes and static files
+  if (req.url.startsWith('/api/') || 
+      req.url.includes('.') || 
+      req.url.startsWith('/assets/')) {
+    return next();
+  }
+  
+  // Let Angular handle all other routes
+  angularApp
+    .handle(req)
+    .then((response) =>
+      response ? writeResponseToNodeResponse(response, res) : next(),
+    )
+    .catch(next);
+});
+
+/**
+ * Fallback handler for any remaining requests
  */
 app.use((req, res, next) => {
   angularApp
