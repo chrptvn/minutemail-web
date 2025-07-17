@@ -1,5 +1,5 @@
-import { Component, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {Component, Inject, OnInit, PLATFORM_ID, signal} from '@angular/core';
+import {CommonModule, isPlatformBrowser} from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DomainService } from '../../core/services/domain.service';
@@ -8,7 +8,6 @@ import { Domain, AddDomainRequest } from '../../core/models/domain.model';
 import { ButtonComponent } from '../../shared/components/ui/button.component';
 import { TablerIconComponent } from '../../shared/components/icons/tabler-icons.component';
 import { ToastComponent } from '../../shared/components/ui/toast.component';
-import { SpinnerComponent } from '../../shared/components/ui/spinner.component';
 import { TopMenu } from '../../shared/components/top-menu/top-menu';
 import { FooterComponent } from '../../shared/components/footer/footer.component';
 
@@ -33,7 +32,6 @@ interface DomainWithStatus extends Domain {
     ButtonComponent,
     TablerIconComponent,
     ToastComponent,
-    SpinnerComponent,
     TopMenu,
     FooterComponent
   ],
@@ -57,16 +55,19 @@ export class ManageDomainComponent implements OnInit {
   constructor(
     private router: Router,
     public themeService: ThemeService,
-    private domainService: DomainService
+    private domainService: DomainService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit() {
-    this.loadDomains();
+    if (isPlatformBrowser(this.platformId)) {
+      this.loadDomains();
+    }
   }
 
   private loadDomains() {
     this.loading.set(true);
-    
+
     this.domainService.getDomains().subscribe({
       next: (response) => {
         // Convert API response to local format with additional UI properties
