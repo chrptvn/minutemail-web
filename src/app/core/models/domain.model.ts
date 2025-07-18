@@ -1,17 +1,18 @@
 export interface Domain {
-  domain: string;
-}
-
-export interface DomainVerificationResponse {
-  valid: boolean;
-}
-
-export interface DomainListResponse {
-  domains: Domain[];
+  name: string;
+  mailbox_ttl: number;
+  verification: string;
+  mx_valid: boolean;
+  txt_valid: boolean;
 }
 
 export interface AddDomainRequest {
-  domain: string;
+  name: string;
+  mailbox_ttl: number;
+}
+
+export interface DomainListResponse {
+  domains?: Domain[];
 }
 
 export interface DeleteDomainResponse {

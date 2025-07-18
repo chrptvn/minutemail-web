@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { Domain, DomainVerificationResponse, DomainListResponse, AddDomainRequest, DeleteDomainResponse } from '../models/domain.model';
+import { Domain, DomainListResponse, AddDomainRequest, DeleteDomainResponse } from '../models/domain.model';
 
 @Injectable({
   providedIn: 'root'
@@ -44,12 +44,12 @@ export class DomainService {
       );
   }
 
-  getDomains(): Observable<DomainListResponse> {
+  getDomains(): Observable<Domain[]> {
     const url = `${this.baseUrl}/domains`;
     const headers = this.getAuthHeaders();
 
     return this.http
-      .get<DomainListResponse>(url, { headers })
+      .get<Domain[]>(url, { headers })
       .pipe(
         catchError(this.handleError)
       );
@@ -66,16 +66,6 @@ export class DomainService {
       );
   }
 
-  verifyDomain(domain: string): Observable<DomainVerificationResponse> {
-    const url = `${this.baseUrl}/domains/verify?domain=${encodeURIComponent(domain)}`;
-    const headers = this.getAuthHeaders();
-
-    return this.http
-      .get<DomainVerificationResponse>(url, { headers })
-      .pipe(
-        catchError(this.handleError)
-      );
-  }
 
   private handleError = (error: HttpErrorResponse): Observable<never> => {
     let errorMessage = 'An error occurred';

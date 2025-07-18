@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit, PLATFORM_ID, signal} from '@angular/core';
+import {Component, Inject, OnInit, OnDestroy, PLATFORM_ID, signal} from '@angular/core';
 import {CommonModule, isPlatformBrowser} from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -10,18 +10,6 @@ import { TablerIconComponent } from '../../shared/components/icons/tabler-icons.
 import { ToastComponent } from '../../shared/components/ui/toast.component';
 import { TopMenu } from '../../shared/components/top-menu/top-menu';
 import { FooterComponent } from '../../shared/components/footer/footer.component';
-
-interface DomainWithStatus extends Domain {
-  id: string;
-  createdAt: Date;
-  isConfigured: boolean;
-  isClaimed: boolean;
-  mxTestResult?: {
-    status: 'success' | 'error';
-    message: string;
-    testedAt: Date;
-  };
-}
 
 @Component({
   selector: 'app-manage-domain',
@@ -38,14 +26,14 @@ interface DomainWithStatus extends Domain {
   templateUrl: './manage-domain.component.html',
   styleUrl: './manage-domain.component.scss'
 })
-export class ManageDomainComponent implements OnInit {
+export class ManageDomainComponent implements OnInit, OnDestroy {
   newDomain = '';
-  domains: DomainWithStatus[] = [];
+  domains: Domain[] = [];
   loading = signal(false);
   addingDomain = false;
-  testingMX = signal<string | null>(null);
-  claimingDomain = signal<string | null>(null);
   removingDomain = signal<string | null>(null);
+
+  private pollInterval?: any;
 
   // Toast notifications
   showToast = signal(false);
@@ -62,6 +50,13 @@ export class ManageDomainComponent implements OnInit {
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
       this.loadDomains();
+      this.startPolling();
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.pollInterval) {
+      clearInterval(this.pollInterval);
     }
   }
 
@@ -69,15 +64,8 @@ export class ManageDomainComponent implements OnInit {
     this.loading.set(true);
 
     this.domainService.getDomains().subscribe({
-      next: (response) => {
-        // Convert API response to local format with additional UI properties
-        this.domains = (response.domains || []).map(domain => ({
-          ...domain,
-          id: this.generateId(),
-          createdAt: new Date(), // You might want to get this from the API if available
-          isConfigured: Math.random() > 0.5, // Placeholder - replace with actual verification
-          isClaimed: true // Since these come from the user's list, they're claimed
-        }));
+      next: (domains) => {
+        this.domains = domains || [];
         this.loading.set(false);
       },
       error: (error) => {
@@ -88,6 +76,15 @@ export class ManageDomainComponent implements OnInit {
     });
   }
 
+  private startPolling() {
+    this.pollInterval = setInterval(() => {
+      this.domainService.getDomains().subscribe({
+        next: (domains) => this.domains = domains || [],
+        error: (error) => console.error('Polling error:', error)
+      });
+    }, 30000); // Poll every 30 seconds
+  }
+
   addDomain() {
     if (!this.newDomain.trim()) {
       this.showToastMessage('error', 'Please enter a valid domain name');
@@ -95,33 +92,24 @@ export class ManageDomainComponent implements OnInit {
     }
 
     // Check if domain already exists
-    if (this.domains.some(d => d.domain.toLowerCase() === this.newDomain.toLowerCase())) {
+    if (this.domains.some(d => d.name.toLowerCase() === this.newDomain.toLowerCase())) {
       this.showToastMessage('error', 'This domain has already been added');
       return;
     }
 
     this.addingDomain = true;
 
-    // First verify if the domain is valid
-    this.domainService.verifyDomain(this.newDomain.trim()).subscribe({
-      next: (response) => {
-        const newDomainObj: DomainWithStatus = {
-          domain: this.newDomain.trim(),
-          id: this.generateId(),
-          createdAt: new Date(),
-          isConfigured: response.valid,
-          isClaimed: false // Not claimed yet, user needs to click claim
-        };
+    const request: AddDomainRequest = {
+      name: this.newDomain.trim(),
+      mailbox_ttl: 3600
+    };
 
-        this.domains.push(newDomainObj);
+    this.domainService.addDomain(request).subscribe({
+      next: (domain) => {
+        this.domains.push(domain);
         this.newDomain = '';
         this.addingDomain = false;
-
-        if (response.valid) {
-          this.showToastMessage('success', `Domain "${newDomainObj.domain}" is valid and ready to claim`);
-        } else {
-          this.showToastMessage('warning', `Domain "${newDomainObj.domain}" added but MX record not configured. Configure MX record then test and claim.`);
-        }
+        this.showToastMessage('success', `Domain "${domain.name}" added successfully`);
       },
       error: (error) => {
         console.error('Error adding domain:', error);
@@ -131,123 +119,25 @@ export class ManageDomainComponent implements OnInit {
     });
   }
 
-  testMXRecord(domain: DomainWithStatus) {
-    this.testingMX.set(domain.id);
-
-    this.domainService.verifyDomain(domain.domain).subscribe({
-      next: (response) => {
-        domain.mxTestResult = {
-          status: response.valid ? 'success' : 'error',
-          message: response.valid
-            ? 'MX record is correctly configured and pointing to MinuteMail servers'
-            : 'MX record not found or not pointing to MinuteMail servers. Please check your DNS configuration.',
-          testedAt: new Date()
-        };
-
-        domain.isConfigured = response.valid;
-        this.testingMX.set(null);
-
-        this.showToastMessage(
-          response.valid ? 'success' : 'error',
-          `MX test ${response.valid ? 'passed' : 'failed'} for ${domain.domain}`
-        );
-      },
-      error: (error) => {
-        console.error('Error testing MX record:', error);
-        domain.mxTestResult = {
-          status: 'error',
-          message: 'Failed to test MX record. Please try again later.',
-          testedAt: new Date()
-        };
-        this.testingMX.set(null);
-        this.showToastMessage('error', `Failed to test MX record for ${domain.domain}`);
-      }
-    });
-  }
-
-  claimDomain(domain: DomainWithStatus) {
-    if (this.claimingDomain()) {
+  removeDomain(domain: Domain) {
+    if (!confirm(`Are you sure you want to remove the domain "${domain.name}"? This action cannot be undone.`)) {
       return;
     }
 
-    this.claimingDomain.set(domain.id);
+    this.removingDomain.set(domain.name);
 
-    const request: AddDomainRequest = {
-      domain: domain.domain
-    };
-
-    this.domainService.addDomain(request).subscribe({
+    this.domainService.deleteDomain(domain.name).subscribe({
       next: () => {
-        domain.isClaimed = true;
-        this.claimingDomain.set(null);
-        this.showToastMessage('success', `Domain "${domain.domain}" claimed successfully`);
-      },
-      error: (error) => {
-        console.error('Error claiming domain:', error);
-        this.claimingDomain.set(null);
-        this.showToastMessage('error', `Failed to claim domain "${domain.domain}": ${error.message}`);
-      }
-    });
-  }
-
-  removeDomain(domain: DomainWithStatus) {
-    if (!confirm(`Are you sure you want to remove the domain "${domain.domain}"? This action cannot be undone.`)) {
-      return;
-    }
-
-    this.removingDomain.set(domain.id);
-
-    this.domainService.deleteDomain(domain.domain).subscribe({
-      next: () => {
-        this.domains = this.domains.filter(d => d.id !== domain.id);
+        this.domains = this.domains.filter(d => d.name !== domain.name);
         this.removingDomain.set(null);
-        this.showToastMessage('success', `Domain "${domain.domain}" removed successfully`);
+        this.showToastMessage('success', `Domain "${domain.name}" removed successfully`);
       },
       error: (error) => {
         console.error('Error removing domain:', error);
         this.removingDomain.set(null);
-        this.showToastMessage('error', `Failed to remove domain "${domain.domain}": ${error.message}`);
+        this.showToastMessage('error', `Failed to remove domain "${domain.name}": ${error.message}`);
       }
     });
-  }
-
-  formatDate(date: Date): string {
-    const now = new Date();
-    const diffInHours = (now.getTime() - date.getTime()) / (1000 * 60 * 60);
-
-    if (diffInHours < 1) {
-      const diffInMinutes = Math.floor(diffInHours * 60);
-      return diffInMinutes <= 0 ? 'Just now' : `${diffInMinutes}m ago`;
-    } else if (diffInHours < 24) {
-      return `${Math.floor(diffInHours)}h ago`;
-    } else if (diffInHours < 48) {
-      return 'Yesterday';
-    } else {
-      return date.toLocaleDateString(undefined, {
-        month: 'short',
-        day: 'numeric',
-        year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
-      });
-    }
-  }
-
-  getMXResultClasses(status: 'success' | 'error'): string {
-    const baseClasses = 'p-3 rounded-lg border';
-    if (status === 'success') {
-      return `${baseClasses} bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800 text-green-800 dark:text-green-200`;
-    } else {
-      return `${baseClasses} bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-800 dark:text-red-200`;
-    }
-  }
-
-  getMXResultIconClasses(status: 'success' | 'error'): string {
-    return status === 'success'
-      ? 'text-green-500 dark:text-green-400'
-      : 'text-red-500 dark:text-red-400';
-  }
-
-  private generateId(): string {
-    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
   }
 
   private showToastMessage(type: 'success' | 'error' | 'warning' | 'info', message: string) {
