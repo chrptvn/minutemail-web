@@ -20,9 +20,7 @@ export class App implements OnInit {
   ngOnInit() {
     // Ensure theme is properly initialized for browser platform
     if (isPlatformBrowser(this.platformId)) {
-      // Force theme application immediately without delay
-      const currentTheme = this.themeService.isDarkMode();
-      this.themeService.isDarkMode.set(currentTheme);
+      this.themeService.isDarkMode.set(true);
 
       // Initialize Keycloak authentication only once
       if (!this.authService.keycloak) {

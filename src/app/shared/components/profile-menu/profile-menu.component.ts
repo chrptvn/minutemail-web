@@ -12,7 +12,7 @@ import { ButtonComponent } from '../ui/button.component';
   templateUrl: './profile-menu.component.html',
   styleUrl: './profile-menu.component.scss'
 })
-export class ProfileMenuComponent implements OnInit {
+export class ProfileMenuComponent {
   isOpen = signal(false);
   isBrowser: boolean;
 
@@ -22,31 +22,6 @@ export class ProfileMenuComponent implements OnInit {
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
-  }
-
-  async ngOnInit() {
-    if (this.isBrowser) {
-      try {
-        // Only initialize if not already initialized
-        if (!this.authService.keycloak) {
-          const authenticated = await this.authService.initKeycloak();
-          console.log('Profile menu - Keycloak init result:', authenticated);
-        } else {
-          console.log('Profile menu - Keycloak already initialized');
-        }
-
-        // Subscribe to auth state changes
-        this.authService.isAuthenticated$.subscribe(authenticated => {
-          console.log('Profile menu - Auth state changed:', authenticated);
-          // Force change detection
-          setTimeout(() => {
-            console.log('Profile menu - Current auth state:', this.authService.isAuthenticated());
-          }, 0);
-        });
-      } catch (error) {
-        console.error('Profile menu - Keycloak init error:', error);
-      }
-    }
   }
 
   toggleMenu() {

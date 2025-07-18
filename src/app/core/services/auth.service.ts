@@ -43,16 +43,15 @@ export class AuthService {
       } as any);
 
       const initOptions: any = {
-        onLoad: 'login-required',
+        onLoad: 'check-sso',
         silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
         silentCheckSso: false,
-        checkLoginIframe: false, // Disable to avoid cross-site issues
+        checkLoginIframe: false,
         silentCheckSsoFallback: false,
         pkceMethod: 'S256',
-        enableLogging: false, // Reduce console noise
-        // Increase intervals to reduce cross-site requests
-        checkLoginIframeInterval: 300, // 5 minutes instead of 5 seconds
-        tokenRefreshInterval: 300 // 5 minutes
+        enableLogging: false,
+        checkLoginIframeInterval: 300,
+        tokenRefreshInterval: 300
       };
 
       // Restore tokens from localStorage if present
@@ -64,8 +63,6 @@ export class AuthService {
       if (storedId) initOptions.idToken = storedId;
 
       const authenticated = await this.keycloak.init(initOptions);
-
-      console.log('Keycloak initialized, authenticated:', authenticated);
 
       if (authenticated) {
         // Persist tokens
