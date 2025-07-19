@@ -86,7 +86,7 @@
                 </div>
 
                 <!-- Add Host Combo Box -->
-                <ng-container *ngIf="getUnusedHosts().length > 0; else noHostsLeft">
+                <div *ngIf="getUnusedHosts().length > 0; else noHostsLeft">
                   <div class="flex items-center space-x-2">
                     <select
                       [(ngModel)]="selectedHostToAdd"
@@ -106,7 +106,7 @@
                       <app-icon name="plus" [size]="16" class="mr-2"></app-icon>
                       Add
                     </app-button>
-                </ng-container>
+                </div>
                 <ng-template #noHostsLeft>
                   <p class="text-sm text-gray-500 dark:text-gray-400">All available hosts have been added.</p>
                 </ng-template>
