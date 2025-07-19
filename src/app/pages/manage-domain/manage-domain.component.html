@@ -135,17 +135,32 @@
 
                        <!-- TXT Verification -->
                        @if (!domain.txt_valid) {
-                         <div class="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-                           <div class="flex items-start space-x-2">
-                             <app-icon name="info" [size]="16" class="text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5"></app-icon>
-                             <div>
-                               <h4 class="text-sm font-medium text-yellow-800 dark:text-yellow-200">TXT Verification Required</h4>
-                               <p class="text-xs text-yellow-700 dark:text-yellow-300 mt-1">
-                                 Add this TXT record to your DNS:
-                               </p>
-                               <code class="text-xs bg-yellow-100 dark:bg-yellow-900/40 px-2 py-1 rounded mt-1 block">
+                         <div class="mt-4 p-4 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-dark-700 rounded-lg">
+                           <div class="flex items-center justify-between mb-2">
+                             <h4 class="text-sm font-medium text-gray-900 dark:text-gray-100">TXT Verification Required</h4>
+                           </div>
+                           <p class="text-xs text-gray-600 dark:text-gray-400 mb-3">
+                             Add this TXT record to your DNS to verify domain ownership:
+                           </p>
+                           <div class="bg-white dark:bg-dark-900 rounded-lg p-3 border border-gray-200 dark:border-dark-600">
+                             <div class="flex items-center justify-between">
+                               <code class="text-sm font-mono text-gray-900 dark:text-gray-100 break-all flex-1 mr-3">
                                  {{ domain.verification }}
                                </code>
+                               <app-button
+                                 variant="ghost"
+                                 size="sm"
+                                 [loading]="copyingTxt()[domain.name]"
+                                 (onClick)="copyTxtRecord(domain.verification, domain.name)"
+                                 ariaLabel="Copy TXT record"
+                                 class="flex-shrink-0"
+                               >
+                                 @if (copiedTxt()[domain.name]) {
+                                   <app-icon name="check" [size]="16" class="text-green-500"></app-icon>
+                                 } @else {
+                                   <app-icon name="copy" [size]="14"></app-icon>
+                                 }
+                               </app-button>
                              </div>
                            </div>
                          </div>

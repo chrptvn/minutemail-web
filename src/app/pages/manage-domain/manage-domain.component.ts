@@ -3,6 +3,7 @@ import {CommonModule, isPlatformBrowser} from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DomainService } from '../../core/services/domain.service';
+import { ClipboardService } from '../../core/services/clipboard.service';
 import { Domain, AddDomainRequest } from '../../core/models/domain.model';
 import { ButtonComponent } from '../../shared/components/ui/button.component';
 import { TablerIconComponent } from '../../shared/components/icons/tabler-icons.component';
@@ -32,6 +33,8 @@ export class ManageDomainComponent implements OnInit, OnDestroy {
   loading = signal(false);
   addingDomain = false;
   removingDomain = signal<string | null>(null);
+  copyingTxt = signal<{ [key: string]: boolean }>({});
+  copiedTxt = signal<{ [key: string]: boolean }>({});
 
   private pollInterval?: any;
 
@@ -43,6 +46,7 @@ export class ManageDomainComponent implements OnInit, OnDestroy {
   constructor(
     private readonly router: Router,
     private readonly domainService: DomainService,
+    private readonly clipboardService: ClipboardService,
     private readonly authService: AuthService,
     @Inject(PLATFORM_ID) private readonly platformId: Object
   ) {}
@@ -146,6 +150,28 @@ export class ManageDomainComponent implements OnInit, OnDestroy {
         this.showToastMessage('error', `Failed to remove domain "${domain.name}": ${error.message}`);
       }
     });
+  }
+
+  async copyTxtRecord(txtRecord: string, domainName: string) {
+    this.copyingTxt.update(state => ({ ...state, [domainName]: true }));
+
+    try {
+      const success = await this.clipboardService.copyToClipboard(txtRecord);
+
+      if (success) {
+        this.copiedTxt.update(state => ({ ...state, [domainName]: true }));
+        this.showToastMessage('success', 'TXT record copied to clipboard!');
+
+        // Reset copied state after 2 seconds
+        setTimeout(() => {
+          this.copiedTxt.update(state => ({ ...state, [domainName]: false }));
+        }, 2000);
+      } else {
+        this.showToastMessage('error', 'Failed to copy to clipboard');
+      }
+    } finally {
+      this.copyingTxt.update(state => ({ ...state, [domainName]: false }));
+    }
   }
 
   private showToastMessage(type: 'success' | 'error' | 'warning' | 'info', message: string) {
