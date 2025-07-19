@@ -67,11 +67,10 @@ export class ApiKeysComponent implements OnInit {
   ) {
     // Set minimum date to current time
     const now = new Date();
-    this.minDate = now.toISOString().slice(0, 16);
+    this.minDate = now.toISOString().slice(0, 10);
 
-    // Set default expiry to 30 days from now
-    const defaultExpiry = new Date(now.getTime() + (30 * 24 * 60 * 60 * 1000));
-    this.expiryDate = defaultExpiry.toISOString().slice(0, 16);
+    // Leave expiry date empty by default (infinite)
+    this.expiryDate = '';
 
     // Set default host to minutemail.co
     this.newApiKey.hosts = ['minutemail.co'];
@@ -124,19 +123,22 @@ export class ApiKeysComponent implements OnInit {
   }
 
   createApiKey() {
-    if (!this.newApiKey.name.trim() || !this.expiryDate) {
-      this.showToastMessage('error', 'Please fill in all required fields');
+    if (!this.newApiKey.name.trim()) {
+      this.showToastMessage('error', 'Please enter a name for the API key');
       return;
     }
 
-    // Calculate TTL in seconds
-    const expiryTime = new Date(this.expiryDate).getTime();
-    const currentTime = Date.now();
-    const ttlSeconds = Math.floor((expiryTime - currentTime) / 1000);
+    // Calculate TTL in seconds (0 for infinite if no date provided)
+    let ttlSeconds = 0;
+    if (this.expiryDate) {
+      const expiryTime = new Date(this.expiryDate + 'T23:59:59').getTime();
+      const currentTime = Date.now();
+      ttlSeconds = Math.floor((expiryTime - currentTime) / 1000);
 
-    if (ttlSeconds <= 0) {
-      this.showToastMessage('error', 'Expiry date must be in the future');
-      return;
+      if (ttlSeconds <= 0) {
+        this.showToastMessage('error', 'Expiry date must be in the future');
+        return;
+      }
     }
 
     // Filter out empty hosts
@@ -274,6 +276,11 @@ export class ApiKeysComponent implements OnInit {
   }
 
   formatDate(dateString: string): string {
+    // Handle infinite API keys
+    if (!dateString || dateString === '0001-01-01T00:00:00Z' || dateString === 'never') {
+      return 'Never expires';
+    }
+
     const date = new Date(dateString);
     const now = new Date();
     const diffInHours = (date.getTime() - now.getTime()) / (1000 * 60 * 60);
@@ -310,9 +317,8 @@ export class ApiKeysComponent implements OnInit {
     };
     this.selectedHostToAdd = '';
 
-    // Reset expiry date to 30 days from now
-    const defaultExpiry = new Date(Date.now() + (30 * 24 * 60 * 60 * 1000));
-    this.expiryDate = defaultExpiry.toISOString().slice(0, 16);
+    // Leave expiry date empty by default (infinite)
+    this.expiryDate = '';
   }
 
   private showToastMessage(type: 'success' | 'error' | 'warning' | 'info', message: string) {
