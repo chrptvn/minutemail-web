@@ -2,7 +2,7 @@ import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { ApiKey, CreateApiKeyRequest, DeleteApiKeyResponse } from '../models/api-key.model';
 
@@ -49,8 +49,15 @@ export class ApiKeyService {
     const headers = this.getAuthHeaders();
 
     return this.http
-      .get<{ apiKeys: ApiKey[] }>(url, { headers })
+      .get<ApiKey[] | { apiKeys: ApiKey[] }>(url, { headers })
       .pipe(
+        map(response => {
+          // Handle both array response and wrapped response
+          if (Array.isArray(response)) {
+            return { apiKeys: response };
+          }
+          return response as { apiKeys: ApiKey[] };
+        }),
         catchError(this.handleError)
       );
   }
