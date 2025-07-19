@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { ApiKeyService } from '../../core/services/api-key.service';
 import { ClipboardService } from '../../core/services/clipboard.service';
 import { ApiKey, CreateApiKeyRequest } from '../../core/models/api-key.model';
+import { DomainService } from '../../core/services/domain.service';
+import { Domain } from '../../core/models/domain.model';
 import { ButtonComponent } from '../../shared/components/ui/button.component';
 import { TablerIconComponent } from '../../shared/components/icons/tabler-icons.component';
 import { ToastComponent } from '../../shared/components/ui/toast.component';
@@ -31,6 +33,8 @@ import {AuthService} from '../../core/services/auth.service';
 })
 export class ApiKeysComponent implements OnInit {
   apiKeys = signal<ApiKey[]>([]);
+  domains = signal<Domain[]>([]);
+  availableHosts = signal<string[]>(['minutemail.co']);
   loading = signal(false);
   creating = signal(false);
   deleting = signal<{ [key: string]: boolean }>({});
@@ -55,6 +59,7 @@ export class ApiKeysComponent implements OnInit {
   constructor(
     private readonly router: Router,
     private readonly apiKeyService: ApiKeyService,
+    private readonly domainService: DomainService,
     private readonly clipboardService: ClipboardService,
     private readonly authService: AuthService,
     @Inject(PLATFORM_ID) private readonly platformId: Object
@@ -66,6 +71,9 @@ export class ApiKeysComponent implements OnInit {
     // Set default expiry to 30 days from now
     const defaultExpiry = new Date(now.getTime() + (30 * 24 * 60 * 60 * 1000));
     this.expiryDate = defaultExpiry.toISOString().slice(0, 16);
+
+    // Set default host to minutemail.co
+    this.newApiKey.hosts = ['minutemail.co'];
   }
 
   ngOnInit() {
@@ -73,6 +81,7 @@ export class ApiKeysComponent implements OnInit {
       this.authService.initKeycloak().then(authenticated => {
         if (authenticated) {
           this.loadApiKeys();
+          this.loadDomains();
         } else {
           this.authService.login();
         }
@@ -93,6 +102,22 @@ export class ApiKeysComponent implements OnInit {
         console.error('Error loading API keys:', error);
         this.showToastMessage('error', error.message);
         this.loading.set(false);
+      }
+    });
+  }
+
+  loadDomains() {
+    this.domainService.getDomains().subscribe({
+      next: (domains) => {
+        this.domains.set(domains || []);
+        // Update available hosts: minutemail.co + user domains
+        const userDomains = domains.map(d => d.name);
+        this.availableHosts.set(['minutemail.co', ...userDomains]);
+      },
+      error: (error) => {
+        console.error('Error loading domains:', error);
+        // Keep minutemail.co as fallback
+        this.availableHosts.set(['minutemail.co']);
       }
     });
   }
@@ -231,7 +256,17 @@ export class ApiKeysComponent implements OnInit {
   }
 
   addHost() {
-    this.newApiKey.hosts.push('');
+    // Add the first available host that's not already selected
+    const availableHosts = this.availableHosts();
+    const usedHosts = this.newApiKey.hosts;
+    const nextHost = availableHosts.find(host => !usedHosts.includes(host));
+    
+    if (nextHost) {
+      this.newApiKey.hosts.push(nextHost);
+    } else if (availableHosts.length > 0) {
+      // If all hosts are used, add the first one (user can change it)
+      this.newApiKey.hosts.push(availableHosts[0]);
+    }
   }
 
   removeHost(index: number) {
@@ -294,6 +329,11 @@ export class ApiKeysComponent implements OnInit {
 
   hideToast() {
     this.showToast.set(false);
+  }
+
+  getAvailableHostsForIndex(currentIndex: number): string[] {
+    // Return all available hosts for the dropdown
+    return this.availableHosts();
   }
 
   goHome() {
