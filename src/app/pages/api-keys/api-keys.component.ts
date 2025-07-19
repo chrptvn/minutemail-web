@@ -48,6 +48,7 @@ export class ApiKeysComponent implements OnInit {
     hosts: ['minutemail.co']
   };
 
+  selectedHostToAdd = '';
   expiryDate = '';
   minDate = '';
 
@@ -255,17 +256,14 @@ export class ApiKeysComponent implements OnInit {
     return new Date(apiKey.expireAt) > new Date();
   }
 
-  addHost() {
-    // Add the first available host that's not already selected
-    const availableHosts = this.availableHosts();
-    const usedHosts = this.newApiKey.hosts;
-    const nextHost = availableHosts.find(host => !usedHosts.includes(host));
+  getUnusedHosts(): string[] {
+    return this.availableHosts().filter(host => !this.newApiKey.hosts.includes(host));
+  }
 
-    if (nextHost) {
-      this.newApiKey.hosts.push(nextHost);
-    } else if (availableHosts.length > 0) {
-      // If all hosts are used, add the first one (user can change it)
-      this.newApiKey.hosts.push(availableHosts[0]);
+  addSelectedHost() {
+    if (this.selectedHostToAdd && !this.newApiKey.hosts.includes(this.selectedHostToAdd)) {
+      this.newApiKey.hosts.push(this.selectedHostToAdd);
+      this.selectedHostToAdd = ''; // Reset selection
     }
   }
 
@@ -310,6 +308,7 @@ export class ApiKeysComponent implements OnInit {
       ttl: 0,
       hosts: ['minutemail.co']
     };
+    this.selectedHostToAdd = '';
 
     // Reset expiry date to 30 days from now
     const defaultExpiry = new Date(Date.now() + (30 * 24 * 60 * 60 * 1000));
@@ -329,11 +328,6 @@ export class ApiKeysComponent implements OnInit {
 
   hideToast() {
     this.showToast.set(false);
-  }
-
-  getAvailableHostsForIndex(currentIndex: number): string[] {
-    // Return all available hosts for the dropdown
-    return this.availableHosts();
   }
 
   goHome() {

@@ -1,4 +1,36 @@
 /* API Keys page specific styles */
+
+/* Host chips styling */
+.host-chip {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.1) 0%, rgba(36, 200, 219, 0.05) 100%);
+  border: 1px solid rgba(36, 200, 219, 0.2);
+  transition: all 0.2s ease;
+}
+
+.host-chip:hover {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.15) 0%, rgba(36, 200, 219, 0.08) 100%);
+  border-color: rgba(36, 200, 219, 0.3);
+}
+
+.dark .host-chip {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.15) 0%, rgba(36, 200, 219, 0.08) 100%);
+  border: 1px solid rgba(36, 200, 219, 0.3);
+}
+
+.dark .host-chip:hover {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.2) 0%, rgba(36, 200, 219, 0.1) 100%);
+  border-color: rgba(36, 200, 219, 0.4);
+}
+
+/* Host chip remove button */
+.host-chip button {
+  transition: all 0.15s ease;
+}
+
+.host-chip button:hover {
+  transform: scale(1.1);
+}
+
 .api-key-card {
   transition: all 0.2s ease-in-out;
 }

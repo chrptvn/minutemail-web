@@ -63,42 +63,55 @@
                 <label for="hosts" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Allowed Hosts
                 </label>
-                <div class="space-y-2">
-                  @for (host of newApiKey.hosts; track $index; let i = $index) {
-                    <div class="flex items-center space-x-2">
-                      <select
-                        [(ngModel)]="newApiKey.hosts[i]"
-                        [name]="'host-' + i"
-                        class="flex-1 px-3 py-2 border border-gray-300 dark:border-dark-600 rounded-lg bg-white dark:bg-dark-900 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                      >
-                        @for (availableHost of getAvailableHostsForIndex(i); track availableHost) {
-                          <option [value]="availableHost">{{ availableHost }}</option>
+                
+                <!-- Selected Hosts as Chips -->
+                @if (newApiKey.hosts.length > 0) {
+                  <div class="flex flex-wrap gap-2 mb-3">
+                    @for (host of newApiKey.hosts; track $index; let i = $index) {
+                      <div class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 border border-primary-200 dark:border-primary-700">
+                        <span>{{ host }}</span>
+                        @if (newApiKey.hosts.length > 1) {
+                          <button
+                            type="button"
+                            class="ml-2 inline-flex items-center justify-center w-4 h-4 rounded-full hover:bg-primary-200 dark:hover:bg-primary-800 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                            (click)="removeHost(i)"
+                            [attr.aria-label]="'Remove ' + host"
+                          >
+                            <app-icon name="x" [size]="12" class="text-primary-600 dark:text-primary-400"></app-icon>
+                          </button>
                         }
-                      </select>
-                      @if (newApiKey.hosts.length > 1) {
-                        <app-button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          (onClick)="removeHost(i)"
-                          ariaLabel="Remove host"
-                        >
-                          <app-icon name="x" [size]="16"></app-icon>
-                        </app-button>
+                      </div>
+                    }
+                  </div>
+                }
+                
+                <!-- Add Host Combo Box -->
+                @if (getUnusedHosts().length > 0) {
+                  <div class="flex items-center space-x-2">
+                    <select
+                      [(ngModel)]="selectedHostToAdd"
+                      name="hostToAdd"
+                      class="flex-1 px-3 py-2 border border-gray-300 dark:border-dark-600 rounded-lg bg-white dark:bg-dark-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    >
+                      <option value="">Select a host to add...</option>
+                      @for (host of getUnusedHosts(); track host) {
+                        <option [value]="host">{{ host }}</option>
                       }
-                    </div>
-                  }
-                  <app-button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    (onClick)="addHost()"
-                    [disabled]="newApiKey.hosts.length >= availableHosts().length"
-                    ariaLabel="Add host"
-                  >
-                    <app-icon name="plus" [size]="16" class="mr-2"></app-icon>
-                    Add Host
-                  </app-button>
+                    </select>
+                    <app-button
+                      type="button"
+                      variant="secondary"
+                      size="sm"
+                      (onClick)="addSelectedHost()"
+                      [disabled]="!selectedHostToAdd"
+                      ariaLabel="Add selected host"
+                    >
+                      <app-icon name="plus" [size]="16" class="mr-1"></app-icon>
+                      Add
+                    </app-button>
+                  </div>
+                } @else {
+                  <p class="text-sm text-gray-500 dark:text-gray-400">All available hosts have been added.</p>
                 </div>
               </div>
 
