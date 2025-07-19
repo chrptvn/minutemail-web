@@ -29,6 +29,7 @@ import {AuthService} from '../../core/services/auth.service';
 export class ManageDomainComponent implements OnInit, OnDestroy {
   newDomain = '';
   domains: Domain[] = [];
+  domains = signal<Domain[]>([]);
   loading = signal(false);
   addingDomain = false;
   removingDomain = signal<string | null>(null);
@@ -73,7 +74,7 @@ export class ManageDomainComponent implements OnInit, OnDestroy {
 
     this.domainService.getDomains().subscribe({
       next: (domains) => {
-        this.domains = domains || [];
+        this.domains.set(domains || []);
         this.loading.set(false);
       },
       error: (error) => {
@@ -87,7 +88,7 @@ export class ManageDomainComponent implements OnInit, OnDestroy {
   private startPolling() {
     this.pollInterval = setInterval(() => {
       this.domainService.getDomains().subscribe({
-        next: (domains) => this.domains = domains || [],
+        next: (domains) => this.domains.set(domains || []),
         error: (error) => console.error('Polling error:', error)
       });
     }, 30000); // Poll every 30 seconds
@@ -100,7 +101,7 @@ export class ManageDomainComponent implements OnInit, OnDestroy {
     }
 
     // Check if domain already exists
-    if (this.domains.some(d => d.name.toLowerCase() === this.newDomain.toLowerCase())) {
+    if (this.domains().some(d => d.name.toLowerCase() === this.newDomain.toLowerCase())) {
       this.showToastMessage('error', 'This domain has already been added');
       return;
     }
@@ -114,7 +115,7 @@ export class ManageDomainComponent implements OnInit, OnDestroy {
 
     this.domainService.addDomain(request).subscribe({
       next: (domain) => {
-        this.domains.push(domain);
+        this.domains.update(domains => [...domains, domain]);
         this.newDomain = '';
         this.addingDomain = false;
         this.showToastMessage('success', `Domain "${domain.name}" added successfully`);
@@ -136,7 +137,7 @@ export class ManageDomainComponent implements OnInit, OnDestroy {
 
     this.domainService.deleteDomain(domain.name).subscribe({
       next: () => {
-        this.domains = this.domains.filter(d => d.name !== domain.name);
+        this.domains.update(domains => domains.filter(d => d.name !== domain.name));
         this.removingDomain.set(null);
         this.showToastMessage('success', `Domain "${domain.name}" removed successfully`);
       },
