@@ -28,8 +28,7 @@ import {AuthService} from '../../core/services/auth.service';
 })
 export class ManageDomainComponent implements OnInit, OnDestroy {
   newDomain = '';
-  domains: Domain[] = [];
-  domains = signal<Domain[]>([]);
+  domains = signal<Domain[]>([])
   loading = signal(false);
   addingDomain = false;
   removingDomain = signal<string | null>(null);
