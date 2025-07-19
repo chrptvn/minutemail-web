@@ -58,12 +58,7 @@ export class ManageDomainComponent implements OnInit, OnDestroy {
         }
       }).catch(error => {
         console.error('API Keys - Keycloak initialization failed:', error);
-        // Still try to load domains even if Keycloak fails
-        this.loadDomains();
       });
-    } else {
-      // For SSR, still attempt to load domains
-      this.loadDomains();
     }
   }
 
@@ -80,10 +75,6 @@ export class ManageDomainComponent implements OnInit, OnDestroy {
       next: (domains) => {
         this.domains = domains || [];
         this.loading.set(false);
-        // Force change detection
-        setTimeout(() => {
-          this.domains = [...this.domains];
-        }, 0);
       },
       error: (error) => {
         console.error('Error loading domains:', error);
@@ -94,11 +85,6 @@ export class ManageDomainComponent implements OnInit, OnDestroy {
   }
 
   private startPolling() {
-    // Initial load with a small delay to ensure everything is ready
-    setTimeout(() => {
-      this.loadDomains();
-    }, 100);
-    
     this.pollInterval = setInterval(() => {
       this.domainService.getDomains().subscribe({
         next: (domains) => this.domains = domains || [],
