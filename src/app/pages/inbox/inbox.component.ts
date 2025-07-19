@@ -22,6 +22,7 @@ import { ProfileMenuComponent } from '../../shared/components/profile-menu/profi
 import { VpnBannerComponent } from '../../shared/components/vpn-banner/vpn-banner.component';
 import {FooterComponent} from '../../shared/components/footer/footer.component';
 import {DocsMenuComponent} from '../../shared/components/docs-menu/docs-menu.component';
+import {AuthService} from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-inbox',
@@ -63,24 +64,23 @@ export class InboxComponent implements OnInit, OnDestroy {
   toastType = signal<'success' | 'error' | 'warning' | 'info'>('info');
   toastMessage = signal('');
 
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
   private readonly POLL_INTERVAL = 5000;
-  private isBrowser: boolean;
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
-    private route: ActivatedRoute,
-    private router: Router,
-    private apiService: ApiService,
-    private aliasService: AliasService,
-    private clipboardService: ClipboardService,
-    public themeService: ThemeService
-  ) {
-    this.isBrowser = isPlatformBrowser(this.platformId);
-  }
+    @Inject(PLATFORM_ID) private readonly platformId: Object,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly apiService: ApiService,
+    private readonly aliasService: AliasService,
+    private readonly clipboardService: ClipboardService,
+    private readonly authService: AuthService,
+  ) {}
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
+    this.route.params.pipe(
+      takeUntil(this.destroy$),
+    ).subscribe(params => {
       const alias = params['alias'];
       if (!alias) {
         this.router.navigate(['/']);
@@ -91,9 +91,13 @@ export class InboxComponent implements OnInit, OnDestroy {
       this.fullAlias.set(`${alias}@minutemail.co`);
       this.aliasService.setCurrentAlias(this.fullAlias());
 
-      if (this.isBrowser) {
-        this.loadMails(false);
-        this.startPolling();
+      if (isPlatformBrowser(this.platformId)) {
+        this.authService.initKeycloak().then(() => {
+          this.loadMails(false);
+          this.startPolling();
+        }).catch(error => {
+          console.error('API Keys - Keycloak initialization failed:', error);
+        });
       }
     });
   }
@@ -101,6 +105,10 @@ export class InboxComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  goHome() {
+    this.router.navigate(['/']);
   }
 
   private startPolling() {
@@ -162,13 +170,13 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   refreshMails() {
-    if (this.isBrowser) {
+    if (isPlatformBrowser(this.platformId)) {
       window.location.reload();
     }
   }
 
   async copyEmailAddress() {
-    if (!this.isBrowser) return;
+    if (!isPlatformBrowser(this.platformId)) return;
 
     const email = this.fullAlias();
     this.copying.set(true);
@@ -197,22 +205,6 @@ export class InboxComponent implements OnInit, OnDestroy {
     this.selectedMail.set(undefined);
   }
 
-  goHome() {
-    this.router.navigate(['/']);
-  }
-
-  goToApi() {
-    this.router.navigate(['/api']);
-  }
-
-  goToPrivacy() {
-    this.router.navigate(['/privacy']);
-  }
-
-  toggleTheme() {
-    this.themeService.toggleTheme();
-  }
-
   formatDate(date: Date): string {
     return date.toLocaleTimeString();
   }
@@ -229,7 +221,7 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   deleteMail(mail: Mail) {
-    if (!this.isBrowser || this.deletingMailId()) {
+    if (!isPlatformBrowser(this.platformId) || this.deletingMailId()) {
       return;
     }
 

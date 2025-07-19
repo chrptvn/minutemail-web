@@ -1,11 +1,11 @@
-import { Component, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ThemeService } from '../../core/services/theme.service';
+import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
+import {CommonModule, isPlatformBrowser} from '@angular/common';
+import { Router } from '@angular/router';
 import { TablerIconComponent } from '../../shared/components/icons/tabler-icons.component';
 import {DnsBannerComponent} from '../../shared/components/dns-banner/dns-banner.component';
 import {TopMenu} from '../../shared/components/top-menu/top-menu';
 import {FooterComponent} from '../../shared/components/footer/footer.component';
+import {AuthService} from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-mx-configuration',
@@ -15,7 +15,6 @@ import {FooterComponent} from '../../shared/components/footer/footer.component';
   styleUrl: './mx-configuration.component.scss'
 })
 export class MxConfigurationComponent implements OnInit {
-  domainName = signal<string | null>(null);
   expandedFaqItems = new Set<number>();
 
   faqItems = [
@@ -34,18 +33,17 @@ export class MxConfigurationComponent implements OnInit {
   ];
 
   constructor(
-    private route: ActivatedRoute,
     private router: Router,
-    public themeService: ThemeService
+    private readonly authService: AuthService,
+    @Inject(PLATFORM_ID) private readonly platformId: Object
   ) {}
 
   ngOnInit() {
-    // Get domain name from query parameters
-    this.route.queryParams.subscribe(params => {
-      if (params['domain']) {
-        this.domainName.set(params['domain']);
-      }
-    });
+    if (isPlatformBrowser(this.platformId)) {
+      this.authService.initKeycloak().catch(error => {
+        console.error('API Keys - Keycloak initialization failed:', error);
+      });
+    }
   }
 
   toggleFaqItem(index: number) {
@@ -60,24 +58,7 @@ export class MxConfigurationComponent implements OnInit {
     return this.expandedFaqItems.has(index);
   }
 
-  goBack() {
-    // Go back to the previous page or manage domain if no history
-    if (window.history.length > 1) {
-      window.history.back();
-    } else {
-      this.goToManageDomain();
-    }
-  }
-
   goToManageDomain() {
     this.router.navigate(['/manage-domain']);
-  }
-
-  goHome() {
-    this.router.navigate(['/']);
-  }
-
-  toggleTheme() {
-    this.themeService.toggleTheme();
   }
 }

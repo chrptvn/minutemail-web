@@ -1,9 +1,8 @@
-import { Component, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {Component, Inject, OnInit, PLATFORM_ID, signal} from '@angular/core';
+import {CommonModule, isPlatformBrowser} from '@angular/common';
 import { Router } from '@angular/router';
 import { AliasService } from '../../core/services/alias.service';
 import { ClipboardService } from '../../core/services/clipboard.service';
-import { ThemeService } from '../../core/services/theme.service';
 import { AddressCardComponent } from '../../shared/components/address-card/address-card.component';
 import { VpnBannerComponent } from '../../shared/components/vpn-banner/vpn-banner.component';
 import { FaqComponent } from '../../shared/components/faq/faq.component';
@@ -12,6 +11,7 @@ import { ToastComponent } from '../../shared/components/ui/toast.component';
 import {ApiService} from '../../core/services/api.service';
 import {TopMenu} from '../../shared/components/top-menu/top-menu';
 import {FooterComponent} from '../../shared/components/footer/footer.component';
+import {AuthService} from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -40,27 +40,34 @@ export class HomeComponent implements OnInit {
   toastMessage = signal('');
 
   constructor(
-    private router: Router,
-    private aliasService: AliasService,
-    private apiService: ApiService,
-    private clipboardService: ClipboardService,
-    public themeService: ThemeService,
+    private readonly router: Router,
+    private readonly aliasService: AliasService,
+    private readonly apiService: ApiService,
+    private readonly clipboardService: ClipboardService,
+    private readonly authService: AuthService,
+    @Inject(PLATFORM_ID) private readonly platformId: Object
   ) {}
 
   ngOnInit() {
-    const existingAlias = this.aliasService.getCurrentAlias();
-
-    if (existingAlias) {
-      this.apiService.getMails(existingAlias).subscribe({
-        next: (result) => {
-          const isExpired = result.expireAt && new Date(result.expireAt) < new Date();
-          if (!isExpired) {
-            this.expiresAt.set(result.expireAt ? new Date(result.expireAt).toISOString() : undefined);
-            this.currentAlias.set(existingAlias + '@minutemail.co');
-          }
+    if (isPlatformBrowser(this.platformId)) {
+      this.authService.initKeycloak().then(() => {
+        const existingAlias = this.aliasService.getCurrentAlias();
+        if (existingAlias) {
+          this.apiService.getMails(existingAlias).subscribe({
+            next: (result) => {
+              const isExpired = result.expireAt && new Date(result.expireAt) < new Date();
+              if (!isExpired) {
+                this.expiresAt.set(result.expireAt ? new Date(result.expireAt).toISOString() : undefined);
+                this.currentAlias.set(existingAlias + '@minutemail.co');
+              }
+            }
+          })
         }
-      })
+      }).catch(error => {
+        console.error('API Keys - Keycloak initialization failed:', error);
+      });
     }
+
   }
 
   async generateAlias() {
@@ -122,14 +129,6 @@ export class HomeComponent implements OnInit {
   viewInbox() {
     const aliasName = this.aliasService.extractAliasFromEmail(this.currentAlias()!);
     this.router.navigate([`/mailbox/${aliasName}`]);
-  }
-
-  goToApi() {
-    this.router.navigate(['/api']);
-  }
-
-  toggleTheme() {
-    this.themeService.toggleTheme();
   }
 
   private showToastMessage(type: 'success' | 'error' | 'warning' | 'info', message: string) {

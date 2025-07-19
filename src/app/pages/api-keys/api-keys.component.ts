@@ -1,10 +1,9 @@
-import { Component, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {Component, Inject, OnInit, PLATFORM_ID, signal} from '@angular/core';
+import {CommonModule, isPlatformBrowser} from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiKeyService } from '../../core/services/api-key.service';
 import { ClipboardService } from '../../core/services/clipboard.service';
-import { ThemeService } from '../../core/services/theme.service';
 import { ApiKey, CreateApiKeyRequest } from '../../core/models/api-key.model';
 import { ButtonComponent } from '../../shared/components/ui/button.component';
 import { TablerIconComponent } from '../../shared/components/icons/tabler-icons.component';
@@ -12,6 +11,7 @@ import { ToastComponent } from '../../shared/components/ui/toast.component';
 import { SpinnerComponent } from '../../shared/components/ui/spinner.component';
 import { TopMenu } from '../../shared/components/top-menu/top-menu';
 import { FooterComponent } from '../../shared/components/footer/footer.component';
+import {AuthService} from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-api-keys',
@@ -53,10 +53,11 @@ export class ApiKeysComponent implements OnInit {
   toastMessage = signal('');
 
   constructor(
-    private router: Router,
-    private apiKeyService: ApiKeyService,
-    private clipboardService: ClipboardService,
-    public themeService: ThemeService
+    private readonly router: Router,
+    private readonly apiKeyService: ApiKeyService,
+    private readonly clipboardService: ClipboardService,
+    private readonly authService: AuthService,
+    @Inject(PLATFORM_ID) private readonly platformId: Object
   ) {
     // Set minimum date to current time
     const now = new Date();
@@ -68,7 +69,17 @@ export class ApiKeysComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadApiKeys();
+    if (isPlatformBrowser(this.platformId)) {
+      this.authService.initKeycloak().then(authenticated => {
+        if (authenticated) {
+          this.loadApiKeys();
+        } else {
+          this.authService.login();
+        }
+      }).catch(error => {
+        console.error('API Keys - Keycloak initialization failed:', error);
+      });
+    }
   }
 
   loadApiKeys() {

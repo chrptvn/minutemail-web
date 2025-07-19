@@ -18,15 +18,10 @@
           <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
             MX Configuration
           </h1>
-          @if (domainName()) {
-            <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">
-              Configure MX records for <strong>{{ domainName() }}</strong>
-            </p>
-          } @else {
-            <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">
-              This guide shows you how to route incoming mail for your own domain to MinuteMail's disposable‑mail service by publishing an MX record.
-            </p>
-          }
+
+          <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">
+            This guide shows you how to route incoming mail for your own domain to MinuteMail's disposable‑mail service by publishing an MX record.
+          </p>
         </div>
 
         <!-- Content -->
@@ -142,8 +137,8 @@
                     <strong>Verify the change:</strong>
                   </p>
                   <div class="bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm font-mono overflow-x-auto">
-                    <div>nslookup -type=MX {{ domainName() || 'yourdomain.com' }}</div>
-                    <div class="mt-1">dig MX {{ domainName() || 'yourdomain.com' }} +short</div>
+                    <div>nslookup -type=MX {{ 'yourdomain.com' }}</div>
+                    <div class="mt-1">dig MX {{ 'yourdomain.com' }} +short</div>
                   </div>
                   <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
                     You should see <code>mail.minutemail.co.</code> in the output.
