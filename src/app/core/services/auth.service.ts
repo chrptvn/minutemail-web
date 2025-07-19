@@ -45,7 +45,7 @@ export class AuthService {
       const initOptions: any = {
         onLoad: 'check-sso',
         silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
-        silentCheckSso: false,
+        silentCheckSso: true,
         checkLoginIframe: false,
         silentCheckSsoFallback: false,
         pkceMethod: 'S256',
