@@ -255,7 +255,20 @@ export class ApiKeysComponent implements OnInit {
   }
 
   isApiKeyActive(apiKey: ApiKey): boolean {
+    // If it's an infinite API key, it's always active
+    if (this.isInfiniteApiKey(apiKey)) {
+      return true;
+    }
+    // Otherwise check if expiry date is in the future
     return new Date(apiKey.expireAt) > new Date();
+  }
+
+  isInfiniteApiKey(apiKey: ApiKey): boolean {
+    // Check for various infinite date formats
+    return !apiKey.expireAt || 
+           apiKey.expireAt === '0001-01-01T00:00:00Z' || 
+           apiKey.expireAt === 'never' ||
+           apiKey.expireAt === '';
   }
 
   getUnusedHosts(): string[] {

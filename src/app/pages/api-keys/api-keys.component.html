@@ -151,20 +151,30 @@
                     <div class="flex-1">
                       <div class="flex items-center space-x-3">
                         <div class="flex-shrink-0">
-                          <app-icon
-                            *ngIf="isApiKeyActive(apiKey)"
-                            name="check-circle"
-                            [size]="20"
-                            class="text-green-500 dark:text-green-400"
-                            title="API key is active"
-                          ></app-icon>
-                          <app-icon
-                            *ngIf="!isApiKeyActive(apiKey)"
-                            name="alert-triangle-filled"
-                            [size]="20"
-                            class="text-red-500 dark:text-red-400"
-                            title="API key is expired"
-                          ></app-icon>
+                          <ng-container *ngIf="isInfiniteApiKey(apiKey); else hasExpiry">
+                            <app-icon
+                              name="check-circle"
+                              [size]="20"
+                              class="text-blue-500 dark:text-blue-400"
+                              title="API key never expires"
+                            ></app-icon>
+                          </ng-container>
+                          <ng-template #hasExpiry>
+                            <app-icon
+                              *ngIf="isApiKeyActive(apiKey)"
+                              name="check-circle"
+                              [size]="20"
+                              class="text-green-500 dark:text-green-400"
+                              title="API key is active"
+                            ></app-icon>
+                            <app-icon
+                              *ngIf="!isApiKeyActive(apiKey)"
+                              name="alert-triangle-filled"
+                              [size]="20"
+                              class="text-red-500 dark:text-red-400"
+                              title="API key is expired"
+                            ></app-icon>
+                          </ng-template>
                         </div>
 
                         <div>
@@ -172,13 +182,16 @@
                             {{ apiKey.name }}
                           </h3>
                           <p class="text-sm text-gray-600 dark:text-gray-400">
-                            Created {{ formatDate(apiKey.createdAt) }} •
-                            <span *ngIf="isApiKeyActive(apiKey)" class="text-green-600 dark:text-green-400">
-                              Expires {{ formatDate(apiKey.expireAt) }}
-                            </span>
-                            <span *ngIf="!isApiKeyActive(apiKey)" class="text-red-600 dark:text-red-400">
-                              Expired {{ formatDate(apiKey.expireAt) }}
-                            </span>
+                            Created {{ formatDate(apiKey.createdAt) }}
+                            <ng-container *ngIf="!isInfiniteApiKey(apiKey)">
+                              •
+                              <span *ngIf="isApiKeyActive(apiKey)" class="text-green-600 dark:text-green-400">
+                                Expires {{ formatDate(apiKey.expireAt) }}
+                              </span>
+                              <span *ngIf="!isApiKeyActive(apiKey)" class="text-red-600 dark:text-red-400">
+                                Expired {{ formatDate(apiKey.expireAt) }}
+                              </span>
+                            </ng-container>
                           </p>
                         </div>
                       </div>
