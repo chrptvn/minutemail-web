@@ -175,7 +175,7 @@ export class ApiKeysComponent implements OnInit {
 
     this.deleting.update(state => ({ ...state, [apiKey.apiKey]: true }));
 
-    this.apiKeyService.deleteApiKey(apiKey.apiKey).subscribe({
+    this.apiKeyService.deleteApiKey(apiKey.apiKey.split("_")[2]).subscribe({
       next: () => {
         this.apiKeys.update(keys => keys.filter(key => key.apiKey !== apiKey.apiKey));
         this.deleting.update(state => {
@@ -260,7 +260,7 @@ export class ApiKeysComponent implements OnInit {
     const availableHosts = this.availableHosts();
     const usedHosts = this.newApiKey.hosts;
     const nextHost = availableHosts.find(host => !usedHosts.includes(host));
-    
+
     if (nextHost) {
       this.newApiKey.hosts.push(nextHost);
     } else if (availableHosts.length > 0) {
