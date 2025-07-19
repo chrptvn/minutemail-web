@@ -117,7 +117,7 @@
                 <app-button
                   type="submit"
                   variant="primary"
-                  [disabled]="!newApiKey.name || !expiryDate || creating()"
+                  [disabled]="!newApiKey.name || creating()"
                   [loading]="creating()"
                 >
                   <app-icon name="plus" [size]="16" class="mr-2"></app-icon>
