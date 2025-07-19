@@ -63,30 +63,28 @@
                 <label for="hosts" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Allowed Hosts
                 </label>
-                
+
                 <!-- Selected Hosts as Chips -->
-                @if (newApiKey.hosts.length > 0) {
-                  <div class="flex flex-wrap gap-2 mb-3">
-                    @for (host of newApiKey.hosts; track $index; let i = $index) {
-                      <div class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 border border-primary-200 dark:border-primary-700">
-                        <span>{{ host }}</span>
-                        @if (newApiKey.hosts.length > 1) {
-                          <button
-                            type="button"
-                            class="ml-2 inline-flex items-center justify-center w-4 h-4 rounded-full hover:bg-primary-200 dark:hover:bg-primary-800 focus:outline-none focus:ring-2 focus:ring-primary-500"
-                            (click)="removeHost(i)"
-                            [attr.aria-label]="'Remove ' + host"
-                          >
-                            <app-icon name="x" [size]="12" class="text-primary-600 dark:text-primary-400"></app-icon>
-                          </button>
-                        }
-                      </div>
-                    }
+                <div *ngIf="newApiKey.hosts.length > 0" class="flex flex-wrap gap-2 mb-3">
+                  <div
+                    *ngFor="let host of newApiKey.hosts; let i = index"
+                    class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 border border-primary-200 dark:border-primary-700"
+                  >
+                    <span>{{ host }}</span>
+                    <button
+                      *ngIf="newApiKey.hosts.length > 1"
+                      type="button"
+                      class="ml-2 inline-flex items-center justify-center w-4 h-4 rounded-full hover:bg-primary-200 dark:hover:bg-primary-800 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      (click)="removeHost(i)"
+                      [attr.aria-label]="'Remove ' + host"
+                    >
+                      <app-icon name="x" [size]="12" class="text-primary-600 dark:text-primary-400"></app-icon>
+                    </button>
                   </div>
-                }
-                
+                </div>
+
                 <!-- Add Host Combo Box -->
-                @if (getUnusedHosts().length > 0) {
+                <ng-container *ngIf="getUnusedHosts().length > 0; else noHostsLeft">
                   <div class="flex items-center space-x-2">
                     <select
                       [(ngModel)]="selectedHostToAdd"
@@ -94,38 +92,34 @@
                       class="flex-1 px-3 py-2 border border-gray-300 dark:border-dark-600 rounded-lg bg-white dark:bg-dark-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                     >
                       <option value="">Select a host to add...</option>
-                      @for (host of getUnusedHosts(); track host) {
-                        <option [value]="host">{{ host }}</option>
-                      }
+                      <option *ngFor="let host of getUnusedHosts()" [value]="host">{{ host }}</option>
                     </select>
-                    <app-button
+                    <button
                       type="button"
-                      variant="secondary"
-                      size="sm"
-                      (onClick)="addSelectedHost()"
+                      class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-dark-700 hover:bg-gray-300 dark:hover:bg-dark-600 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      (click)="addSelectedHost()"
                       [disabled]="!selectedHostToAdd"
-                      ariaLabel="Add selected host"
+                      aria-label="Add selected host"
                     >
                       <app-icon name="plus" [size]="16" class="mr-1"></app-icon>
                       Add
-                    </app-button>
+                    </button>
                   </div>
-                } @else {
+                </ng-container>
+                <ng-template #noHostsLeft>
                   <p class="text-sm text-gray-500 dark:text-gray-400">All available hosts have been added.</p>
-                </div>
+                </ng-template>
               </div>
 
               <div class="flex justify-end">
-                <app-button
+                <button
                   type="submit"
-                  variant="primary"
+                  class="px-6 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:opacity-50"
                   [disabled]="!newApiKey.name || !expiryDate || creating()"
-                  [loading]="creating()"
-                  ariaLabel="Create API key"
                 >
                   <app-icon name="plus" [size]="16" class="mr-2"></app-icon>
                   Create API Key
-                </app-button>
+                </button>
               </div>
             </form>
           </div>
@@ -137,46 +131,37 @@
             Your API Keys ({{ apiKeys().length }})
           </h2>
 
-          @if (loading()) {
+          <ng-container *ngIf="loading(); else loadedKeys">
             <div class="text-center py-8">
               <app-spinner size="lg" text="Loading API keys..."></app-spinner>
             </div>
-          } @else if (apiKeys().length === 0) {
-            <div class="text-center py-12 bg-gray-50 dark:bg-dark-800 rounded-lg border border-gray-200 dark:border-dark-700">
-              <div class="w-16 h-16 mx-auto bg-gray-100 dark:bg-dark-700 rounded-full flex items-center justify-center mb-4">
-                <app-icon name="code" [size]="24" class="text-gray-400 dark:text-gray-500"></app-icon>
-              </div>
-              <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
-                No API keys created yet
-              </h3>
-              <p class="text-gray-600 dark:text-gray-400">
-                Create your first API key using the form above to get started.
-              </p>
-            </div>
-          } @else {
-            <div class="space-y-3">
-              @for (apiKey of apiKeys(); track apiKey.apiKey) {
-                <div class="bg-white dark:bg-dark-800 border border-gray-200 dark:border-dark-700 rounded-lg p-4 sm:p-6">
+          </ng-container>
+
+          <ng-template #loadedKeys>
+            <ng-container *ngIf="apiKeys().length > 0; else noKeys">
+              <div class="space-y-3">
+                <div
+                  *ngFor="let apiKey of apiKeys(); let idx = index"
+                  class="bg-white dark:bg-dark-800 border border-gray-200 dark:border-dark-700 rounded-lg p-4 sm:p-6"
+                >
                   <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
                     <div class="flex-1">
                       <div class="flex items-center space-x-3">
-                        <!-- Status Icon -->
                         <div class="flex-shrink-0">
-                          @if (isApiKeyActive(apiKey)) {
-                            <app-icon
-                              name="check-circle"
-                              [size]="20"
-                              class="text-green-500 dark:text-green-400"
-                              title="API key is active"
-                            ></app-icon>
-                          } @else {
-                            <app-icon
-                              name="alert-triangle-filled"
-                              [size]="20"
-                              class="text-red-500 dark:text-red-400"
-                              title="API key is expired"
-                            ></app-icon>
-                          }
+                          <app-icon
+                            *ngIf="isApiKeyActive(apiKey)"
+                            name="check-circle"
+                            [size]="20"
+                            class="text-green-500 dark:text-green-400"
+                            title="API key is active"
+                          ></app-icon>
+                          <app-icon
+                            *ngIf="!isApiKeyActive(apiKey)"
+                            name="alert-triangle-filled"
+                            [size]="20"
+                            class="text-red-500 dark:text-red-400"
+                            title="API key is expired"
+                          ></app-icon>
                         </div>
 
                         <div>
@@ -185,94 +170,100 @@
                           </h3>
                           <p class="text-sm text-gray-600 dark:text-gray-400">
                             Created {{ formatDate(apiKey.createdAt) }} •
-                            @if (isApiKeyActive(apiKey)) {
-                              <span class="text-green-600 dark:text-green-400">Expires {{ formatDate(apiKey.expireAt) }}</span>
-                            } @else {
-                              <span class="text-red-600 dark:text-red-400">Expired {{ formatDate(apiKey.expireAt) }}</span>
-                            }
+                            <span *ngIf="isApiKeyActive(apiKey)" class="text-green-600 dark:text-green-400">
+                              Expires {{ formatDate(apiKey.expireAt) }}
+                            </span>
+                            <span *ngIf="!isApiKeyActive(apiKey)" class="text-red-600 dark:text-red-400">
+                              Expired {{ formatDate(apiKey.expireAt) }}
+                            </span>
                           </p>
                         </div>
                       </div>
 
-                      <!-- API Key Display -->
                       <div class="mt-3 p-3 bg-gray-50 dark:bg-dark-700 rounded-lg border border-gray-200 dark:border-dark-600">
                         <div class="flex items-center justify-between">
                           <code class="text-sm font-mono text-gray-900 dark:text-gray-100 break-all">
                             {{ showApiKey()[apiKey.apiKey] ? apiKey.apiKey : maskApiKey(apiKey.apiKey) }}
                           </code>
                           <div class="flex items-center space-x-2 ml-3">
-                            <app-button
-                              variant="ghost"
-                              size="sm"
-                              (onClick)="toggleApiKeyVisibility(apiKey.apiKey)"
-                              [ariaLabel]="showApiKey()[apiKey.apiKey] ? 'Hide API key' : 'Show API key'"
+                            <button
+                              type="button"
+                              (click)="toggleApiKeyVisibility(apiKey.apiKey)"
+                              [attr.aria-label]="showApiKey()[apiKey.apiKey] ? 'Hide API key' : 'Show API key'"
+                              class="focus:outline-none focus:ring-2 focus:ring-primary-500 rounded"
                             >
                               <app-icon [name]="showApiKey()[apiKey.apiKey] ? 'x' : 'info'" [size]="14"></app-icon>
-                            </app-button>
-                            <app-button
-                              variant="ghost"
-                              size="sm"
-                              [loading]="copying()[apiKey.apiKey]"
-                              (onClick)="copyApiKey(apiKey.apiKey)"
-                              ariaLabel="Copy API key"
+                            </button>
+                            <button
+                              type="button"
+                              (click)="copyApiKey(apiKey.apiKey)"
+                              [disabled]="copying()[apiKey.apiKey]"
+                              class="focus:outline-none focus:ring-2 focus:ring-primary-500 rounded"
                             >
-                              @if (copied()[apiKey.apiKey]) {
-                                <app-icon name="check" [size]="14" class="text-green-500"></app-icon>
-                              } @else {
-                                <app-icon name="copy" [size]="14"></app-icon>
-                              }
-                            </app-button>
+                              <app-icon *ngIf="copied()[apiKey.apiKey]" name="check" [size]="14" class="text-green-500"></app-icon>
+                              <app-icon *ngIf="!copied()[apiKey.apiKey]" name="copy" [size]="14"></app-icon>
+                            </button>
                           </div>
                         </div>
                       </div>
 
-                      <!-- Hosts -->
-                      @if (apiKey.hosts && apiKey.hosts.length > 0) {
-                        <div class="mt-3">
-                          <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Allowed Hosts:</p>
-                          <div class="flex flex-wrap gap-1">
-                            @for (host of apiKey.hosts; track host) {
-                              <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200">
-                                {{ host }}
-                              </span>
-                            }
-                          </div>
+                      <div *ngIf="apiKey.hosts && apiKey.hosts.length > 0" class="mt-3">
+                        <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Allowed Hosts:</p>
+                        <div class="flex flex-wrap gap-1">
+                          <span
+                            *ngFor="let host of apiKey.hosts"
+                            class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200"
+                          >
+                            {{ host }}
+                          </span>
                         </div>
-                      }
+                      </div>
                     </div>
 
                     <div class="flex items-center space-x-2 sm:space-x-3">
-                      <!-- Delete API Key Button -->
-                      <app-button
-                        variant="danger"
-                        size="sm"
-                        [loading]="deleting()[apiKey.apiKey]"
-                        (onClick)="deleteApiKey(apiKey)"
-                        ariaLabel="Delete {{ apiKey.name }}"
-                        class="flex-1 sm:flex-none"
+                      <button
+                        type="button"
+                        (click)="deleteApiKey(apiKey)"
+                        [disabled]="deleting()[apiKey.apiKey]"
+                        [attr.aria-label]="'Delete ' + apiKey.name"
+                        class="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50"
                       >
                         <app-icon name="trash" [size]="14" class="mr-2"></app-icon>
                         Delete
-                      </app-button>
+                      </button>
                     </div>
                   </div>
-              }
-            </div>
-          }
+                </div>
+              </div>
+            </ng-container>
+
+            <ng-template #noKeys>
+              <div class="text-center py-12 bg-gray-50 dark:bg-dark-800 rounded-lg border border-gray-200 dark:border-dark-700">
+                <div class="w-16 h-16 mx-auto bg-gray-100 dark:bg-dark-700 rounded-full flex items-center justify-center mb-4">
+                  <app-icon name="code" [size]="24" class="text-gray-400 dark:text-gray-500"></app-icon>
+                </div>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                  No API keys created yet
+                </h3>
+                <p class="text-gray-600 dark:text-gray-400">
+                  Create your first API key using the form above to get started.
+                </p>
+              </div>
+            </ng-template>
+          </ng-template>
         </div>
+
+        <app-footer></app-footer>
       </div>
     </div>
-    <app-footer></app-footer>
   </main>
 
   <!-- Toast Notifications -->
-  @if (showToast()) {
-    <div class="fixed bottom-4 right-4 left-4 sm:left-auto z-50">
-      <app-toast
-        [type]="toastType()"
-        [message]="toastMessage()"
-        (onClose)="hideToast()"
-      ></app-toast>
-    </div>
-  }
+  <div *ngIf="showToast()" class="fixed bottom-4 right-4 left-4 sm:left-auto z-50">
+    <app-toast
+      [type]="toastType()"
+      [message]="toastMessage()"
+      (onClose)="hideToast()"
+    ></app-toast>
+  </div>
 </div>
