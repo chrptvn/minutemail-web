@@ -23,11 +23,10 @@ export class ApiService {
   private prepareRequestHeaders(): HttpHeaders {
     let headers = new HttpHeaders();
     const sessionId = this.sessionService.getOrCreateSessionId()
+    headers = headers.set('X-Mailbox-Password', sessionId);
     const jwt: string | null = localStorage.getItem('kc_token')
     if (jwt) {
       headers = headers.set('Authorization', `Bearer ${jwt}`);
-    } else if (sessionId) {
-      headers = headers.set('X-Mailbox-Password', sessionId);
     }
 
     return headers;
@@ -46,7 +45,7 @@ export class ApiService {
 
   createMailBox(): Observable<RegisterModel> {
     return defer(() => {
-      const url = `https://api.minutemail.co/v2/mailbox/create`;
+      const url = `${this.baseUrl}/mailbox/create`;
       const headers = this.prepareRequestHeaders();
       return this.http.post<RegisterModel>(url,  {source: 'web'}, { headers })
     }).pipe(catchError(this.handleError));
