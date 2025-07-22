@@ -1,30 +1,35 @@
-# 1. Build Stage
+# ------------------
+# 1) Build Stage
+# ------------------
 FROM node:22 AS builder
 
 WORKDIR /app
 
-# Copy package files and install dependencies
-COPY package.json package-lock.json ./
+# Copy package files first so Docker can cache installs
+COPY package*.json ./
+
+# Install dependencies (honor exact versions from package-lock.json)
 RUN npm ci --legacy-peer-deps
 
-# Copy the rest of the app and build
+# Copy the rest of the source code
 COPY . .
 RUN mv src/index-prod.html src/index.html
-RUN npm run build
 
-# 2. Runtime Stage
+# Build the SSR output
+RUN npm run build:ssr
+
+# ------------------
+# 2) Runtime Stage
+# ------------------
 FROM node:22 AS runner
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
-# Install static file server globally
-RUN npm install -g http-server
+# Copy build artifacts from builder image
+COPY --from=builder /app/dist /usr/src/app/dist
 
-# Copy the built Angular browser files
-COPY --from=builder /app/dist/minutemail-web/browser ./dist
+# Expose the port on which your SSR server runs (commonly 4000)
+EXPOSE 8080
 
-# Expose Angular port
-EXPOSE 4200
-
-# Start the server
-CMD ["http-server", "dist", "-p", "4200"]
+# Launch the SSR server
+CMD ["node", "dist/minutemail-web/server/server.mjs"]
