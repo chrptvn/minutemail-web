@@ -1,30 +1,29 @@
-# 1) Build Stage
+# 1. Build Stage
 FROM node:22 AS builder
 
 WORKDIR /app
 
-# Copy package files
-COPY package.json ./
-COPY package-lock.json ./
-
-# Install dependencies
+# Copy package files and install dependencies
+COPY package.json package-lock.json ./
 RUN npm ci --legacy-peer-deps
 
-# Copy the rest of the source code
+# Copy the rest of the app and build
 COPY . .
-
-# Build the Angular app (only browser target)
 RUN npm run build
 
-# 2) Runtime Stage (using NGINX to serve static files)
-FROM nginx:stable-alpine AS runner
+# 2. Runtime Stage
+FROM node:22 AS runner
 
-# Copy build output to NGINX's html directory
-COPY --from=builder /app/dist/minutemail-web/browser /usr/share/nginx/html
+WORKDIR /app
 
-# Optional: Replace default nginx config with custom one
-# COPY nginx.conf /etc/nginx/nginx.conf
+# Install static file server globally
+RUN npm install -g http-server
 
-EXPOSE 80
+# Copy the built Angular browser files
+COPY --from=builder /app/dist/minutemail-web/browser ./dist
 
-CMD ["nginx", "-g", "daemon off;"]
+# Expose Angular port
+EXPOSE 4200
+
+# Start the server
+CMD ["http-server", "dist", "-p", "4200"]
