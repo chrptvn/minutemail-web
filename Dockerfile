@@ -9,6 +9,7 @@ RUN npm ci --legacy-peer-deps
 
 # Copy the rest of the app and build
 COPY . .
+RUN mv src/index-prod.html src/index.html
 RUN npm run build
 
 # 2. Runtime Stage
