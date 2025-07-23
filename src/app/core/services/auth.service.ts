@@ -46,7 +46,7 @@ export class AuthService {
         onLoad: 'check-sso',
         silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
         silentCheckSso: true,
-        checkLoginIframe: false,
+        checkLoginIframe: true,
         silentCheckSsoFallback: false,
         pkceMethod: 'S256',
         enableLogging: false,
