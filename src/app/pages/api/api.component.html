@@ -27,7 +27,7 @@
           <section class="mb-8">
             <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Authentication</h2>
             <p class="text-gray-700 dark:text-gray-300 mb-4">
-              The MinuteMail API uses <strong>Bearer token authentication</strong> for secure access to protected endpoints.
+              The MinuteMail API uses <strong>Bearer API key authentication</strong> for secure access to all endpoints.
             </p>
 
             <div class="space-y-4">
@@ -36,7 +36,7 @@
                 <ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-1">
                   <li><strong>Header:</strong> <code>Authorization</code></li>
                   <li><strong>Value:</strong> <code>Bearer YOUR_API_KEY</code></li>
-                  <li><strong>Required:</strong> For all authenticated endpoints</li>
+                  <li><strong>Required:</strong> For all API endpoints</li>
                 </ul>
                 <pre class="mt-2 bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-scroll"><code>Authorization: Bearer your_api_key_here</code></pre>
               </div>
@@ -54,7 +54,7 @@
 
             <div class="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
               <p class="text-sm text-blue-800 dark:text-blue-200">
-                <strong>Note:</strong> You can obtain API keys from your MinuteMail account dashboard. The X-Mailbox-Password header is optional and only needed if you set a password when creating the mailbox.
+                <strong>Note:</strong> API keys are required for all endpoints and can be obtained from your MinuteMail account dashboard. The X-Mailbox-Password header is optional and only needed if you set a password when creating the mailbox.
               </p>
             </div>
           </section>
@@ -111,12 +111,12 @@
                       <tbody class="divide-y divide-gray-200 dark:divide-dark-700">
                         <tr>
                           <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">Authorization</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Optional</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Bearer token for authenticated access</td>
+                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Yes</td>
+                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Bearer API key for authentication</td>
                         </tr>
                         <tr>
                           <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">X-Mailbox-Password</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Optional</td>
+                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">No</td>
                           <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Custom password for the mailbox</td>
                         </tr>
                       </tbody>
@@ -396,12 +396,12 @@
                     </table>
                   </div>
                 </div>
-
-                <div>
+                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Yes</td>
+                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Bearer API key for authentication</td>
                   <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">Response (HTTP 200):</h4>
                   <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-scroll"><code>&#123;
   "message": "Mailbox deleted"
-&#125;</code></pre>
+                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">No</td>
                 </div>
               </div>
             </div>
@@ -422,12 +422,12 @@
                   <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">URL Path Parameters:</h4>
                   <div class="overflow-scroll">
                     <table class="min-w-full border border-gray-200 dark:border-dark-700 rounded">
-                      <thead class="bg-gray-50 dark:bg-dark-800">
-                        <tr>
+                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Yes</td>
+                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Bearer API key for authentication</td>
                           <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Name</th>
                           <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Type</th>
                           <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Description</th>
-                        </tr>
+                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">No</td>
                       </thead>
                       <tbody class="divide-y divide-gray-200 dark:divide-dark-700">
                         <tr>
@@ -448,12 +448,12 @@
                 <div>
                   <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">Headers:</h4>
                   <div class="overflow-scroll">
-                    <table class="min-w-full border border-gray-200 dark:border-dark-700 rounded">
-                      <thead class="bg-gray-50 dark:bg-dark-800">
+                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Yes</td>
+                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Bearer API key for authentication</td>
                         <tr>
                           <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Header</th>
                           <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Required</th>
-                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Description</th>
+                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">No</td>
                         </tr>
                       </thead>
                       <tbody class="divide-y divide-gray-200 dark:divide-dark-700">
@@ -474,12 +474,12 @@
 
                 <div>
                   <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">Response (HTTP 200):</h4>
-                  <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-scroll"><code>&#123;
-  "message": "Mail deleted"
+                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Yes</td>
+                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Bearer API key for authentication</td>
 &#125;</code></pre>
                 </div>
               </div>
-            </div>
+                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">No</td>
           </section>
 
           <!-- Usage Examples Section -->
@@ -488,7 +488,7 @@
 
             <div class="space-y-4">
               <div>
-                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">1. Create a mailbox with password (authenticated)</h3>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">1. Create a mailbox with password</h3>
                 <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-scroll"><code>curl -X POST https://api.minutemail.co/v1/mailbox/create \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer your_api_key_here" \
@@ -496,22 +496,24 @@
               </div>
 
               <div>
-                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">2. Create a mailbox without authentication</h3>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">2. Create a mailbox without password</h3>
                 <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-scroll"><code>curl -X POST https://api.minutemail.co/v1/mailbox/create \
   -H "Content-Type: application/json" \
+  -H "Authorization: Bearer your_api_key_here" \
   -d '&#123; "source": "api" &#125;'</code></pre>
               </div>
 
               <div>
-                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">3. Fetch all mails (with API key and mailbox password)</h3>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">3. Fetch all mails (with mailbox password)</h3>
                 <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-scroll"><code>curl https://api.minutemail.co/v1/mailbox/q9x2k8 \
   -H "Authorization: Bearer your_api_key_here" \
   -H "X-Mailbox-Password: hunter2"</code></pre>
               </div>
 
               <div>
-                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">4. Fetch all mails (without authentication)</h3>
-                <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-scroll"><code>curl https://api.minutemail.co/v1/mailbox/q9x2k8</code></pre>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">4. Fetch all mails (without mailbox password)</h3>
+                <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-scroll"><code>curl https://api.minutemail.co/v1/mailbox/q9x2k8 \
+  -H "Authorization: Bearer your_api_key_here"</code></pre>
               </div>
 
               <div>
@@ -561,12 +563,12 @@
             <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Getting API Keys</h2>
             <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
               <p class="text-sm text-blue-800 dark:text-blue-200 mb-3">
-                <strong>API keys are optional</strong> but provide enhanced functionality and rate limits. To obtain an API key:
+                <strong>API keys are required</strong> for all API endpoints. To obtain an API key:
               </p>
               <ol class="list-decimal pl-6 text-sm text-blue-800 dark:text-blue-200 space-y-1">
                 <li>Sign up for a MinuteMail account</li>
                 <li>Navigate to the API Keys section in your dashboard</li>
-                <li>Create a new API key with appropriate permissions</li>
+                <li>Create a new API key</li>
                 <li>Use the key in the Authorization header as shown in the examples above</li>
               </ol>
             </div>
