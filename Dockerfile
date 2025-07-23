@@ -29,7 +29,7 @@ WORKDIR /usr/src/app
 COPY --from=builder /app/dist /usr/src/app/dist
 
 # Expose the port on which your SSR server runs (commonly 4000)
-EXPOSE 8080
+EXPOSE 4000
 
 # Launch the SSR server
 CMD ["node", "dist/minutemail-web/server/server.mjs"]
