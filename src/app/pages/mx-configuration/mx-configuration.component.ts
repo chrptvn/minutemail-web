@@ -28,7 +28,7 @@ export class MxConfigurationComponent implements OnInit {
     },
     {
       question: "Will I need to update this later?",
-      answer: "If we add extra inbound hosts (mx2.minutemail.co, etc.) for redundancy, we'll let you know. You'll simply add another MX record with a higher priority number."
+      answer: "If we add extra inbound hosts (smtp2.minutemail.co, etc.) for redundancy, we'll let you know. You'll simply add another MX record with a higher priority number."
     }
   ];
 

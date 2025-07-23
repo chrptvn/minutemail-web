@@ -27,16 +27,16 @@
           <section class="mb-8">
             <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Authentication</h2>
             <p class="text-gray-700 dark:text-gray-300 mb-4">
-              The MinuteMail API uses <strong>Bearer API key authentication</strong> for secure access to all endpoints.
+              The MinuteMail API uses <strong>API KEY</strong> to access public endpoints.
             </p>
 
             <div class="space-y-4">
               <div class="bg-gray-50 dark:bg-dark-800 p-4 rounded-lg border border-gray-200 dark:border-dark-700">
                 <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">API Key Authentication</h3>
                 <ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-1">
-                  <li><strong>Header:</strong> <code>Authorization</code></li>
-                  <li><strong>Value:</strong> <code>Bearer YOUR_API_KEY</code></li>
-                  <li><strong>Required:</strong> For all API endpoints</li>
+                  <li><strong>Header: </strong><code>Authorization</code></li>
+                  <li><strong>Value: </strong><code>Bearer YOUR_API_KEY</code></li>
+                  <li><strong>Required: </strong>Yes</li>
                 </ul>
                 <pre class="mt-2 bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-scroll"><code>Authorization: Bearer your_api_key_here</code></pre>
               </div>
@@ -44,9 +44,9 @@
               <div class="bg-gray-50 dark:bg-dark-800 p-4 rounded-lg border border-gray-200 dark:border-dark-700">
                 <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">Optional Mailbox Password</h3>
                 <ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-1">
-                  <li><strong>Header:</strong> <code>X-Mailbox-Password</code></li>
-                  <li><strong>Value:</strong> Your mailbox password (if set during creation)</li>
-                  <li><strong>Required:</strong> Only if the mailbox was created with a password</li>
+                  <li><strong>Header: </strong><code>X-Mailbox-Password</code></li>
+                  <li><strong>Value: </strong>Your mailbox password (if set during creation)</li>
+                  <li><strong>Required: </strong>Only if the mailbox was created with a password</li>
                 </ul>
                 <pre class="mt-2 bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-scroll"><code>X-Mailbox-Password: your_mailbox_password</code></pre>
               </div>
@@ -54,7 +54,7 @@
 
             <div class="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
               <p class="text-sm text-blue-800 dark:text-blue-200">
-                <strong>Note:</strong> API keys are required for all endpoints and can be obtained from your MinuteMail account dashboard. The X-Mailbox-Password header is optional and only needed if you set a password when creating the mailbox.
+                <strong>Note: </strong>You can obtain API keys from your MinuteMail profile menu.
               </p>
             </div>
           </section>
@@ -70,13 +70,13 @@
   "subject": "Welcome!",
   "body": "Hello there…",
   "received_at": "2025-07-02T14:23:45.123456+00:00",
-  "attachments": []
+  "attachments": ['myattachment.jpg']
 &#125;</code></pre>
 
             <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3 mt-6">Mailbox Creation Request</h3>
             <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-scroll"><code>&#123;
   "password": "optional_password",
-  "host": "optional_host",
+  "host": "yourhost.com",
   "source": "api"
 &#125;</code></pre>
           </section>
@@ -102,23 +102,23 @@
                   <div class="overflow-scroll">
                     <table class="min-w-full border border-gray-200 dark:border-dark-700 rounded">
                       <thead class="bg-gray-50 dark:bg-dark-800">
-                        <tr>
-                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Header</th>
-                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Required</th>
-                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Description</th>
-                        </tr>
+                      <tr>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Header</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Required</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Description</th>
+                      </tr>
                       </thead>
                       <tbody class="divide-y divide-gray-200 dark:divide-dark-700">
-                        <tr>
-                          <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">Authorization</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Yes</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Bearer API key for authentication</td>
-                        </tr>
-                        <tr>
-                          <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">X-Mailbox-Password</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">No</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Custom password for the mailbox</td>
-                        </tr>
+                      <tr>
+                        <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">Authorization</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Yes</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Your API Key</td>
+                      </tr>
+                      <tr>
+                        <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">X-Mailbox-Password</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Optional</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Custom password for the mailbox</td>
+                      </tr>
                       </tbody>
                     </table>
                   </div>
@@ -129,32 +129,32 @@
                   <div class="overflow-scroll">
                     <table class="min-w-full border border-gray-200 dark:border-dark-700 rounded">
                       <thead class="bg-gray-50 dark:bg-dark-800">
-                        <tr>
-                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Field</th>
-                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Type</th>
-                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Required</th>
-                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Description</th>
-                        </tr>
+                      <tr>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Field</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Type</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Required</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Description</th>
+                      </tr>
                       </thead>
                       <tbody class="divide-y divide-gray-200 dark:divide-dark-700">
-                        <tr>
-                          <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">password</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">string</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">No</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Optional mailbox password (plain text)</td>
-                        </tr>
-                        <tr>
-                          <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">host</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">string</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">No</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Optional host specification</td>
-                        </tr>
-                        <tr>
-                          <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">source</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">string</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">No</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Source identifier (defaults to "api")</td>
-                        </tr>
+                      <tr>
+                        <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">password</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">string</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">No</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Optional mailbox password (plain text)</td>
+                      </tr>
+                      <tr>
+                        <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">host</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">string</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">No</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Optional host specification</td>
+                      </tr>
+                      <tr>
+                        <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">source</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">string</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">No</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Source identifier (defaults to "api")</td>
+                      </tr>
                       </tbody>
                     </table>
                   </div>
@@ -163,8 +163,9 @@
                 <div>
                   <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">Response (HTTP 200):</h4>
                   <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-3 rounded text-sm overflow-scroll"><code>&#123;
-  "message": "Mailbox created",
   "name": "friendly-pear-shaped-cougar-191",
+  "host": "yourhost.com",
+  "email": "friendly-pear-shaped-cougar-191&#64;yourhost.com",
   "ttl": 3600
 &#125;</code></pre>
                 </div>
@@ -188,18 +189,18 @@
                   <div class="overflow-scroll">
                     <table class="min-w-full border border-gray-200 dark:border-dark-700 rounded">
                       <thead class="bg-gray-50 dark:bg-dark-800">
-                        <tr>
-                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Name</th>
-                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Type</th>
-                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Description</th>
-                        </tr>
+                      <tr>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Name</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Type</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Description</th>
+                      </tr>
                       </thead>
                       <tbody class="divide-y divide-gray-200 dark:divide-dark-700">
-                        <tr>
-                          <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">name</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">string</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Mailbox identifier (from creation)</td>
-                        </tr>
+                      <tr>
+                        <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">name</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">string</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Mailbox identifier (from creation)</td>
+                      </tr>
                       </tbody>
                     </table>
                   </div>
@@ -210,23 +211,23 @@
                   <div class="overflow-scroll">
                     <table class="min-w-full border border-gray-200 dark:border-dark-700 rounded">
                       <thead class="bg-gray-50 dark:bg-dark-800">
-                        <tr>
-                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Header</th>
-                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Required</th>
-                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Description</th>
-                        </tr>
+                      <tr>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Header</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Required</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Description</th>
+                      </tr>
                       </thead>
                       <tbody class="divide-y divide-gray-200 dark:divide-dark-700">
-                        <tr>
-                          <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">Authorization</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Optional</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Bearer token for authenticated access</td>
-                        </tr>
-                        <tr>
-                          <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">X-Mailbox-Password</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Optional</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Mailbox password (if set during creation)</td>
-                        </tr>
+                      <tr>
+                        <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">Authorization</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Yes</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Your API Key</td>
+                      </tr>
+                      <tr>
+                        <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">X-Mailbox-Password</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Optional</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Mailbox password (if set during creation)</td>
+                      </tr>
                       </tbody>
                     </table>
                   </div>
@@ -263,28 +264,28 @@
                   <div class="overflow-scroll">
                     <table class="min-w-full border border-gray-200 dark:border-dark-700 rounded">
                       <thead class="bg-gray-50 dark:bg-dark-800">
-                        <tr>
-                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Name</th>
-                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Type</th>
-                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Description</th>
-                        </tr>
+                      <tr>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Name</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Type</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Description</th>
+                      </tr>
                       </thead>
                       <tbody class="divide-y divide-gray-200 dark:divide-dark-700">
-                        <tr>
-                          <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">name</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">string</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Mailbox identifier</td>
-                        </tr>
-                        <tr>
-                          <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">mail_id</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">string</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300"><code>id</code> field of the mail containing the attachment</td>
-                        </tr>
-                        <tr>
-                          <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">filename</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">string</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Name of the attachment file to download</td>
-                        </tr>
+                      <tr>
+                        <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">name</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">string</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Mailbox identifier</td>
+                      </tr>
+                      <tr>
+                        <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">mail_id</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">string</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300"><code>id</code> field of the mail containing the attachment</td>
+                      </tr>
+                      <tr>
+                        <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">filename</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">string</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Name of the attachment file to download</td>
+                      </tr>
                       </tbody>
                     </table>
                   </div>
@@ -295,23 +296,23 @@
                   <div class="overflow-scroll">
                     <table class="min-w-full border border-gray-200 dark:border-dark-700 rounded">
                       <thead class="bg-gray-50 dark:bg-dark-800">
-                        <tr>
-                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Header</th>
-                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Required</th>
-                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Description</th>
-                        </tr>
+                      <tr>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Header</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Required</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Description</th>
+                      </tr>
                       </thead>
                       <tbody class="divide-y divide-gray-200 dark:divide-dark-700">
-                        <tr>
-                          <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">Authorization</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Optional</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Bearer token for authenticated access</td>
-                        </tr>
-                        <tr>
-                          <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">X-Mailbox-Password</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Optional</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Mailbox password (if set during creation)</td>
-                        </tr>
+                      <tr>
+                        <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">Authorization</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Yes</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Your API Key</td>
+                      </tr>
+                      <tr>
+                        <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">X-Mailbox-Password</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Optional</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Mailbox password (if set during creation)</td>
+                      </tr>
                       </tbody>
                     </table>
                   </div>
@@ -353,18 +354,18 @@
                   <div class="overflow-scroll">
                     <table class="min-w-full border border-gray-200 dark:border-dark-700 rounded">
                       <thead class="bg-gray-50 dark:bg-dark-800">
-                        <tr>
-                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Name</th>
-                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Type</th>
-                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Description</th>
-                        </tr>
+                      <tr>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Name</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Type</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Description</th>
+                      </tr>
                       </thead>
                       <tbody class="divide-y divide-gray-200 dark:divide-dark-700">
-                        <tr>
-                          <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">name</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">string</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Mailbox identifier</td>
-                        </tr>
+                      <tr>
+                        <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">name</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">string</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Mailbox identifier</td>
+                      </tr>
                       </tbody>
                     </table>
                   </div>
@@ -375,23 +376,23 @@
                   <div class="overflow-scroll">
                     <table class="min-w-full border border-gray-200 dark:border-dark-700 rounded">
                       <thead class="bg-gray-50 dark:bg-dark-800">
-                        <tr>
-                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Header</th>
-                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Required</th>
-                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Description</th>
-                        </tr>
+                      <tr>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Header</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Required</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Description</th>
+                      </tr>
                       </thead>
                       <tbody class="divide-y divide-gray-200 dark:divide-dark-700">
-                        <tr>
-                          <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">Authorization</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Optional</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Bearer token for authenticated access</td>
-                        </tr>
-                        <tr>
-                          <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">X-Mailbox-Password</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Optional</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Mailbox password (if set during creation)</td>
-                        </tr>
+                      <tr>
+                        <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">Authorization</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Yes</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Your API Key</td>
+                      </tr>
+                      <tr>
+                        <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">X-Mailbox-Password</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Optional</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Mailbox password (if set during creation)</td>
+                      </tr>
                       </tbody>
                     </table>
                   </div>
@@ -403,6 +404,7 @@
   "message": "Mailbox deleted"
 &#125;</code></pre>
                 </div>
+              </div>
             </div>
 
             <!-- Delete Single Mail -->
@@ -421,21 +423,24 @@
                   <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-2">URL Path Parameters:</h4>
                   <div class="overflow-scroll">
                     <table class="min-w-full border border-gray-200 dark:border-dark-700 rounded">
-                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Name</th>
-                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Type</th>
-                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Description</th>
+                      <thead class="bg-gray-50 dark:bg-dark-800">
+                      <tr>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Name</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Type</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Description</th>
+                      </tr>
                       </thead>
                       <tbody class="divide-y divide-gray-200 dark:divide-dark-700">
-                        <tr>
-                          <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">name</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">string</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Mailbox identifier</td>
-                        </tr>
-                        <tr>
-                          <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">mail_id</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">string</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300"><code>id</code> field of the mail to remove</td>
-                        </tr>
+                      <tr>
+                        <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">name</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">string</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Mailbox identifier</td>
+                      </tr>
+                      <tr>
+                        <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">mail_id</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">string</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300"><code>id</code> field of the mail to remove</td>
+                      </tr>
                       </tbody>
                     </table>
                   </div>
@@ -446,23 +451,23 @@
                   <div class="overflow-scroll">
                     <table class="min-w-full border border-gray-200 dark:border-dark-700 rounded">
                       <thead class="bg-gray-50 dark:bg-dark-800">
-                        <tr>
-                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Header</th>
-                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Required</th>
-                          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Description</th>
-                        </tr>
+                      <tr>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Header</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Required</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Description</th>
+                      </tr>
                       </thead>
                       <tbody class="divide-y divide-gray-200 dark:divide-dark-700">
-                        <tr>
-                          <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">Authorization</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Optional</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Bearer token for authenticated access</td>
-                        </tr>
-                        <tr>
-                          <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">X-Mailbox-Password</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Optional</td>
-                          <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Mailbox password (if set during creation)</td>
-                        </tr>
+                      <tr>
+                        <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">Authorization</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Yes</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Your API Key</td>
+                      </tr>
+                      <tr>
+                        <td class="px-4 py-2 text-sm font-mono text-gray-900 dark:text-gray-100">X-Mailbox-Password</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Optional</td>
+                        <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">Mailbox password (if set during creation)</td>
+                      </tr>
                       </tbody>
                     </table>
                   </div>
@@ -475,6 +480,7 @@
 &#125;</code></pre>
                 </div>
               </div>
+            </div>
           </section>
 
           <!-- Usage Examples Section -->
@@ -487,32 +493,18 @@
                 <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-scroll"><code>curl -X POST https://api.minutemail.co/v1/mailbox/create \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer your_api_key_here" \
-  -d '&#123; "password": "hunter2", "source": "api" &#125;'</code></pre>
+  -d '&#123; "password": "hunter2" &#125;'</code></pre>
               </div>
 
               <div>
-                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">2. Create a mailbox without password</h3>
-                <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-scroll"><code>curl -X POST https://api.minutemail.co/v1/mailbox/create \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer your_api_key_here" \
-  -d '&#123; "source": "api" &#125;'</code></pre>
-              </div>
-
-              <div>
-                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">3. Fetch all mails (with mailbox password)</h3>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">2. Fetch all mails</h3>
                 <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-scroll"><code>curl https://api.minutemail.co/v1/mailbox/q9x2k8 \
   -H "Authorization: Bearer your_api_key_here" \
   -H "X-Mailbox-Password: hunter2"</code></pre>
               </div>
 
               <div>
-                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">4. Fetch all mails (without mailbox password)</h3>
-                <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-scroll"><code>curl https://api.minutemail.co/v1/mailbox/q9x2k8 \
-  -H "Authorization: Bearer your_api_key_here"</code></pre>
-              </div>
-
-              <div>
-                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">5. Download an attachment</h3>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">3. Download an attachment</h3>
                 <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-scroll"><code>curl https://api.minutemail.co/v1/mailbox/q9x2k8/mail/4f8b1a2e3c9d4f5a8b7c6d0e1f2a3b4c/attachment/document.pdf \
   -H "Authorization: Bearer your_api_key_here" \
   -H "X-Mailbox-Password: hunter2" \
@@ -520,14 +512,14 @@
               </div>
 
               <div>
-                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">6. Delete a single mail</h3>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">4. Delete a single mail</h3>
                 <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-scroll"><code>curl -X DELETE https://api.minutemail.co/v1/mailbox/q9x2k8/mail/4f8b1a2e3c9d4f5a8b7c6d0e1f2a3b4c \
   -H "Authorization: Bearer your_api_key_here" \
   -H "X-Mailbox-Password: hunter2"</code></pre>
               </div>
 
               <div>
-                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">7. Delete entire mailbox</h3>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">5. Delete entire mailbox</h3>
                 <pre class="bg-gray-900 dark:bg-dark-950 text-green-400 p-4 rounded text-sm overflow-scroll"><code>curl -X DELETE https://api.minutemail.co/v1/mailbox/q9x2k8 \
   -H "Authorization: Bearer your_api_key_here" \
   -H "X-Mailbox-Password: hunter2"</code></pre>
@@ -558,12 +550,12 @@
             <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Getting API Keys</h2>
             <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
               <p class="text-sm text-blue-800 dark:text-blue-200 mb-3">
-                <strong>API keys are required</strong> for all API endpoints. To obtain an API key:
+                To obtain an API key:
               </p>
               <ol class="list-decimal pl-6 text-sm text-blue-800 dark:text-blue-200 space-y-1">
                 <li>Sign up for a MinuteMail account</li>
                 <li>Navigate to the API Keys section in your dashboard</li>
-                <li>Create a new API key</li>
+                <li>Create a new API key with appropriate permissions</li>
                 <li>Use the key in the Authorization header as shown in the examples above</li>
               </ol>
             </div>
