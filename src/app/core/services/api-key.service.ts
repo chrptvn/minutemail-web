@@ -1,6 +1,7 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { KeycloakService } from 'keycloak-angular';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
@@ -31,10 +32,10 @@ export class ApiKeyService {
           if (token) {
             headers = headers.set('Authorization', `Bearer ${token}`);
           }
-              } catch (error) {
+        }
+      } catch (error) {
         // Silently fail - will result in 401 if auth is required
       }
-          }
     }
 
     return headers;

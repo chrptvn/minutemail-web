@@ -105,7 +105,7 @@ export class ProfileMenuComponent implements OnInit {
     }
 
     try {
-      await this.keycloak.logout(window.location.origin);
+      await this.keycloakService.logout(window.location.origin);
     } catch (error) {
       console.error('Logout error:', error);
       // Fallback: clear local state and redirect
