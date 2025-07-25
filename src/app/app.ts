@@ -21,33 +21,61 @@ export class App implements OnInit {
 
   async ngOnInit() {
     if (!this.isBrowser) {
-      return; // Skip Keycloak setup on server
+      console.log('App: Not in browser, skipping Keycloak setup');
+      return;
     }
 
-    try {
-      // Wait for Keycloak initialization to complete
-      await new Promise(resolve => setTimeout(resolve, 1000));
+    console.log('App: Starting Keycloak setup...');
+    
+    // Check if we just completed authentication
+    const urlParams = new URLSearchParams(window.location.search);
+    const hasAuthParams = urlParams.has('code') && urlParams.has('state');
+    
+    if (hasAuthParams) {
+      console.log('App: Authentication flow detected, waiting for completion...');
       
-      // Make Keycloak service available globally for token access
-      (window as any).keycloakService = this.keycloakService;
-      console.log('Keycloak service made available globally');
-      
-      // Check if we just completed authentication
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.has('code') && urlParams.has('state')) {
-        console.log('Authentication flow completed, checking login status...');
-        // Give Keycloak time to process the authentication
-        setTimeout(async () => {
-          try {
-            const isLoggedIn = await this.keycloakService.isLoggedIn();
-            console.log('Post-auth login status:', isLoggedIn);
-          } catch (error) {
-            console.warn('Error checking post-auth status:', error);
+      // Wait longer for authentication to complete
+      setTimeout(async () => {
+        try {
+          const isLoggedIn = await this.keycloakService.isLoggedIn();
+          console.log('App: Post-auth login status:', isLoggedIn);
+          
+          if (isLoggedIn) {
+            console.log('App: Authentication successful!');
+            const token = this.keycloakService.getToken();
+            console.log('App: Token available:', !!token);
+            
+            // Try to load user profile
+            try {
+              const userProfile = await this.keycloakService.loadUserProfile();
+              console.log('App: User profile:', userProfile);
+            } catch (error) {
+              console.warn('App: Could not load user profile:', error);
+            }
           }
-        }, 2000);
-      }
+        } catch (error) {
+          console.error('App: Error checking post-auth status:', error);
+        }
+      }, 3000); // Wait 3 seconds for auth to complete
+    }
+
+    // Make Keycloak service available globally for debugging
+    try {
+      (window as any).keycloakService = this.keycloakService;
+      (window as any).checkAuth = async () => {
+        try {
+          const isLoggedIn = await this.keycloakService.isLoggedIn();
+          const token = this.keycloakService.getToken();
+          console.log('Manual auth check - Logged in:', isLoggedIn, 'Token:', !!token);
+          return { isLoggedIn, hasToken: !!token };
+        } catch (error) {
+          console.error('Manual auth check failed:', error);
+          return { error };
+        }
+      };
+      console.log('App: Keycloak service and checkAuth() function available globally for debugging');
     } catch (error) {
-      console.warn('Error setting up Keycloak service globally:', error);
+      console.warn('App: Error setting up global Keycloak access:', error);
     }
   }
 }

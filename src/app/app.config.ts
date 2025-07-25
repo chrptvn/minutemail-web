@@ -8,8 +8,10 @@ import { routes } from './app.routes';
 
 // Keycloak initialization function
 function initializeKeycloak(keycloak: KeycloakService) {
-  return () =>
-    keycloak.init({
+  return () => {
+    console.log('Starting Keycloak initialization...');
+    
+    return keycloak.init({
       config: {
         url: 'https://keycloak.minutemail.co',
         realm: 'minutemail',
@@ -20,23 +22,29 @@ function initializeKeycloak(keycloak: KeycloakService) {
         silentCheckSsoRedirectUri: typeof window !== 'undefined' ? window.location.origin + '/silent-check-sso.html' : undefined,
         checkLoginIframe: false,
         pkceMethod: 'S256',
-        enableLogging: false,
-        flow: 'standard',
-        // Handle URL cleanup after authentication
-        checkLoginIframeInterval: 5
+        enableLogging: true, // Enable logging for debugging
+        flow: 'standard'
       },
-      // Add bearer excluded URLs to avoid token issues
       bearerExcludedUrls: ['/assets', '/silent-check-sso.html']
-    }).then(() => {
+    }).then((authenticated) => {
+      console.log('Keycloak initialization completed. Authenticated:', authenticated);
+      
       // Clean up URL after successful authentication
       if (typeof window !== 'undefined' && window.location.search.includes('state=') && window.location.search.includes('code=')) {
+        console.log('Cleaning up authentication URL parameters...');
         const url = new URL(window.location.href);
         url.searchParams.delete('state');
         url.searchParams.delete('session_state');
         url.searchParams.delete('code');
         window.history.replaceState({}, document.title, url.toString());
       }
+      
+      return authenticated;
+    }).catch((error) => {
+      console.error('Keycloak initialization failed:', error);
+      throw error;
     });
+  };
 }
 
 export const appConfig: ApplicationConfig = {
@@ -45,10 +53,8 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withFetch()),
     provideAnimations(),
-    // Remove client hydration since we're not doing SSR
-    // provideClientHydration(withEventReplay()),
     
-    // Provide KeycloakService explicitly
+    // Provide KeycloakService
     KeycloakService,
     
     // Initialize Keycloak
