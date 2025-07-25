@@ -24,28 +24,16 @@ export class DomainService {
     let headers = new HttpHeaders();
 
     if (this.isBrowser) {
-      // Try to get token from Keycloak service if available
       try {
         const keycloakService = (window as any).keycloakService;
-        if (keycloakService && keycloakService.getToken) {
+        if (keycloakService && typeof keycloakService.getToken === 'function') {
           const token = keycloakService.getToken();
           if (token) {
             headers = headers.set('Authorization', `Bearer ${token}`);
           }
-        } else {
-          // Fallback to localStorage
-          const jwt = localStorage.getItem('kc_token');
-          if (jwt) {
-            headers = headers.set('Authorization', `Bearer ${jwt}`);
-          }
         }
       } catch (error) {
         console.warn('Error getting Keycloak token:', error);
-        // Fallback to localStorage
-        const jwt = localStorage.getItem('kc_token');
-      if (jwt) {
-        headers = headers.set('Authorization', `Bearer ${jwt}`);
-      }
       }
     }
 
