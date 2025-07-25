@@ -3,10 +3,30 @@
 <head>
     <title>Silent Check SSO</title>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
     <script>
-        parent.postMessage(location.href, location.origin);
+        try {
+            // Handle the silent SSO check
+            const urlParams = new URLSearchParams(window.location.search);
+            const error = urlParams.get('error');
+            
+            if (error) {
+                console.warn('Silent SSO error:', error);
+            }
+            
+            // Post message to parent window
+            if (window.parent && window.parent !== window) {
+                window.parent.postMessage(window.location.href, window.location.origin);
+            }
+        } catch (e) {
+            console.error('Silent SSO error:', e);
+            // Still try to post message even if there's an error
+            if (window.parent && window.parent !== window) {
+                window.parent.postMessage(window.location.href, window.location.origin);
+            }
+        }
     </script>
 </body>
 </html>

@@ -15,7 +15,8 @@ export class DomainService {
 
   constructor(
     private http: HttpClient,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private keycloakService: KeycloakService
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
@@ -25,15 +26,13 @@ export class DomainService {
 
     if (this.isBrowser) {
       try {
-        const keycloakService = (window as any).keycloakService;
-        if (keycloakService && typeof keycloakService.getToken === 'function') {
-          const token = keycloakService.getToken();
+        if (this.keycloakService) {
+          const token = this.keycloakService.getToken();
           if (token) {
             headers = headers.set('Authorization', `Bearer ${token}`);
           }
-        }
       } catch (error) {
-        console.warn('Error getting Keycloak token:', error);
+        // Silently fail - will result in 401 if auth is required
       }
     }
 

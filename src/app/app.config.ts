@@ -1,15 +1,15 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
+import { ApplicationConfig, provideZonelessChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { KeycloakService, provideKeycloak } from 'keycloak-angular';
+import { KeycloakService } from 'keycloak-angular';
 
 import { routes } from './app.routes';
-import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 
-export const appConfig: ApplicationConfig = {
-  providers: [
-    provideKeycloak({
+// Keycloak initialization function
+function initializeKeycloak(keycloak: KeycloakService) {
+  return () =>
+    keycloak.init({
       config: {
         url: 'https://keycloak.minutemail.co',
         realm: 'minutemail',
@@ -19,14 +19,34 @@ export const appConfig: ApplicationConfig = {
         onLoad: 'check-sso',
         silentCheckSsoRedirectUri: typeof window !== 'undefined' ? window.location.origin + '/silent-check-sso.html' : undefined,
         checkLoginIframe: false,
-        pkceMethod: 'S256'
-      }
-    }),
-    provideBrowserGlobalErrorListeners(),
+        pkceMethod: 'S256',
+        // Add cookie settings for cross-site compatibility
+        enableLogging: false,
+        flow: 'standard'
+      },
+      // Add bearer excluded URLs to avoid token issues
+      bearerExcludedUrls: ['/assets', '/silent-check-sso.html']
+    });
+}
+
+export const appConfig: ApplicationConfig = {
+  providers: [
     provideZonelessChangeDetection(),
     provideRouter(routes),
     provideHttpClient(withFetch()),
     provideAnimations(),
-    provideClientHydration(withEventReplay())
+    // Remove client hydration since we're not doing SSR
+    // provideClientHydration(withEventReplay()),
+    
+    // Provide KeycloakService explicitly
+    KeycloakService,
+    
+    // Initialize Keycloak
+    {
+      provide: 'APP_INITIALIZER',
+      useFactory: initializeKeycloak,
+      deps: [KeycloakService],
+      multi: true
+    }
   ]
 };

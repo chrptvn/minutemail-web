@@ -17,7 +17,8 @@ export class ApiService {
   constructor(
     private http: HttpClient,
     private sessionService: SessionService,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private keycloakService: KeycloakService
   ) {}
 
   private prepareRequestHeaders(): HttpHeaders {
@@ -28,15 +29,15 @@ export class ApiService {
     // Add Keycloak token if available (browser only)
     if (isPlatformBrowser(this.platformId)) {
       try {
-        const keycloakService = (window as any).keycloakService;
-        if (keycloakService && typeof keycloakService.getToken === 'function') {
-          const token = keycloakService.getToken();
+        // Try to get token from Keycloak service
+        if (this.keycloakService) {
+          const token = this.keycloakService.getToken();
           if (token) {
             headers = headers.set('Authorization', `Bearer ${token}`);
           }
         }
       } catch (error) {
-        console.warn('Error getting Keycloak token:', error);
+        // Silently fail - token is optional for most endpoints
       }
     }
 

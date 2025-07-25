@@ -1,5 +1,5 @@
-import { Component, signal, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, signal, inject, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { TablerIconComponent } from '../icons/tabler-icons.component';
 import { ButtonComponent } from '../ui/button.component';
@@ -15,20 +15,35 @@ import { KeycloakService } from 'keycloak-angular';
 export class ProfileMenuComponent implements OnInit {
   isOpen = signal(false);
   keycloakReady = signal(false);
+  isAuthenticated = signal(false);
   
   private router = inject(Router);
   private keycloakService = inject(KeycloakService);
+  private isBrowser: boolean;
 
-  constructor() {}
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+  }
 
   async ngOnInit() {
+    if (!this.isBrowser) {
+      return; // Skip Keycloak initialization on server
+    }
+
     try {
-      // Wait for Keycloak to be ready
-      await this.keycloakService.isLoggedIn();
+      // Wait a bit for Keycloak to initialize
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      // Check if Keycloak is ready
+      const isLoggedIn = await this.keycloakService.isLoggedIn();
+      this.isAuthenticated.set(isLoggedIn);
       this.keycloakReady.set(true);
+      
+      console.log('Keycloak initialized successfully, logged in:', isLoggedIn);
     } catch (error) {
       console.warn('Keycloak initialization error:', error);
       this.keycloakReady.set(false);
+      this.isAuthenticated.set(false);
     }
   }
 
@@ -36,58 +51,68 @@ export class ProfileMenuComponent implements OnInit {
     this.isOpen.update(current => !current);
   }
 
-  isAuthenticated() {
-    try {
-      return this.keycloakReady() && this.keycloakService.isLoggedIn();
-    } catch (error) {
-      console.warn('Error checking authentication status:', error);
-      return false;
-    }
-  }
-
   closeMenu() {
     this.isOpen.set(false);
   }
 
   async login() {
+    if (!this.isBrowser || !this.keycloakReady()) {
+      console.warn('Keycloak not ready or not in browser');
+      return;
+    }
+
     try {
-      if (!this.keycloakReady()) {
-        console.warn('Keycloak not ready yet');
-        return;
-      }
       await this.keycloakService.login({
-        redirectUri: window.location.origin
+        redirectUri: window.location.origin,
+        // Add additional options for cross-site compatibility
+        scope: 'openid profile email'
       });
     } catch (error) {
       console.error('Login error:', error);
+      // Fallback: redirect to Keycloak login page directly
+      if (this.isBrowser) {
+        window.location.href = 'https://keycloak.minutemail.co/realms/minutemail/protocol/openid-connect/auth?client_id=minutemail-web&redirect_uri=' + encodeURIComponent(window.location.origin) + '&response_type=code&scope=openid';
+      }
     }
     this.closeMenu();
   }
 
   async register() {
+    if (!this.isBrowser || !this.keycloakReady()) {
+      console.warn('Keycloak not ready or not in browser');
+      return;
+    }
+
     try {
-      if (!this.keycloakReady()) {
-        console.warn('Keycloak not ready yet');
-        return;
-      }
       await this.keycloakService.register({
-        redirectUri: window.location.origin
+        redirectUri: window.location.origin,
+        scope: 'openid profile email'
       });
     } catch (error) {
       console.error('Register error:', error);
+      // Fallback: redirect to Keycloak registration page directly
+      if (this.isBrowser) {
+        window.location.href = 'https://keycloak.minutemail.co/realms/minutemail/protocol/openid-connect/registrations?client_id=minutemail-web&redirect_uri=' + encodeURIComponent(window.location.origin) + '&response_type=code&scope=openid';
+      }
     }
     this.closeMenu();
   }
 
   async logout() {
+    if (!this.isBrowser || !this.keycloakReady()) {
+      console.warn('Keycloak not ready or not in browser');
+      return;
+    }
+
     try {
-      if (!this.keycloakReady()) {
-        console.warn('Keycloak not ready yet');
-        return;
-      }
-      await this.keycloakService.logout(window.location.origin);
+      await this.keycloak.logout(window.location.origin);
     } catch (error) {
       console.error('Logout error:', error);
+      // Fallback: clear local state and redirect
+      if (this.isBrowser) {
+        this.isAuthenticated.set(false);
+        window.location.href = window.location.origin;
+      }
     }
     this.closeMenu();
   }
@@ -109,6 +134,8 @@ export class ProfileMenuComponent implements OnInit {
 
   // Close menu when clicking outside
   onDocumentClick(event: Event) {
+    if (!this.isBrowser) return;
+
     const target = event.target as HTMLElement;
     const menuElement = target.closest('.profile-menu');
 
