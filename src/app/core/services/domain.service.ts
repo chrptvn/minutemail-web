@@ -5,6 +5,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { Domain, DomainListResponse, AddDomainRequest, DeleteDomainResponse } from '../models/domain.model';
+import {KeycloakService} from 'keycloak-angular';
 
 @Injectable({
   providedIn: 'root'
@@ -25,16 +26,12 @@ export class DomainService {
     let headers = new HttpHeaders();
 
     if (this.isBrowser) {
-      try {
         if (this.keycloakService) {
           const token = this.keycloakService.getToken();
           if (token) {
             headers = headers.set('Authorization', `Bearer ${token}`);
           }
-              } catch (error) {
-        // Silently fail - will result in 401 if auth is required
-      }
-          }
+        }
     }
 
     return headers;
