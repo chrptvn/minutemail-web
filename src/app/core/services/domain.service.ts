@@ -1,37 +1,26 @@
-import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import {Injectable, inject} from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { Domain, DomainListResponse, AddDomainRequest, DeleteDomainResponse } from '../models/domain.model';
-import {KeycloakService} from 'keycloak-angular';
+import { Domain, AddDomainRequest, DeleteDomainResponse } from '../models/domain.model';
+import Keycloak from 'keycloak-js';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DomainService {
+  private readonly keycloak: Keycloak = inject(Keycloak);
   private readonly baseUrl = environment.apiBase;
-  private isBrowser: boolean;
-
-  constructor(
-    private http: HttpClient,
-    @Inject(PLATFORM_ID) private platformId: Object,
-    private keycloakService: KeycloakService
-  ) {
-    this.isBrowser = isPlatformBrowser(this.platformId);
-  }
+  private readonly http = inject(HttpClient);
 
   private getAuthHeaders(): HttpHeaders {
     let headers = new HttpHeaders();
-
-    if (this.isBrowser) {
-        if (this.keycloakService) {
-          const token = this.keycloakService.getToken();
-          if (token) {
-            headers = headers.set('Authorization', `Bearer ${token}`);
-          }
-        }
+    if (this.keycloak.authenticated) {
+      const token = this.keycloak.token;
+      if (token) {
+        headers = headers.set('Authorization', `Bearer ${token}`);
+      }
     }
 
     return headers;

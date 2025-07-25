@@ -1,44 +1,26 @@
-import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import {Injectable, inject} from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { isPlatformBrowser } from '@angular/common';
-import { KeycloakService } from 'keycloak-angular';
-import {defer, Observable, of, throwError} from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import {defer, Observable, throwError} from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { Mail, MailResponse } from '../models/mail.model';
+import { MailResponse } from '../models/mail.model';
 import {RegisterModel} from '../models/register.model';
-import { SessionService } from './session.service';
+import Keycloak from 'keycloak-js';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
+  private readonly keycloak: Keycloak = inject(Keycloak);
   private readonly baseUrl = environment.apiBase;
+  private readonly http = inject(HttpClient);
 
-  constructor(
-    private http: HttpClient,
-    private sessionService: SessionService,
-    @Inject(PLATFORM_ID) private platformId: Object,
-    private keycloakService: KeycloakService
-  ) {}
-
-  private prepareRequestHeaders(): HttpHeaders {
+  private getAuthHeaders(): HttpHeaders {
     let headers = new HttpHeaders();
-    const sessionId = this.sessionService.getOrCreateSessionId()
-    headers = headers.set('X-Mailbox-Password', sessionId);
-    
-    // Add Keycloak token if available (browser only)
-    if (isPlatformBrowser(this.platformId)) {
-      try {
-        // Try to get token from Keycloak service
-        if (this.keycloakService) {
-          const token = this.keycloakService.getToken();
-          if (token) {
-            headers = headers.set('Authorization', `Bearer ${token}`);
-          }
-        }
-      } catch (error) {
-        // Silently fail - token is optional for most endpoints
+    if (this.keycloak.authenticated) {
+      const token = this.keycloak.token;
+      if (token) {
+        headers = headers.set('Authorization', `Bearer ${token}`);
       }
     }
 
@@ -47,7 +29,7 @@ export class ApiService {
 
   getMails(alias: string): Observable<MailResponse> {
     const url = `${this.baseUrl}/mailbox/${alias}`;
-    const headers = this.prepareRequestHeaders();
+    const headers = this.getAuthHeaders();
 
     return this.http
       .get<MailResponse>(url, { headers })
@@ -59,14 +41,14 @@ export class ApiService {
   createMailBox(): Observable<RegisterModel> {
     return defer(() => {
       const url = `${this.baseUrl}/mailbox/create`;
-      const headers = this.prepareRequestHeaders();
+      const headers = this.getAuthHeaders();
       return this.http.post<RegisterModel>(url,  {source: 'web'}, { headers })
     }).pipe(catchError(this.handleError));
   }
 
   deleteMail(alias: string, mailId: string): Observable<{ message: string }> {
     const url = `${this.baseUrl}/mailbox/${alias}/mail/${mailId}`;
-    const headers = this.prepareRequestHeaders();
+    const headers = this.getAuthHeaders();
 
     return this.http
       .delete<{ message: string }>(url, { headers })
@@ -86,11 +68,6 @@ export class ApiService {
     } else {
       // Server-side error
       switch (error.status) {
-        case 0:
-          errorMessage = isPlatformBrowser(this.platformId)
-            ? 'Unable to connect to the server. Please check your internet connection.'
-            : 'Server connection failed during SSR';
-          break;
         case 401:
           errorMessage = 'Unauthorized access. Session may have expired.';
           break;
