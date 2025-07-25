@@ -1,9 +1,9 @@
-import { Component, OnInit, signal, Inject, PLATFORM_ID } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../core/services/auth.service';
 import { TablerIconComponent } from '../icons/tabler-icons.component';
 import { ButtonComponent } from '../ui/button.component';
+import { KeycloakService } from 'keycloak-angular';
 
 @Component({
   selector: 'app-profile-menu',
@@ -14,14 +14,11 @@ import { ButtonComponent } from '../ui/button.component';
 })
 export class ProfileMenuComponent {
   isOpen = signal(false);
-  isBrowser: boolean;
 
   constructor(
-    public authService: AuthService,
     private router: Router,
-    @Inject(PLATFORM_ID) private platformId: Object
+    private keycloakService: KeycloakService,
   ) {
-    this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
   toggleMenu() {
@@ -29,7 +26,7 @@ export class ProfileMenuComponent {
   }
 
   isAuthenticated() {
-    return this.authService.isAuthenticated();
+    return this.keycloakService.isLoggedIn()
   }
 
   closeMenu() {
@@ -37,17 +34,17 @@ export class ProfileMenuComponent {
   }
 
   login() {
-    this.authService.login();
+    this.keycloakService.login()
     this.closeMenu();
   }
 
   register() {
-    this.authService.register();
+    this.keycloakService.register()
     this.closeMenu();
   }
 
   logout() {
-    this.authService.logout();
+    this.keycloakService.logout()
     this.closeMenu();
   }
 
@@ -68,8 +65,6 @@ export class ProfileMenuComponent {
 
   // Close menu when clicking outside
   onDocumentClick(event: Event) {
-    if (!this.isBrowser) return;
-
     const target = event.target as HTMLElement;
     const menuElement = target.closest('.profile-menu');
 

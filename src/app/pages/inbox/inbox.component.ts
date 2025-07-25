@@ -22,7 +22,6 @@ import { ProfileMenuComponent } from '../../shared/components/profile-menu/profi
 import { VpnBannerComponent } from '../../shared/components/vpn-banner/vpn-banner.component';
 import {FooterComponent} from '../../shared/components/footer/footer.component';
 import {DocsMenuComponent} from '../../shared/components/docs-menu/docs-menu.component';
-import {AuthService} from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-inbox',
@@ -74,7 +73,6 @@ export class InboxComponent implements OnInit, OnDestroy {
     private readonly apiService: ApiService,
     private readonly aliasService: AliasService,
     private readonly clipboardService: ClipboardService,
-    private readonly authService: AuthService,
   ) {}
 
   ngOnInit() {
@@ -91,14 +89,8 @@ export class InboxComponent implements OnInit, OnDestroy {
       this.fullAlias.set(`${alias}@minutemail.co`);
       this.aliasService.setCurrentAlias(this.fullAlias());
 
-      if (isPlatformBrowser(this.platformId)) {
-        this.authService.initKeycloak().then(() => {
-          this.loadMails(false);
-          this.startPolling();
-        }).catch(error => {
-          console.error('API Keys - Keycloak initialization failed:', error);
-        });
-      }
+      this.loadMails(false);
+      this.startPolling();
     });
   }
 

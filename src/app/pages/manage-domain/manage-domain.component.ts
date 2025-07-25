@@ -1,5 +1,5 @@
-import {Component, Inject, OnInit, OnDestroy, PLATFORM_ID, signal} from '@angular/core';
-import {CommonModule, isPlatformBrowser} from '@angular/common';
+import {Component, OnInit, OnDestroy, signal} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DomainService } from '../../core/services/domain.service';
@@ -10,7 +10,6 @@ import { TablerIconComponent } from '../../shared/components/icons/tabler-icons.
 import { ToastComponent } from '../../shared/components/ui/toast.component';
 import { TopMenu } from '../../shared/components/top-menu/top-menu';
 import { FooterComponent } from '../../shared/components/footer/footer.component';
-import {AuthService} from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-manage-domain',
@@ -47,23 +46,11 @@ export class ManageDomainComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly domainService: DomainService,
     private readonly clipboardService: ClipboardService,
-    private readonly authService: AuthService,
-    @Inject(PLATFORM_ID) private readonly platformId: Object
   ) {}
 
   ngOnInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      this.authService.initKeycloak().then(authenticated => {
-        if (authenticated) {
-          this.loadDomains();
-          this.startPolling();
-        } else {
-          this.authService.login();
-        }
-      }).catch(error => {
-        console.error('API Keys - Keycloak initialization failed:', error);
-      });
-    }
+    this.loadDomains();
+    this.startPolling();
   }
 
   ngOnDestroy() {

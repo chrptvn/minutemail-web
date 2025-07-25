@@ -13,7 +13,6 @@ import { ToastComponent } from '../../shared/components/ui/toast.component';
 import { SpinnerComponent } from '../../shared/components/ui/spinner.component';
 import { TopMenu } from '../../shared/components/top-menu/top-menu';
 import { FooterComponent } from '../../shared/components/footer/footer.component';
-import {AuthService} from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-api-keys',
@@ -62,7 +61,6 @@ export class ApiKeysComponent implements OnInit {
     private readonly apiKeyService: ApiKeyService,
     private readonly domainService: DomainService,
     private readonly clipboardService: ClipboardService,
-    private readonly authService: AuthService,
     @Inject(PLATFORM_ID) private readonly platformId: Object
   ) {
     // Set minimum date to current time
@@ -77,18 +75,8 @@ export class ApiKeysComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      this.authService.initKeycloak().then(authenticated => {
-        if (authenticated) {
-          this.loadApiKeys();
-          this.loadDomains();
-        } else {
-          this.authService.login();
-        }
-      }).catch(error => {
-        console.error('API Keys - Keycloak initialization failed:', error);
-      });
-    }
+    this.loadApiKeys();
+    this.loadDomains();
   }
 
   loadApiKeys() {
@@ -265,8 +253,8 @@ export class ApiKeysComponent implements OnInit {
 
   isInfiniteApiKey(apiKey: ApiKey): boolean {
     // Check for various infinite date formats
-    return !apiKey.expireAt || 
-           apiKey.expireAt === '0001-01-01T00:00:00Z' || 
+    return !apiKey.expireAt ||
+           apiKey.expireAt === '0001-01-01T00:00:00Z' ||
            apiKey.expireAt === 'never' ||
            apiKey.expireAt === '';
   }
