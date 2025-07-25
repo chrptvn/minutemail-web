@@ -31,8 +31,8 @@ export class ProfileMenuComponent implements OnInit {
     }
 
     try {
-      // Wait a bit for Keycloak to initialize
-      await new Promise(resolve => setTimeout(resolve, 100));
+      // Wait for Keycloak to be fully initialized
+      await new Promise(resolve => setTimeout(resolve, 500));
       
       // Check if Keycloak is ready
       const isLoggedIn = await this.keycloakService.isLoggedIn();
@@ -40,11 +40,31 @@ export class ProfileMenuComponent implements OnInit {
       this.keycloakReady.set(true);
       
       console.log('Keycloak initialized successfully, logged in:', isLoggedIn);
+      
+      // Listen for authentication state changes
+      this.setupAuthStateListener();
     } catch (error) {
       console.warn('Keycloak initialization error:', error);
       this.keycloakReady.set(false);
       this.isAuthenticated.set(false);
     }
+  }
+
+  private setupAuthStateListener() {
+    // Check authentication state periodically
+    setInterval(async () => {
+      if (this.keycloakReady()) {
+        try {
+          const isLoggedIn = await this.keycloakService.isLoggedIn();
+          if (this.isAuthenticated() !== isLoggedIn) {
+            this.isAuthenticated.set(isLoggedIn);
+            console.log('Authentication state changed:', isLoggedIn);
+          }
+        } catch (error) {
+          console.warn('Error checking auth state:', error);
+        }
+      }
+    }, 1000); // Check every second
   }
 
   toggleMenu() {

@@ -20,12 +20,22 @@ function initializeKeycloak(keycloak: KeycloakService) {
         silentCheckSsoRedirectUri: typeof window !== 'undefined' ? window.location.origin + '/silent-check-sso.html' : undefined,
         checkLoginIframe: false,
         pkceMethod: 'S256',
-        // Add cookie settings for cross-site compatibility
         enableLogging: false,
-        flow: 'standard'
+        flow: 'standard',
+        // Handle URL cleanup after authentication
+        checkLoginIframeInterval: 5
       },
       // Add bearer excluded URLs to avoid token issues
       bearerExcludedUrls: ['/assets', '/silent-check-sso.html']
+    }).then(() => {
+      // Clean up URL after successful authentication
+      if (typeof window !== 'undefined' && window.location.search.includes('state=') && window.location.search.includes('code=')) {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('state');
+        url.searchParams.delete('session_state');
+        url.searchParams.delete('code');
+        window.history.replaceState({}, document.title, url.toString());
+      }
     });
 }
 
