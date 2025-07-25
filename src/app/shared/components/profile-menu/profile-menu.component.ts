@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { TablerIconComponent } from '../icons/tabler-icons.component';
@@ -14,19 +14,18 @@ import { KeycloakService } from 'keycloak-angular';
 })
 export class ProfileMenuComponent {
   isOpen = signal(false);
+  
+  private router = inject(Router);
+  private keycloakService = inject(KeycloakService);
 
-  constructor(
-    private router: Router,
-    private keycloakService: KeycloakService,
-  ) {
-  }
+  constructor() {}
 
   toggleMenu() {
     this.isOpen.update(current => !current);
   }
 
   isAuthenticated() {
-    return this.keycloakService.isLoggedIn()
+    return this.keycloakService.isLoggedIn();
   }
 
   closeMenu() {
@@ -34,17 +33,17 @@ export class ProfileMenuComponent {
   }
 
   login() {
-    this.keycloakService.login()
+    this.keycloakService.login();
     this.closeMenu();
   }
 
   register() {
-    this.keycloakService.register()
+    this.keycloakService.register();
     this.closeMenu();
   }
 
   logout() {
-    this.keycloakService.logout()
+    this.keycloakService.logout();
     this.closeMenu();
   }
 
