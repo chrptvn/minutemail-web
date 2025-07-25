@@ -31,9 +31,10 @@ export class ApiKeyService {
           if (token) {
             headers = headers.set('Authorization', `Bearer ${token}`);
           }
-      } catch (error) {
+              } catch (error) {
         // Silently fail - will result in 401 if auth is required
       }
+          }
     }
 
     return headers;
