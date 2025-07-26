@@ -1,13 +1,11 @@
 import { Component, OnInit, OnDestroy, Inject, PLATFORM_ID, signal } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
-import { CommonModule } from '@angular/common';
+import { isPlatformBrowser, CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { timer, Subject, switchMap, takeUntil, catchError, of } from 'rxjs';
 
 import { ApiService } from '../../core/services/api.service';
 import { AliasService } from '../../core/services/alias.service';
 import { ClipboardService } from '../../core/services/clipboard.service';
-import { ThemeService } from '../../core/services/theme.service';
 
 import { Mail } from '../../core/models/mail.model';
 
@@ -117,7 +115,7 @@ export class InboxComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe(response => {
-        const newMails = response.mails || [];
+        const newMails = response.mails ?? [];
         const currentMails = this.mails();
         const hasNew = newMails.some(m => !currentMails.find(c => c.id === m.id));
 
@@ -144,7 +142,7 @@ export class InboxComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: resp => {
-          this.mails.set(resp.mails || []);
+          this.mails.set(resp.mails ?? []);
           this.lastUpdated.set(new Date());
 
           if (resp.expireAt) {

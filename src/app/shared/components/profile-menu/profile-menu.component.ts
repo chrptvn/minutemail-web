@@ -1,5 +1,5 @@
-import { Component, signal, inject, OnInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component, signal, inject, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { TablerIconComponent } from '../icons/tabler-icons.component';
 import { ButtonComponent } from '../ui/button.component';
@@ -12,9 +12,8 @@ import Keycloak from 'keycloak-js';
   templateUrl: './profile-menu.component.html',
   styleUrl: './profile-menu.component.scss'
 })
-export class ProfileMenuComponent {
+export class ProfileMenuComponent implements OnInit{
   isOpen = signal(false);
-  keycloakReady = signal(false);
   isAuthenticated = signal(false);
 
   private readonly router = inject(Router);
@@ -30,38 +29,38 @@ export class ProfileMenuComponent {
 
   async login() {
     this.keycloak.login().then(() => {
+      this.isAuthenticated.set(!!this.keycloak.authenticated);
+      this.closeMenu();
+    }).then(() => {
       this.closeMenu();
     })
-
   }
 
   async register() {
-
-    this.closeMenu();
+    this.keycloak.register().then(() => {
+      this.closeMenu();
+    })
   }
 
   async logout() {
-
-    this.closeMenu();
+    this.keycloak.logout().then(() => {
+      this.isAuthenticated.set(!!this.keycloak.authenticated);
+      this.router.navigate(['/']);
+    }).then(() => {
+      this.closeMenu();
+    })
   }
 
   manageDomain() {
     this.router.navigate(['/manage-domain']);
-    this.closeMenu();
   }
 
   manageApiKeys() {
     this.router.navigate(['/api-keys']);
-    this.closeMenu();
   }
 
-  // Close menu when clicking outside
-  onDocumentClick(event: Event) {
-    const target = event.target as HTMLElement;
-    const menuElement = target.closest('.profile-menu');
 
-    if (!menuElement && this.isOpen()) {
-      this.closeMenu();
-    }
+  ngOnInit(): void {
+    this.isAuthenticated.set(!!this.keycloak.authenticated);
   }
 }
