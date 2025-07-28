@@ -1,35 +1,23 @@
-# ------------------
-# 1) Build Stage
-# ------------------
-FROM node:22 AS builder
-
+# 1) Build
+FROM node:22-alpine AS builder
 WORKDIR /app
 
-# Copy package files first so Docker can cache installs
-COPY package*.json ./
+COPY package.json package-lock.json ./
+RUN npm ci
 
-# Install dependencies (honor exact versions from package-lock.json)
-RUN npm ci --legacy-peer-deps
-
-# Copy the rest of the source code
 COPY . .
-RUN mv src/index-prod.html src/index.html
+RUN npm run build -- --configuration production
 
-# Build the SSR output
-RUN npm run build:ssr
+# 2) Serve
+FROM nginx:stable-alpine
+# Remove default assets
+RUN rm -rf /usr/share/nginx/html/*
 
-# ------------------
-# 2) Runtime Stage
-# ------------------
-FROM node:22 AS runner
+# Copy your built files
+COPY --from=builder /app/dist/minutemail-web/browser/ /usr/share/nginx/html/
 
-WORKDIR /usr/src/app
+# (Optional) custom nginx.conf for SPA routing / caching
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Copy build artifacts from builder image
-COPY --from=builder /app/dist /usr/src/app/dist
-
-# Expose the port on which your SSR server runs (commonly 4000)
-EXPOSE 4000
-
-# Launch the SSR server
-CMD ["node", "dist/minutemail-web/server/server.mjs"]
+EXPOSE 8080
+CMD ["nginx", "-g", "daemon off;"]

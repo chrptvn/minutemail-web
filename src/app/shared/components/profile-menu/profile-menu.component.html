@@ -1,4 +1,4 @@
-<div class="relative profile-menu">
+<div class="relative profile-menu" #menu (focusout)="onFocusOut($event)" tabindex="0">
   <!-- Profile Button -->
   <app-button
     variant="ghost"
@@ -24,23 +24,27 @@
       @if (isAuthenticated()) {
         <!-- Profile Actions -->
         <div class="py-1">
-          <button
-            type="button"
-            class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-800 flex items-center space-x-2"
-            (click)="manageApiKeys()"
-          >
-            <app-icon name="code" [size]="16" class="text-gray-500 dark:text-gray-400"></app-icon>
-            <span>API Keys</span>
-          </button>
+          @if (hasRole('member') || hasRole('owner')) {
+            <button
+              type="button"
+              class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-800 flex items-center space-x-2"
+              (click)="manageApiKeys()"
+            >
+              <app-icon name="code" [size]="16" class="text-gray-500 dark:text-gray-400"></app-icon>
+              <span>API Keys</span>
+            </button>
+          }
 
-          <button
-            type="button"
-            class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-800 flex items-center space-x-2"
-            (click)="manageDomain()"
-          >
-            <app-icon name="globe" [size]="16" class="text-gray-500 dark:text-gray-400"></app-icon>
-            <span>Manage Domain</span>
-          </button>
+          @if (hasRole('owner')) {
+            <button
+              type="button"
+              class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-800 flex items-center space-x-2"
+              (click)="manageDomain()"
+            >
+              <app-icon name="globe" [size]="16" class="text-gray-500 dark:text-gray-400"></app-icon>
+              <span>Manage Domain</span>
+            </button>
+          }
 
           <button
             type="button"

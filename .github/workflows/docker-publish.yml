@@ -25,8 +25,8 @@ jobs:
       # If you want to ensure your build is correct before building Docker,
       # you can do it directly in CI. (This step is optional because the Dockerfile
       # also does the build in the "builder" stage.)
-      - name: Build Angular SSR
-        run: npm run build:ssr
+      - name: Build Angular
+        run: npm run build
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
