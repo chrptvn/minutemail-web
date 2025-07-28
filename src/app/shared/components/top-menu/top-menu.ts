@@ -30,6 +30,10 @@ export class TopMenu {
     this.router.navigate(['/']);
   }
 
+  goToPricing() {
+    this.router.navigate(['/pricing']);
+  }
+
   isHome(): boolean {
     return this.router.url === '/';
   }

@@ -210,6 +210,10 @@ export class InboxComponent implements OnInit, OnDestroy {
     this.showToast.set(false);
   }
 
+  goToPricing() {
+    this.router.navigate(['/pricing']);
+  }
+
   deleteMail(mail: Mail) {
     if (!isPlatformBrowser(this.platformId) || this.deletingMailId()) {
       return;

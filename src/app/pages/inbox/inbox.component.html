@@ -43,6 +43,16 @@
         <div class="flex items-center space-x-2 sm:space-x-3">
           <app-button
             variant="ghost"
+          <app-button
+            variant="ghost"
+            size="sm"
+            (onClick)="goToPricing()"
+            ariaLabel="View pricing"
+            class="hidden sm:flex"
+          >
+            <span class="text-gray-700 dark:text-gray-300">Pricing</span>
+          </app-button>
+
             size="sm"
             [loading]="refreshing()"
             (onClick)="refreshMails()"
