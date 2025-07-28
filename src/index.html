@@ -114,15 +114,6 @@
     /* Prevent flash of unstyled content */
     :root {
       --primary-color: #24c8db;
-      --background-color: #ffffff;
-      --surface-color: #f8fafc;
-      --text-color: #1e293b;
-      --text-muted: #64748b;
-      --border-color: #e2e8f0;
-    }
-
-    .dark {
-      --primary-color: #24c8db;
       --background-color: #0d1117;
       --surface-color: #161b22;
       --text-color: #e6edf3;
@@ -142,16 +133,6 @@
       overflow-y: auto !important;
       height: auto !important;
       -webkit-overflow-scrolling: touch !important;
-    }
-
-    html.dark {
-      background-color: #0d1117;
-      color: #e6edf3;
-    }
-
-    html:not(.dark) {
-      background-color: #ffffff;
-      color: #1e293b;
     }
 
     body {
@@ -405,31 +386,6 @@
     // Immediately apply saved theme or default to dark
     (function() {
       try {
-        // Try cookie first (preferred method)
-        let savedTheme = getCookie('minutemail_theme');
-
-        // Fallback to localStorage for existing users
-        if (!savedTheme) {
-          savedTheme = localStorage.getItem('minutemail_theme');
-
-          // If found in localStorage, migrate to cookie
-          if (savedTheme) {
-            const expires = new Date();
-            expires.setTime(expires.getTime() + (365 * 24 * 60 * 60 * 1000));
-
-            // Use appropriate SameSite policy based on protocol
-            if (window.location.protocol === 'https:') {
-              document.cookie = `minutemail_theme=${savedTheme};expires=${expires.toUTCString()};path=/;SameSite=None;Secure`;
-            } else {
-              document.cookie = `minutemail_theme=${savedTheme};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
-            }
-            localStorage.removeItem('minutemail_theme');
-          }
-        }
-
-        // Determine theme: use saved preference or default to dark
-        const shouldUseDark = savedTheme ? savedTheme === 'dark' : true;
-
         const html = document.documentElement;
         const body = document.body;
 
@@ -437,14 +393,9 @@
         html.classList.add('no-transition');
         body.classList.add('no-transition');
 
-        // Apply theme immediately
-        if (shouldUseDark) {
-          html.classList.add('dark');
-          body.classList.add('dark');
-        } else {
-          html.classList.remove('dark');
-          body.classList.remove('dark');
-        }
+        // Always apply dark mode
+        html.classList.add('dark');
+        body.classList.add('dark');
 
         // Force mobile styles
         forceMobileStyles();
@@ -462,7 +413,7 @@
         }, 50);
       } catch (e) {
         console.warn('Theme initialization error:', e);
-        // Fallback to dark mode if cookies/localStorage are not available
+        // Always fallback to dark mode
         document.documentElement.classList.add('dark');
         document.body.classList.add('dark');
         forceMobileStyles();
