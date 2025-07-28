@@ -40,6 +40,11 @@ export class DocsMenuComponent {
     this.closeMenu();
   }
 
+  goToPricing() {
+    this.router.navigate(['/pricing']);
+    this.closeMenu();
+  }
+
   // Close menu when clicking outside
   onDocumentClick(event: Event) {
     if (!this.isBrowser) return;
