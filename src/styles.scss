@@ -5,6 +5,16 @@
 /* Global styles */
 :root {
   --primary-color: #24c8db;
+  --background-color: #ffffff;
+  --surface-color: #f8f9fa;
+  --text-color: #1f2937;
+  --text-muted: #6b7280;
+  --border-color: #e5e7eb;
+}
+
+/* Dark mode variables - always applied since we force dark mode */
+.dark {
+  --primary-color: #24c8db;
   --background-color: #0d1117;
   --surface-color: #161b22;
   --text-color: #e6edf3;

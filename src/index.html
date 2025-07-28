@@ -114,6 +114,16 @@
     /* Prevent flash of unstyled content */
     :root {
       --primary-color: #24c8db;
+      --background-color: #ffffff;
+      --surface-color: #f8f9fa;
+      --text-color: #1f2937;
+      --text-muted: #6b7280;
+      --border-color: #e5e7eb;
+    }
+
+    /* Dark mode variables - always applied */
+    .dark {
+      --primary-color: #24c8db;
       --background-color: #0d1117;
       --surface-color: #161b22;
       --text-color: #e6edf3;
@@ -393,9 +403,8 @@
         html.classList.add('no-transition');
         body.classList.add('no-transition');
 
-        // Always apply dark mode
+        // ALWAYS apply dark mode - no conditions
         html.classList.add('dark');
-        body.classList.add('dark');
 
         // Force mobile styles
         forceMobileStyles();
@@ -413,9 +422,8 @@
         }, 50);
       } catch (e) {
         console.warn('Theme initialization error:', e);
-        // Always fallback to dark mode
+        // Fallback: always apply dark mode
         document.documentElement.classList.add('dark');
-        document.body.classList.add('dark');
         forceMobileStyles();
         fixMobileScrolling();
       }
