@@ -140,9 +140,9 @@
 
 /* Enhanced hover effects for buttons */
 .pricing-card app-button:hover {
-  box-shadow: 0 6px 20px rgba(36, 200, 219, 0.4);
+  box-shadow: none;
 }
 
 .dark .pricing-card app-button:hover {
-  box-shadow: 0 6px 20px rgba(36, 200, 219, 0.3);
+  box-shadow: none;
 }
