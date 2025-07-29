@@ -83,18 +83,8 @@
   .pricing-card {
     transform: none !important;
   }
-  
-  .pricing-card-popular {
-    transform: none !important;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-  }
-  
+
   .pricing-card:hover {
-    transform: translateY(-2px);
-  }
-  
-  .pricing-card-popular:hover {
     transform: translateY(-2px);
   }
 }
@@ -103,11 +93,11 @@
   .pricing-card {
     padding: 1.5rem;
   }
-  
+
   .pricing-card h3 {
     font-size: 1.125rem;
   }
-  
+
   .pricing-card .text-4xl {
     font-size: 2rem;
   }
@@ -140,11 +130,6 @@
     grid-template-columns: repeat(4, 1fr);
     gap: 2rem;
     align-items: start;
-  }
-  
-  .pricing-card-popular {
-    grid-row: 1;
-    margin-top: -1rem;
   }
 }
 

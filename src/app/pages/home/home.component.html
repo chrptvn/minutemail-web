@@ -8,14 +8,11 @@
   <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12">
     <div class="text-center mb-8 sm:mb-12">
       <h1 class="text-2xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-3 sm:mb-4">
-        Fast, Ad-Free Temporary Email in One Click
+        Protect your privacy with disposable email
       </h1>
 
       <p class="text-base sm:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto px-2">
-        Generate a disposable address instantly—no signup, no ads, no trackers.
-        <span class="hidden sm:inline">
-          Emails arrive in seconds, self-destruct automatically, and you can automate everything with our public API.
-        </span>
+        Shield your real address—get a free, one-click inbox for sign-ups, newsletters, and more. Automate it all via our public API for QA and testing workflows.
       </p>
     </div>
 
@@ -32,45 +29,6 @@
           (onCopy)="copyAlias()"
           (onViewInbox)="viewInbox()"
         ></app-address-card>
-      </div>
-
-      <!-- Features - Hidden on mobile -->
-      <div class="hidden md:grid md:grid-cols-3 gap-6 mt-16">
-        <div class="text-center p-6">
-          <div class="w-12 h-12 mx-auto bg-primary-100 dark:bg-primary-900 rounded-lg flex items-center justify-center mb-4">
-            <app-icon name="clock" [size]="24" class="text-primary-600 dark:text-primary-400"></app-icon>
-          </div>
-          <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
-            Auto-Expires
-          </h3>
-          <p class="text-gray-600 dark:text-gray-400">
-            Your temporary email automatically expires after the specified time
-          </p>
-        </div>
-
-        <div class="text-center p-6">
-          <div class="w-12 h-12 mx-auto bg-primary-100 dark:bg-primary-900 rounded-lg flex items-center justify-center mb-4">
-            <app-icon name="shield" [size]="24" class="text-primary-600 dark:text-primary-400"></app-icon>
-          </div>
-          <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
-            Privacy First
-          </h3>
-          <p class="text-gray-600 dark:text-gray-400">
-            No registration required. No tracking. Your privacy is protected.
-          </p>
-        </div>
-
-        <div class="text-center p-6">
-          <div class="w-12 h-12 mx-auto bg-primary-100 dark:bg-primary-900 rounded-lg flex items-center justify-center mb-4">
-            <app-icon name="refresh" [size]="24" class="text-primary-600 dark:text-primary-400"></app-icon>
-          </div>
-          <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
-            Real-time Updates
-          </h3>
-          <p class="text-gray-600 dark:text-gray-400">
-            Emails appear instantly in your temporary inbox
-          </p>
-        </div>
       </div>
 
       <!-- VPN Banner -->

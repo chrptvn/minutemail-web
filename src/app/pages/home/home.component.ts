@@ -6,7 +6,6 @@ import { ClipboardService } from '../../core/services/clipboard.service';
 import { AddressCardComponent } from '../../shared/components/address-card/address-card.component';
 import { VpnBannerComponent } from '../../shared/components/vpn-banner/vpn-banner.component';
 import { FaqComponent } from '../../shared/components/faq/faq.component';
-import { TablerIconComponent } from '../../shared/components/icons/tabler-icons.component';
 import { ToastComponent } from '../../shared/components/ui/toast.component';
 import {ApiService} from '../../core/services/api.service';
 import {TopMenu} from '../../shared/components/top-menu/top-menu';
@@ -20,7 +19,6 @@ import {FooterComponent} from '../../shared/components/footer/footer.component';
     AddressCardComponent,
     VpnBannerComponent,
     FaqComponent,
-    TablerIconComponent,
     ToastComponent,
     TopMenu,
     FooterComponent,
