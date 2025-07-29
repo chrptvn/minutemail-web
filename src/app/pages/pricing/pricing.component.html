@@ -24,14 +24,14 @@
         <!-- Pricing Cards -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 mb-16">
           <!-- Free Plan -->
-          <div class="bg-white dark:bg-dark-900 rounded-xl border border-gray-200 dark:border-dark-700 p-6 shadow-sm pricing-card">
-            <div class="text-center">
+          <div class="bg-white dark:bg-dark-900 rounded-xl border border-gray-200 dark:border-dark-700 p-6 shadow-sm pricing-card flex flex-col">
+            <div class="text-center flex-1 flex flex-col">
               <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">Free</h3>
               <div class="mb-4">
                 <span class="text-4xl font-bold text-gray-900 dark:text-gray-100">$0</span>
                 <span class="text-gray-600 dark:text-gray-400">/month</span>
               </div>
-              <ul class="space-y-3 mb-6 text-left">
+              <ul class="space-y-3 mb-6 text-left flex-1">
                 <li class="flex items-center text-sm text-gray-700 dark:text-gray-300">
                   <app-icon name="check" [size]="16" class="text-green-500 mr-3 flex-shrink-0"></app-icon>
                   Up to 100 API calls per month
@@ -41,31 +41,33 @@
                   Unlimited Temporary Addresses (UI)
                 </li>
               </ul>
-              @if (isAuthenticated()) {
-                <div class="w-full py-2 px-4 bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-200 rounded-lg font-medium text-sm border border-green-200 dark:border-green-800">
-                  Current Plan
-                </div>
-              } @else {
-                <app-button
-                  variant="secondary"
-                  (onClick)="subscribe('free')"
-                  class="w-full"
-                >
-                  Get Started Free
-                </app-button>
-              }
+              <div class="mt-auto">
+                @if (isAuthenticated()) {
+                  <div class="w-full py-2 px-4 bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-200 rounded-lg font-medium text-sm border border-green-200 dark:border-green-800">
+                    Current Plan
+                  </div>
+                } @else {
+                  <app-button
+                    variant="secondary"
+                    (onClick)="subscribe('free')"
+                    class="w-full"
+                  >
+                    Get Started Free
+                  </app-button>
+                }
+              </div>
             </div>
           </div>
 
           <!-- Hobbyist Plan -->
-          <div class="bg-white dark:bg-dark-900 rounded-xl border border-gray-200 dark:border-dark-700 p-6 shadow-sm pricing-card">
-            <div class="text-center">
+          <div class="bg-white dark:bg-dark-900 rounded-xl border border-gray-200 dark:border-dark-700 p-6 shadow-sm pricing-card flex flex-col">
+            <div class="text-center flex-1 flex flex-col">
               <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">Hobbyist</h3>
               <div class="mb-4">
                 <span class="text-4xl font-bold text-gray-900 dark:text-gray-100">$5</span>
                 <span class="text-gray-600 dark:text-gray-400">/month</span>
               </div>
-              <ul class="space-y-3 mb-6 text-left">
+              <ul class="space-y-3 mb-6 text-left flex-1">
                 <li class="flex items-center text-sm text-gray-700 dark:text-gray-300">
                   <app-icon name="check" [size]="16" class="text-green-500 mr-3 flex-shrink-0"></app-icon>
                   1 custom domain
@@ -79,31 +81,33 @@
                   Unlimited Temporary Addresses (UI)
                 </li>
               </ul>
-              <app-button
-                variant="primary"
-                (onClick)="subscribe('hobbyist')"
-                class="w-full"
-              >
-                Subscribe
-              </app-button>
+              <div class="mt-auto">
+                <app-button
+                  variant="primary"
+                  (onClick)="subscribe('hobbyist')"
+                  class="w-full"
+                >
+                  Subscribe
+                </app-button>
+              </div>
             </div>
           </div>
 
           <!-- Pro Plan (Most Popular) -->
-          <div class="bg-white dark:bg-dark-900 rounded-xl border-2 border-gray-200 dark:border-dark-700 p-6 shadow-sm pricing-card pricing-card-popular">
+          <div class="bg-white dark:bg-dark-900 rounded-xl border-2 border-gray-200 dark:border-dark-700 p-6 shadow-sm pricing-card pricing-card-popular flex flex-col">
 <!--          <div class="bg-white dark:bg-dark-900 rounded-xl border-2 border-primary-500 p-6 shadow-sm pricing-card pricing-card-popular">-->
             <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
               <span class="bg-primary-500 text-white px-4 py-1 rounded-full text-sm font-medium">
                 Most Popular
               </span>
             </div>
-            <div class="text-center">
+            <div class="text-center flex-1 flex flex-col">
               <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">Pro</h3>
               <div class="mb-4">
                 <span class="text-4xl font-bold text-gray-900 dark:text-gray-100">$15</span>
                 <span class="text-gray-600 dark:text-gray-400">/month</span>
               </div>
-              <ul class="space-y-3 mb-6 text-left">
+              <ul class="space-y-3 mb-6 text-left flex-1">
                 <li class="flex items-center text-sm text-gray-700 dark:text-gray-300">
                   <app-icon name="check" [size]="16" class="text-green-500 mr-3 flex-shrink-0"></app-icon>
                   Up to 5 custom domains
@@ -117,25 +121,27 @@
                   Unlimited Temporary Addresses (UI)
                 </li>
               </ul>
-              <app-button
-                variant="primary"
-                (onClick)="subscribe('pro')"
-                class="w-full"
-              >
-                Subscribe
-              </app-button>
+              <div class="mt-auto">
+                <app-button
+                  variant="primary"
+                  (onClick)="subscribe('pro')"
+                  class="w-full"
+                >
+                  Subscribe
+                </app-button>
+              </div>
             </div>
           </div>
 
           <!-- Team Plan -->
-          <div class="bg-white dark:bg-dark-900 rounded-xl border border-gray-200 dark:border-dark-700 p-6 shadow-sm pricing-card">
-            <div class="text-center">
+          <div class="bg-white dark:bg-dark-900 rounded-xl border border-gray-200 dark:border-dark-700 p-6 shadow-sm pricing-card flex flex-col">
+            <div class="text-center flex-1 flex flex-col">
               <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">Team</h3>
               <div class="mb-4">
                 <span class="text-4xl font-bold text-gray-900 dark:text-gray-100">$50</span>
                 <span class="text-gray-600 dark:text-gray-400">/month</span>
               </div>
-              <ul class="space-y-3 mb-6 text-left">
+              <ul class="space-y-3 mb-6 text-left flex-1">
                 <li class="flex items-center text-sm text-gray-700 dark:text-gray-300">
                   <app-icon name="check" [size]="16" class="text-green-500 mr-3 flex-shrink-0"></app-icon>
                   Unlimited custom domains
@@ -153,13 +159,15 @@
                   Unlimited Temporary Addresses (UI)
                 </li>
               </ul>
-              <app-button
-                variant="primary"
-                (onClick)="subscribe('team')"
-                class="w-full"
-              >
-                Subscribe
-              </app-button>
+              <div class="mt-auto">
+                <app-button
+                  variant="primary"
+                  (onClick)="subscribe('team')"
+                  class="w-full"
+                >
+                  Subscribe
+                </app-button>
+              </div>
             </div>
           </div>
         </div>
