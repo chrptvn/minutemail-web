@@ -45,11 +45,6 @@
   transition: all 0.3s ease;
 }
 
-.pricing-card:hover app-button {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(36, 200, 219, 0.3);
-}
-
 /* Current plan styling */
 .current-plan-badge {
   background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%);
