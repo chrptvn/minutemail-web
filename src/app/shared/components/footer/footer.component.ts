@@ -16,6 +16,10 @@ export class FooterComponent {
     private router: Router,
   ) {}
 
+  currentYear(): number {
+    return new Date().getFullYear();
+  }
+
   goToPrivacy() {
     this.router.navigate(['/privacy']);
   }

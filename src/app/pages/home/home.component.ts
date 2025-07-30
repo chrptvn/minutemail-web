@@ -59,35 +59,29 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  async generateAlias() {
-    this.generating.set(true);
+  generateAlias() {
+      this.generating.set(true);
 
-    try {
       // Call the new method that registers the alias with the API
-      this.aliasService.generateAndRegisterAlias().subscribe({
-        next: (result) => {
-          this.currentAlias.set(result.alias);
-          console.log('Generated alias:', result.alias);
-          // Set expiration time if provided by API
-          if (result.ttl) {
-            const expirationTime = new Date(Date.now() + result.ttl * 1000);
-            this.expiresAt.set(expirationTime.toISOString());
-          }
+      this.aliasService.generateAndRegisterAlias()
+        .subscribe({
+          next: (result) => {
+            this.currentAlias.set(result.alias);
+            console.log('Generated alias:', result.alias);
+            // Set expiration time if provided by API
+            if (result.expireAt) {
+              this.expiresAt.set(result.expireAt.toISOString());
+            }
 
-          this.showToastMessage('success', 'New email address generated and registered!');
-          this.generating.set(false);
-        },
-        error: (error) => {
-          console.error('Error generating alias:', error);
-          this.showToastMessage('error', 'Failed to generate email address. Please try again.');
-          this.generating.set(false);
-        }
+            this.showToastMessage('success', 'New email address generated and registered!');
+            this.generating.set(false);
+          },
+          error: (error) => {
+            console.error('Error generating alias:', error);
+            this.showToastMessage('error', 'Failed to generate email address. Please try again.');
+            this.generating.set(false);
+          }
       });
-    } catch (error) {
-      console.error('Unexpected error:', error);
-      this.showToastMessage('error', 'An unexpected error occurred');
-      this.generating.set(false);
-    }
   }
 
   async copyAlias() {

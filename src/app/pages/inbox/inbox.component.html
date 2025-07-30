@@ -1,78 +1,25 @@
 <div class="min-h-screen bg-gray-50 dark:bg-dark-950">
   <!-- Header -->
-  <header class="bg-white dark:bg-dark-900 border-b border-gray-200 dark:border-dark-700 sticky top-0 z-30 backdrop-blur-sm">
-    <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
-      <div class="flex justify-between items-center h-14 sm:h-16">
-        <div class="flex items-center space-x-2 sm:space-x-4 min-w-0 flex-1">
-          <app-button
-            variant="ghost"
-            size="sm"
-            (onClick)="goHome()"
-            ariaLabel="Go back to home"
-            class="flex-shrink-0"
-          >
-            <app-icon name="arrow-left" [size]="18" class="text-gray-700 dark:text-gray-300 sm:w-5 sm:h-5"></app-icon>
-          </app-button>
-
-          <div class="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1">
-            <img src="/minutemail64x64.png" alt="MinuteMail" class="w-8 h-8 sm:w-10 sm:h-10" />
-            <div class="min-w-0 flex-1">
-              <div class="flex items-center space-x-1 sm:space-x-2">
-                <h1 class="text-sm sm:text-lg font-semibold text-gray-900 dark:text-gray-100 truncate">
-                  {{ fullAlias() }}
-                </h1>
-                <app-button
-                  variant="ghost"
-                  size="sm"
-                  [loading]="copying()"
-                  (onClick)="copyEmailAddress()"
-                  ariaLabel="Copy email address"
-                  class="flex-shrink-0"
-                >
-                  @if (copied()) {
-                    <app-icon name="check" [size]="16" class="text-green-500 sm:w-4 sm:h-4"></app-icon>
-                  } @else {
-                    <app-icon name="copy" [size]="14" class="text-gray-500 dark:text-gray-400 sm:w-4 sm:h-4"></app-icon>
-                  }
-                </app-button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="flex items-center space-x-2 sm:space-x-3">
-          <app-button
-            variant="ghost"
-            size="sm"
-            [loading]="refreshing()"
-            (onClick)="refreshMails()"
-            ariaLabel="Refresh inbox"
-          >
-            <app-icon name="refresh" [size]="18" class="text-gray-700 dark:text-gray-300 sm:w-5 sm:h-5"></app-icon>
-          </app-button>
-
-          <app-button
-            variant="ghost"
-            size="sm"
-            (onClick)="goToPricing()"
-            ariaLabel="View pricing"
-            class="hidden sm:flex"
-          >
-            <span class="text-gray-700 dark:text-gray-300">Pricing</span>
-          </app-button>
-
-          <div class="flex items-center space-x-2 sm:space-x-3">
-            <app-docs-menu></app-docs-menu>
-
-            <app-profile-menu></app-profile-menu>
-          </div>
-        </div>
-      </div>
-    </div>
+  <header class="bg-white dark:bg-dark-900 border-b border-gray-200 dark:border-dark-700">
+    <app-top-menu></app-top-menu>
   </header>
 
   <!-- Main Content -->
-  <main class="max-w-5xl mx-auto px-3 sm:px-4 lg:px-8 py-4 sm:py-8">
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12 mobile-scroll-content">
+      <!-- Header -->
+      <div class="text-center mb-8 sm:mb-12">
+        <div class="w-16 h-16 mx-auto bg-primary-100 dark:bg-primary-900 rounded-xl flex items-center justify-center mb-4">
+          <app-icon name="mail" [size]="32" class="text-primary-600 dark:text-primary-400"></app-icon>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+          Your temporary inbox
+        </h1>
+
+        <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">
+          This mailbox is secured with a unique session password and can only be accessed from your current browser session. Explore our plans for enhanced protection, API access, and custom domain support.
+        </p>
+    </div>
+
     @if (error()) {
       <div class="max-w-2xl mx-auto">
         <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6 sm:p-8 text-center shadow-sm">
@@ -111,40 +58,43 @@
         <!-- Mailbox Status Card -->
         <div class="bg-white dark:bg-dark-900 rounded-xl border border-gray-200 dark:border-dark-700 p-4 sm:p-6 shadow-sm">
           <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-2 sm:space-x-3">
-              <div>
-                <h2 class="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100">
-                  Inbox
-                </h2>
-                @if (expiresAt()) {
+              <div class="flex items-center space-x-1 sm:space-x-2">
+                <h1 class="text-sm sm:text-lg font-semibold text-gray-900 dark:text-gray-100 truncate">
+                  {{ fullAlias() }}
+                </h1>
+                <app-button
+                  variant="ghost"
+                  size="sm"
+                  [loading]="copying()"
+                  (onClick)="copyEmailAddress()"
+                  ariaLabel="Copy email address"
+                  class="flex-shrink-0"
+                >
+                  @if (copied()) {
+                    <app-icon name="check" [size]="16" class="text-green-500 sm:w-4 sm:h-4"></app-icon>
+                  } @else {
+                    <app-icon name="copy" [size]="14" class="text-gray-500 dark:text-gray-400 sm:w-4 sm:h-4"></app-icon>
+                  }
+                </app-button>
+              </div>
+
+              @if (expiresAt()) {
                 <div class="hidden sm:flex items-center space-x-2 px-3 py-1.5 bg-gray-100 dark:bg-dark-800 rounded-lg mt-2 mb-2">
                   <app-countdown [expiresAt]="expiresAt()" class="text-sm"></app-countdown>
                 </div>
-                }
-                <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 flex items-center">
-                  <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 mr-2">
-                    {{ mails().length }}
-                  </span>
-                  {{ mails().length === 1 ? 'message' : 'messages' }}
-                  @if (loading()) {
-                    <span class="ml-2">
-                      <app-spinner size="sm"></app-spinner>
-                    </span>
-                  }
-                </p>
-              </div>
-            </div>
-
-            <div class="text-right hidden sm:block">
-              @if (mails().length > 0) {
-                <div>
-                  <div class="text-sm font-medium text-gray-900 dark:text-gray-100">Last updated</div>
-                  <div class="text-xs text-gray-500 dark:text-gray-400">{{ formatDate(lastUpdated()) }}</div>
-                </div>
               }
-            </div>
           </div>
-
+          <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 flex items-center">
+                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 mr-2">
+                  {{ mails().length }}
+                </span>
+            {{ mails().length === 1 ? 'message' : 'messages' }}
+            @if (loading()) {
+              <span class="ml-2">
+                    <app-spinner size="sm"></app-spinner>
+                  </span>
+            }
+          </p>
           <!-- Mobile countdown display -->
           @if (expiresAt()) {
             <div class="mt-3 sm:hidden">

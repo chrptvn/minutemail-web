@@ -16,10 +16,9 @@ import { ButtonComponent } from '../../shared/components/ui/button.component';
 import { TablerIconComponent } from '../../shared/components/icons/tabler-icons.component';
 import { ToastComponent } from '../../shared/components/ui/toast.component';
 import { SpinnerComponent } from '../../shared/components/ui/spinner.component';
-import { ProfileMenuComponent } from '../../shared/components/profile-menu/profile-menu.component';
 import { VpnBannerComponent } from '../../shared/components/vpn-banner/vpn-banner.component';
 import {FooterComponent} from '../../shared/components/footer/footer.component';
-import {DocsMenuComponent} from '../../shared/components/docs-menu/docs-menu.component';
+import {TopMenu} from '../../shared/components/top-menu/top-menu';
 
 @Component({
   selector: 'app-inbox',
@@ -33,10 +32,9 @@ import {DocsMenuComponent} from '../../shared/components/docs-menu/docs-menu.com
     TablerIconComponent,
     ToastComponent,
     SpinnerComponent,
-    ProfileMenuComponent,
     VpnBannerComponent,
     FooterComponent,
-    DocsMenuComponent
+    TopMenu
   ],
   templateUrl: './inbox.component.html',
   styleUrls: ['./inbox.component.scss']
@@ -48,7 +46,6 @@ export class InboxComponent implements OnInit, OnDestroy {
   selectedMail = signal<Mail | undefined>(undefined);
   isMailViewerOpen = signal(false);
   loading = signal(false);
-  refreshing = signal(false);
   error = signal<string | null>(null);
   expiresAt = signal<string | undefined | null>(undefined);
   lastUpdated = signal<Date>(new Date());
@@ -114,21 +111,29 @@ export class InboxComponent implements OnInit, OnDestroy {
           return of({ mails: [], expireAt: undefined });
         })
       )
-      .subscribe(response => {
-        const newMails = response.mails ?? [];
-        const currentMails = this.mails();
-        const hasNew = newMails.some(m => !currentMails.find(c => c.id === m.id));
+      .subscribe(
+        {
+          next : (response) => {
+            const newMails = response.mails ?? [];
+            const currentMails = this.mails();
+            const hasNew = newMails.some(m => !currentMails.find(c => c.id === m.id));
 
-        if (hasNew) {
-          this.showToastMessage('info', 'New email received!');
-        }
+            if (hasNew) {
+              this.showToastMessage('info', 'New email received!');
+            }
 
-        this.mails.set(newMails);
-        this.lastUpdated.set(new Date());
+            this.mails.set(newMails);
+            this.lastUpdated.set(new Date());
 
-        if (response.expireAt) {
-          this.expiresAt.set(response.expireAt);
-        }
+            if (response.expireAt) {
+              this.expiresAt.set(response.expireAt);
+            }
+          },
+          error: err => {
+            console.error('Polling error:', err);
+            this.error.set(err.message);
+            this.showToastMessage('error', 'Failed to refresh emails');
+          }
       });
   }
 
@@ -139,7 +144,6 @@ export class InboxComponent implements OnInit, OnDestroy {
     this.error.set(null);
 
     this.apiService.getMails(this.alias())
-      .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: resp => {
           this.mails.set(resp.mails ?? []);
@@ -210,10 +214,6 @@ export class InboxComponent implements OnInit, OnDestroy {
     this.showToast.set(false);
   }
 
-  goToPricing() {
-    this.router.navigate(['/pricing']);
-  }
-
   deleteMail(mail: Mail) {
     if (!isPlatformBrowser(this.platformId) || this.deletingMailId()) {
       return;
@@ -222,7 +222,6 @@ export class InboxComponent implements OnInit, OnDestroy {
     this.deletingMailId.set(mail.id);
 
     this.apiService.deleteMail(this.alias(), mail.id)
-      .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
           this.mails.set(this.mails().filter(m => m.id !== mail.id));

@@ -51,10 +51,6 @@ export class PricingComponent {
       answer: "We accept all major credit cards (Visa, MasterCard, American Express) and PayPal. All payments are processed securely through Stripe."
     },
     {
-      question: "Is there a free trial for paid plans?",
-      answer: "All paid plans come with a 14-day free trial. No credit card required to start your trial. You can cancel anytime during the trial period."
-    },
-    {
       question: "What happens to my custom domains if I downgrade?",
       answer: "If you downgrade to a plan with fewer domain slots, you'll need to remove excess domains before the change takes effect. We'll notify you in advance and help with the transition."
     }
@@ -75,7 +71,7 @@ export class PricingComponent {
 
     // For paid plans, show a placeholder message for now
     this.showToastMessage('info', `Subscription for ${plan} plan will be implemented soon. Please check back later!`);
-    
+
     // TODO: Implement actual subscription logic
     // This is where you would integrate with your payment processor
     console.log(`Subscribing to ${plan} plan`);

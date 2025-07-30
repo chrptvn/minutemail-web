@@ -37,7 +37,7 @@ export const routes: Routes = [
     }
   },
   {
-    path: 'mx-configuration',
+    path: 'custom-domains',
     loadComponent: () => import('./pages/mx-configuration/mx-configuration.component').then(m => m.MxConfigurationComponent),
     title: 'MX Record Configuration - MinuteMail'
   },

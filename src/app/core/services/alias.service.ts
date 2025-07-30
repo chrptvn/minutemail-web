@@ -15,7 +15,7 @@ export class AliasService {
   /**
    * Generate a new alias and register it with the API using session ID as password
    */
-  generateAndRegisterAlias(): Observable<{ alias?: string; ttl?: number }> {
+  generateAndRegisterAlias(): Observable<{ alias?: string; expireAt?: Date }> {
 
     return this.apiService.createMailBox().pipe(
       map(response => {
@@ -24,14 +24,6 @@ export class AliasService {
           alias: `${response.name}@minutemail.co`,
           ttl: response.ttl
         };
-      }),
-      catchError(error => {
-        console.error('Failed to register alias:', error);
-
-        return of({
-          alias: undefined,
-          ttl: undefined
-        });
       })
     );
   }

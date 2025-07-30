@@ -36,7 +36,7 @@ export class DocsMenuComponent {
   }
 
   goToMxConfiguration() {
-    this.router.navigate(['/mx-configuration']);
+    this.router.navigate(['/custom-domains']);
     this.closeMenu();
   }
 
