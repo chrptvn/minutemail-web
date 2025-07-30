@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {Router} from '@angular/router';
 import {ButtonComponent} from '../ui/button.component';
 import {TablerIconComponent} from '../icons/tabler-icons.component';
@@ -18,9 +18,8 @@ import {DocsMenuComponent} from '../docs-menu/docs-menu.component';
   styleUrl: './top-menu.scss'
 })
 export class TopMenu {
-  constructor(
-    private router: Router,
-  ) {}
+
+  private readonly router = inject(Router);
 
   goToPrivacy() {
     this.router.navigate(['/privacy']);
