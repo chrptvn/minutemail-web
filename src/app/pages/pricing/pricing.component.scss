@@ -1,4 +1,53 @@
 /* Pricing page specific styles */
+
+/* Billing toggle styles */
+.billing-toggle {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.1) 0%, rgba(36, 200, 219, 0.05) 100%);
+}
+
+.dark .billing-toggle {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.15) 0%, rgba(36, 200, 219, 0.08) 100%);
+}
+
+.billing-toggle button {
+  transition: all 0.2s ease;
+}
+
+.billing-toggle button:hover {
+  transform: translateY(-1px);
+}
+
+/* Discount badge */
+.discount-badge {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* Price animation */
+.price-change {
+  animation: priceUpdate 0.3s ease-out;
+}
+
+@keyframes priceUpdate {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 .pricing-card {
   transition: all 0.3s ease;
   position: relative;

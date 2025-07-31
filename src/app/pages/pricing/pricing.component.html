@@ -19,6 +19,33 @@
           <p class="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
             Choose the perfect plan for your temporary email needs. Start free and scale as you grow.
           </p>
+
+          <!-- Billing Period Toggle -->
+          <div class="flex items-center justify-center mt-8 mb-4">
+            <div class="bg-gray-100 dark:bg-dark-800 p-1 rounded-lg">
+              <div class="flex items-center space-x-1">
+                <button
+                  type="button"
+                  class="px-4 py-2 text-sm font-medium rounded-md transition-all duration-200"
+                  [class]="!isYearly() ? 'bg-white dark:bg-dark-900 text-gray-900 dark:text-gray-100 shadow-sm' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100'"
+                  (click)="setYearly(false)"
+                >
+                  Monthly
+                </button>
+                <button
+                  type="button"
+                  class="px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 relative"
+                  [class]="isYearly() ? 'bg-white dark:bg-dark-900 text-gray-900 dark:text-gray-100 shadow-sm' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100'"
+                  (click)="setYearly(true)"
+                >
+                  Yearly
+                  <span class="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-1.5 py-0.5 rounded-full">
+                    -10%
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Pricing Cards -->
@@ -29,7 +56,7 @@
               <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">Free</h3>
               <div class="mb-4">
                 <span class="text-4xl font-bold text-gray-900 dark:text-gray-100">$0</span>
-                <span class="text-gray-600 dark:text-gray-400">/month</span>
+                <span class="text-gray-600 dark:text-gray-400">{{ getBillingPeriodText() }}</span>
               </div>
               <ul class="space-y-3 mb-6 text-left flex-1">
                 <li class="flex items-center text-sm text-gray-700 dark:text-gray-300">
@@ -64,8 +91,13 @@
             <div class="text-center flex-1 flex flex-col">
               <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">Hobbyist</h3>
               <div class="mb-4">
-                <span class="text-4xl font-bold text-gray-900 dark:text-gray-100">$5</span>
-                <span class="text-gray-600 dark:text-gray-400">/month</span>
+                <div class="flex items-baseline justify-center space-x-2">
+                  <span class="text-4xl font-bold text-gray-900 dark:text-gray-100">${{ getPrice(5) }}</span>
+                  @if (isYearly() && getOriginalPrice(5) !== getPrice(5)) {
+                    <span class="text-lg text-gray-500 dark:text-gray-400 line-through">${{ getOriginalPrice(5) }}</span>
+                  }
+                </div>
+                <span class="text-gray-600 dark:text-gray-400">{{ getBillingPeriodText() }}</span>
               </div>
               <ul class="space-y-3 mb-6 text-left flex-1">
                 <li class="flex items-center text-sm text-gray-700 dark:text-gray-300">
@@ -103,8 +135,13 @@
             <div class="text-center flex-1 flex flex-col">
               <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">Pro</h3>
               <div class="mb-4">
-                <span class="text-4xl font-bold text-gray-900 dark:text-gray-100">$15</span>
-                <span class="text-gray-600 dark:text-gray-400">/month</span>
+                <div class="flex items-baseline justify-center space-x-2">
+                  <span class="text-4xl font-bold text-gray-900 dark:text-gray-100">${{ getPrice(15) }}</span>
+                  @if (isYearly() && getOriginalPrice(15) !== getPrice(15)) {
+                    <span class="text-lg text-gray-500 dark:text-gray-400 line-through">${{ getOriginalPrice(15) }}</span>
+                  }
+                </div>
+                <span class="text-gray-600 dark:text-gray-400">{{ getBillingPeriodText() }}</span>
               </div>
               <ul class="space-y-3 mb-6 text-left flex-1">
                 <li class="flex items-center text-sm text-gray-700 dark:text-gray-300">
@@ -137,8 +174,13 @@
             <div class="text-center flex-1 flex flex-col">
               <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">Team</h3>
               <div class="mb-4">
-                <span class="text-4xl font-bold text-gray-900 dark:text-gray-100">$50</span>
-                <span class="text-gray-600 dark:text-gray-400">/month</span>
+                <div class="flex items-baseline justify-center space-x-2">
+                  <span class="text-4xl font-bold text-gray-900 dark:text-gray-100">${{ getPrice(50) }}</span>
+                  @if (isYearly() && getOriginalPrice(50) !== getPrice(50)) {
+                    <span class="text-lg text-gray-500 dark:text-gray-400 line-through">${{ getOriginalPrice(50) }}</span>
+                  }
+                </div>
+                <span class="text-gray-600 dark:text-gray-400">{{ getBillingPeriodText() }}</span>
               </div>
               <ul class="space-y-3 mb-6 text-left flex-1">
                 <li class="flex items-center text-sm text-gray-700 dark:text-gray-300">

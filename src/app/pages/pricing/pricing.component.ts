@@ -26,6 +26,9 @@ export class PricingComponent {
   private readonly router = inject(Router);
   private readonly keycloak = inject(Keycloak);
 
+  // Billing period state
+  yearly = signal(false);
+
   expandedFaqItems = new Set<number>();
 
   // Toast notifications
@@ -102,5 +105,33 @@ export class PricingComponent {
 
   hideToast() {
     this.showToast.set(false);
+  }
+
+  isYearly(): boolean {
+    return this.yearly();
+  }
+
+  setYearly(value: boolean) {
+    this.yearly.set(value);
+  }
+
+  getPrice(monthlyPrice: number): number {
+    if (this.yearly()) {
+      // 10% discount for yearly plans
+      const yearlyPrice = monthlyPrice * 12 * 0.9;
+      return Math.round(yearlyPrice);
+    }
+    return monthlyPrice;
+  }
+
+  getOriginalPrice(monthlyPrice: number): number {
+    if (this.yearly()) {
+      return monthlyPrice * 12;
+    }
+    return monthlyPrice;
+  }
+
+  getBillingPeriodText(): string {
+    return this.yearly() ? '/year' : '/month';
   }
 }
