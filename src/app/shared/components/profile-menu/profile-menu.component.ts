@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { TablerIconComponent } from '../icons/tabler-icons.component';
 import { ButtonComponent } from '../ui/button.component';
 import Keycloak from 'keycloak-js';
-import {AuthGuardData} from 'keycloak-angular';
 
 @Component({
   selector: 'app-profile-menu',
@@ -64,7 +63,7 @@ export class ProfileMenuComponent implements OnInit{
   }
 
   hasRole(role: string): boolean {
-    return this.keycloak.hasResourceRole(role, 'minutemail-web')
+    return this.keycloak.hasRealmRole(role)
   }
 
   manageDomain() {

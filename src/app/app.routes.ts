@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import {canActivateAuthRole} from './core/gards/authgard';
+import {canActivateAuthRole, canActivateLogin} from './core/gards/authgard';
 
 export const routes: Routes = [
   {
@@ -23,6 +23,12 @@ export const routes: Routes = [
     title: 'Pricing - MinuteMail'
   },
   {
+    path: 'subscribe',
+    loadComponent: () => import('./pages/subscribe/subscribe.component').then(m => m.SubscribeComponent),
+    title: 'Thanks for your confidence - MinuteMail',
+    canActivate: [canActivateLogin]
+  },
+  {
     path: 'mailbox/:alias',
     loadComponent: () => import('./pages/inbox/inbox.component').then(m => m.InboxComponent),
     title: 'Inbox - MinuteMail'
@@ -33,7 +39,7 @@ export const routes: Routes = [
     title: 'Manage Domain - MinuteMail',
     canActivate: [canActivateAuthRole],
     data: {
-      role: 'owner'
+      role: 'manage_domains'
     }
   },
   {
@@ -47,7 +53,7 @@ export const routes: Routes = [
     title: 'API Keys - MinuteMail',
     canActivate: [canActivateAuthRole],
     data: {
-      role: 'member'
+      role: 'use_api'
     }
   },
   {

@@ -63,21 +63,25 @@ export class PricingComponent {
     return !!this.keycloak.authenticated;
   }
 
+  register() {
+    let redirectUri = window.location.origin ;
+    this.keycloak.register({
+      redirectUri: redirectUri
+    });
+  }
+
   subscribe(plan: string) {
-    if (plan === 'free') {
-      if (!this.isAuthenticated()) {
-        // Redirect to login for free plan
-        this.keycloak.login();
+    if (!this.isAuthenticated()) {
+      let redirectUri = window.location.origin + this.router.url;
+      let interval = this.yearly() ? 'yearly' : 'monthly';
+      if (plan !== 'free') {
+        redirectUri = `${window.location.origin}/subscribe?plan=${plan}&interval=${interval}`;
       }
-      return;
+
+      this.keycloak.register({
+        redirectUri: redirectUri
+      });
     }
-
-    // For paid plans, show a placeholder message for now
-    this.showToastMessage('info', `Subscription for ${plan} plan will be implemented soon. Please check back later!`);
-
-    // TODO: Implement actual subscription logic
-    // This is where you would integrate with your payment processor
-    console.log(`Subscribing to ${plan} plan`);
   }
 
   toggleFaqItem(index: number) {
