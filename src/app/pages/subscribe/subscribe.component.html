@@ -1,27 +1,31 @@
 <div class="min-h-screen bg-gray-50 dark:bg-dark-950 mobile-scroll-container">
+  @if(isSuccess()) {
+
   <!-- Header -->
   <header class="bg-white dark:bg-dark-900 border-b border-gray-200 dark:border-dark-700">
     <app-top-menu></app-top-menu>
   </header>
 
-  <!-- Main Content -->
-  <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12 mobile-scroll-content">
-    <div class="bg-white dark:bg-dark-900 rounded-xl border border-gray-200 dark:border-dark-700 shadow-sm mobile-scroll-card">
-      <div class="px-6 py-8 sm:px-8 sm:py-12 mobile-scroll-inner">
-        <!-- Header -->
-        <div class="text-center mb-8 sm:mb-12">
-          <div class="w-16 h-16 mx-auto bg-primary-100 dark:bg-primary-900 rounded-xl flex items-center justify-center mb-4">
-            <app-icon name="file-text" [size]="32" class="text-primary-600 dark:text-primary-400"></app-icon>
+    <!-- Main Content -->
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12 mobile-scroll-content">
+      <div class="bg-white dark:bg-dark-900 rounded-xl border border-gray-200 dark:border-dark-700 shadow-sm mobile-scroll-card">
+        <div class="px-6 py-8 sm:px-8 sm:py-12 mobile-scroll-inner">
+          <!-- Header -->
+          <div class="text-center mb-8 sm:mb-12">
+            <div class="w-16 h-16 mx-auto bg-primary-100 dark:bg-primary-900 rounded-xl flex items-center justify-center mb-4">
+              <app-icon name="file-text" [size]="32" class="text-primary-600 dark:text-primary-400"></app-icon>
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+              Your Subscription is Active
+            </h1>
+            <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">
+              Thanks for subscribing!
+              Plan : <strong>{{ this.plan_name() }}</strong>
+            </p>
           </div>
-          <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-            Your Subscription is Active
-          </h1>
-          <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">
-            Thanks for subscribing!
-          </p>
         </div>
       </div>
-    </div>
-    <app-footer></app-footer>
-  </main>
+      <app-footer></app-footer>
+    </main>
+  }
 </div>
