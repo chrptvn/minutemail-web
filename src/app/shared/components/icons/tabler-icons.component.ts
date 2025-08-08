@@ -362,6 +362,20 @@ import { Component, Input } from '@angular/core';
             <path d="M12 2v20"/>
           </g>
         }
+
+        @case('arrow-up') {
+          <g>
+            <path d="M12 19V5"/>
+            <path d="M5 12l7-7 7 7"/>
+          </g>
+        }
+
+        @case('arrow-down') {
+          <g>
+            <path d="M12 5v14"/>
+            <path d="M19 12l-7 7-7-7"/>
+          </g>
+        }
       }
     </svg>
   `

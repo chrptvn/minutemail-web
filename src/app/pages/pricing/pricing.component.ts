@@ -94,14 +94,10 @@ export class PricingComponent implements OnInit {
   }
 
   update(plan: string) {
-    this.subscriptionService.update({ plan, interval: this.yearly() ? 'yearly' : 'monthly' }).subscribe({
-      next: (response) => {
-        this.keycloak.login();
-      },
-      error: (error) => {
-        console.error('Upgrade failed:', error);
-        this.showToastMessage('error', 'Failed to upgrade. Please try again later.');
-      }
+    // Navigate to plan change confirmation page
+    const interval = this.yearly() ? 'yearly' : 'monthly';
+    this.router.navigate(['/plan-change'], {
+      queryParams: { plan, interval }
     });
   }
 

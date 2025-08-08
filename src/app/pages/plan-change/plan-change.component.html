@@ -1,0 +1,186 @@
+<div class="min-h-screen bg-gray-50 dark:bg-dark-950 mobile-scroll-container">
+  <!-- Header -->
+  <header class="bg-white dark:bg-dark-900 border-b border-gray-200 dark:border-dark-700">
+    <app-top-menu></app-top-menu>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12 mobile-scroll-content">
+    <div class="bg-white dark:bg-dark-900 rounded-xl border border-gray-200 dark:border-dark-700 shadow-sm mobile-scroll-card">
+      <div class="px-6 py-8 sm:px-8 sm:py-12 mobile-scroll-inner">
+        <!-- Header -->
+        <div class="text-center mb-8 sm:mb-12">
+          <div class="w-16 h-16 mx-auto bg-primary-100 dark:bg-primary-900 rounded-xl flex items-center justify-center mb-4">
+            <app-icon [name]="isUpgrade() ? 'arrow-up' : 'arrow-down'" [size]="32" class="text-primary-600 dark:text-primary-400"></app-icon>
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+            {{ isUpgrade() ? 'Upgrade' : 'Downgrade' }} to {{ getTargetPlanDisplayName() }}
+          </h1>
+          <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">
+            Review the changes and billing conditions before confirming
+          </p>
+        </div>
+
+        <!-- Plan Comparison -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <!-- Current Plan -->
+          <div class="bg-gray-50 dark:bg-dark-800 rounded-lg p-6 border border-gray-200 dark:border-dark-700">
+            <div class="text-center mb-4">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                Current Plan
+              </h3>
+              <div class="text-2xl font-bold text-gray-600 dark:text-gray-400">
+                {{ getCurrentPlanDisplayName() }}
+              </div>
+            </div>
+            <ul class="space-y-2">
+              @for (feature of getCurrentPlanFeatures(); track feature) {
+                <li class="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                  <app-icon name="check" [size]="16" class="text-gray-400 mr-3 flex-shrink-0"></app-icon>
+                  {{ feature }}
+                </li>
+              }
+            </ul>
+          </div>
+
+          <!-- Target Plan -->
+          <div class="bg-primary-50 dark:bg-primary-900/20 rounded-lg p-6 border-2 border-primary-200 dark:border-primary-800">
+            <div class="text-center mb-4">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                New Plan
+              </h3>
+              <div class="text-2xl font-bold text-primary-600 dark:text-primary-400">
+                {{ getTargetPlanDisplayName() }}
+              </div>
+            </div>
+            <ul class="space-y-2">
+              @for (feature of getTargetPlanFeatures(); track feature) {
+                <li class="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                  <app-icon name="check" [size]="16" class="text-primary-500 mr-3 flex-shrink-0"></app-icon>
+                  {{ feature }}
+                </li>
+              }
+            </ul>
+          </div>
+        </div>
+
+        <!-- Billing Conditions -->
+        <div class="mb-8">
+          <div [class]="getConditionsCardClass()">
+            <div class="flex items-start space-x-3">
+              <div class="flex-shrink-0">
+                <app-icon [name]="getConditionsIcon()" [size]="20" [class]="getConditionsIconClass()"></app-icon>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                  {{ getConditionsTitle() }}
+                </h3>
+                <div class="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                  @if (isUpgrade()) {
+                    <p>
+                      <strong>Immediate Effect:</strong> Your plan will be upgraded immediately and you'll have access to all new features right away.
+                    </p>
+                    <p>
+                      <strong>Billing:</strong> You'll be charged the prorated amount for the remaining billing period. Your next billing cycle will reflect the new plan pricing.
+                    </p>
+                  } @else if (targetPlan() === 'free') {
+                    <p>
+                      <strong>End of Billing Cycle:</strong> Your subscription will be cancelled at the end of your current billing period.
+                    </p>
+                    <p>
+                      <strong>Access:</strong> You'll continue to have access to your current plan features until the billing period ends, then your account will revert to the free plan.
+                    </p>
+                    <p>
+                      <strong>Data:</strong> Any custom domains exceeding the free plan limits will need to be removed before the downgrade takes effect.
+                    </p>
+                  } @else {
+                    <p>
+                      <strong>End of Billing Cycle:</strong> Your plan will be downgraded at the end of your current billing period.
+                    </p>
+                    <p>
+                      <strong>Access:</strong> You'll continue to have access to your current plan features until the billing period ends.
+                    </p>
+                    <p>
+                      <strong>Limitations:</strong> If your current usage exceeds the new plan limits (e.g., custom domains), you'll need to adjust before the change takes effect.
+                    </p>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Acceptance Checkbox -->
+        <div class="mb-8">
+          <label class="flex items-start space-x-3 cursor-pointer">
+            <input
+              type="checkbox"
+              [(ngModel)]="accepted"
+              class="mt-1 h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 dark:border-dark-600 rounded"
+            />
+            <span class="text-sm text-gray-700 dark:text-gray-300">
+              I understand and accept the billing conditions for this plan change. 
+              @if (!isUpgrade()) {
+                I acknowledge that the change will take effect at the end of my current billing period.
+              } @else {
+                I acknowledge that I will be charged immediately for the prorated amount.
+              }
+            </span>
+          </label>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4">
+          <app-button
+            variant="secondary"
+            (onClick)="goBack()"
+            class="w-full sm:w-auto"
+          >
+            <app-icon name="arrow-left" [size]="16" class="mr-2"></app-icon>
+            Cancel
+          </app-button>
+          <app-button
+            variant="primary"
+            [disabled]="!accepted || updating()"
+            [loading]="updating()"
+            (onClick)="confirmPlanChange()"
+            class="w-full sm:w-auto"
+          >
+            <app-icon [name]="isUpgrade() ? 'arrow-up' : 'arrow-down'" [size]="16" class="mr-2"></app-icon>
+            {{ getConfirmButtonText() }}
+          </app-button>
+        </div>
+
+        <!-- Additional Information -->
+        @if (targetPlan() === 'free') {
+          <div class="mt-8 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
+            <div class="flex items-start space-x-3">
+              <app-icon name="alert-triangle" [size]="20" class="text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5"></app-icon>
+              <div>
+                <h4 class="text-sm font-semibold text-yellow-800 dark:text-yellow-200 mb-1">
+                  Important: Subscription Cancellation
+                </h4>
+                <p class="text-sm text-yellow-700 dark:text-yellow-300">
+                  Downgrading to the free plan will cancel your subscription. You can resubscribe at any time, but you'll lose any existing billing discounts or promotional pricing.
+                </p>
+              </div>
+            </div>
+          </div>
+        }
+
+        <app-footer></app-footer>
+      </div>
+    </div>
+  </main>
+
+  <!-- Toast Notifications -->
+  @if (showToast()) {
+    <div class="fixed bottom-4 right-4 left-4 sm:left-auto z-50">
+      <app-toast
+        [type]="toastType()"
+        [message]="toastMessage()"
+        (onClose)="hideToast()"
+      ></app-toast>
+    </div>
+  }
+</div>

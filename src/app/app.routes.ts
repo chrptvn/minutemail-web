@@ -23,6 +23,12 @@ export const routes: Routes = [
     title: 'Pricing - MinuteMail'
   },
   {
+    path: 'plan-change',
+    loadComponent: () => import('./pages/plan-change/plan-change.component').then(m => m.PlanChangeComponent),
+    title: 'Change Plan - MinuteMail',
+    canActivate: [canActivateLogin]
+  },
+  {
     path: 'subscribe',
     loadComponent: () => import('./pages/subscribe/subscribe.component').then(m => m.SubscribeComponent),
     title: 'Thanks for your confidence - MinuteMail',
