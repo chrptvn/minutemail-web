@@ -18,7 +18,7 @@ export const appConfig: ApplicationConfig = {
       initOptions: {
         onLoad: 'check-sso',
         silentCheckSsoRedirectUri: typeof window !== 'undefined' ? window.location.origin + '/silent-check-sso.html' : undefined,
-        checkLoginIframe: false,
+        checkLoginIframe: true,
         pkceMethod: 'S256'
       } as any,
     }),
