@@ -85,20 +85,20 @@
                     </p>
                   } @else if (targetPlan() === 'free') {
                     <p>
-                      <strong>End of Billing Cycle:</strong> Your subscription will be cancelled at the end of your current billing period.
+                      <strong>Immediate Effect:</strong> Your subscription will be cancelled immediately and your plan will revert to the free plan.
                     </p>
                     <p>
-                      <strong>Access:</strong> You'll continue to have access to your current plan features until the billing period ends, then your account will revert to the free plan.
+                      <strong>Billing:</strong> You'll receive a credit for the unused portion of your current billing period.
                     </p>
                     <p>
                       <strong>Data:</strong> Any custom domains exceeding the free plan limits will need to be removed before the downgrade takes effect.
                     </p>
                   } @else {
                     <p>
-                      <strong>End of Billing Cycle:</strong> Your plan will be downgraded at the end of your current billing period.
+                      <strong>Immediate Effect:</strong> Your plan will be downgraded immediately to {{ getTargetPlanDisplayName() }}.
                     </p>
                     <p>
-                      <strong>Access:</strong> You'll continue to have access to your current plan features until the billing period ends.
+                      <strong>Billing:</strong> You'll receive a credit for the difference in your remaining billing period.
                     </p>
                     <p>
                       <strong>Limitations:</strong> If your current usage exceeds the new plan limits (e.g., custom domains), you'll need to adjust before the change takes effect.
@@ -121,7 +121,7 @@
             <span class="text-sm text-gray-700 dark:text-gray-300">
               I understand and accept the billing conditions for this plan change. 
               @if (!isUpgrade()) {
-                I acknowledge that the change will take effect at the end of my current billing period.
+                I acknowledge that the change will take effect immediately and I will receive a credit for the unused portion.
               } @else {
                 I acknowledge that I will be charged immediately for the prorated amount.
               }
