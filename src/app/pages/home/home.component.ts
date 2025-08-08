@@ -51,6 +51,10 @@ export class HomeComponent implements OnInit {
     @Inject(PLATFORM_ID) private readonly platformId: Object
   ) {}
 
+  isAuthenticated(): boolean {
+    return !!this.keycloak.authenticated;
+  }
+
   ngOnInit() {
     // Check if user can manage domains and load their domains
     if (this.keycloak.authenticated && this.keycloak.hasRealmRole('manage_domains')) {
