@@ -25,9 +25,13 @@
           [generating]="generating()"
           [copying]="copying()"
           [copied]="copied()"
-          (onGenerate)="generateAlias()"
+          [showDomainSelector]="showDomainSelector()"
+          [availableDomains]="availableDomains()"
+          [selectedDomain]="selectedDomain()"
+          (onGenerate)="generateAlias($event)"
           (onCopy)="copyAlias()"
           (onViewInbox)="viewInbox()"
+          (onDomainChange)="onDomainChange($event)"
         ></app-address-card>
       </div>
 

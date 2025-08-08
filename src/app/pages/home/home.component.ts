@@ -3,6 +3,7 @@ import {CommonModule} from '@angular/common';
 import { Router } from '@angular/router';
 import { AliasService } from '../../core/services/alias.service';
 import { ClipboardService } from '../../core/services/clipboard.service';
+import { DomainService } from '../../core/services/domain.service';
 import { AddressCardComponent } from '../../shared/components/address-card/address-card.component';
 import { VpnBannerComponent } from '../../shared/components/vpn-banner/vpn-banner.component';
 import { FaqComponent } from '../../shared/components/faq/faq.component';
@@ -10,6 +11,7 @@ import { ToastComponent } from '../../shared/components/ui/toast.component';
 import {ApiService} from '../../core/services/api.service';
 import {TopMenu} from '../../shared/components/top-menu/top-menu';
 import {FooterComponent} from '../../shared/components/footer/footer.component';
+import Keycloak from 'keycloak-js';
 
 @Component({
   selector: 'app-home',
@@ -32,6 +34,9 @@ export class HomeComponent implements OnInit {
   copying = signal(false);
   copied = signal(false);
   expiresAt = signal<string | undefined>(undefined);
+  showDomainSelector = signal(false);
+  availableDomains = signal<string[]>(['minutemail.co']);
+  selectedDomain = signal('minutemail.co');
   showToast = signal(false);
   toastType = signal<'success' | 'error' | 'warning' | 'info'>('info');
   toastMessage = signal('');
@@ -40,11 +45,19 @@ export class HomeComponent implements OnInit {
     private readonly router: Router,
     private readonly aliasService: AliasService,
     private readonly apiService: ApiService,
+    private readonly domainService: DomainService,
     private readonly clipboardService: ClipboardService,
+    private readonly keycloak: Keycloak,
     @Inject(PLATFORM_ID) private readonly platformId: Object
   ) {}
 
   ngOnInit() {
+    // Check if user can manage domains and load their domains
+    if (this.keycloak.authenticated && this.keycloak.hasRealmRole('manage_domains')) {
+      this.showDomainSelector.set(true);
+      this.loadUserDomains();
+    }
+
     const existingAlias = this.aliasService.getCurrentAlias();
     if (existingAlias) {
       this.apiService.getMails(existingAlias).subscribe({
@@ -59,11 +72,27 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  generateAlias() {
+  private loadUserDomains() {
+    this.domainService.getDomains().subscribe({
+      next: (domains) => {
+        const userDomains = domains.map(d => d.name);
+        this.availableDomains.set(['minutemail.co', ...userDomains]);
+      },
+      error: (error) => {
+        console.error('Error loading domains:', error);
+        // Keep minutemail.co as fallback
+        this.availableDomains.set(['minutemail.co']);
+      }
+    });
+  }
+
+  generateAlias(domain?: string) {
       this.generating.set(true);
 
+      const selectedDomain = domain || this.selectedDomain();
+
       // Call the new method that registers the alias with the API
-      this.aliasService.generateAndRegisterAlias()
+      this.aliasService.generateAndRegisterAlias(selectedDomain)
         .subscribe({
           next: (result) => {
             this.currentAlias.set(result.alias);
@@ -112,6 +141,10 @@ export class HomeComponent implements OnInit {
   viewInbox() {
     const aliasName = this.aliasService.extractAliasFromEmail(this.currentAlias()!);
     this.router.navigate([`/mailbox/${aliasName}`]);
+  }
+
+  onDomainChange(domain: string) {
+    this.selectedDomain.set(domain);
   }
 
   private showToastMessage(type: 'success' | 'error' | 'warning' | 'info', message: string) {

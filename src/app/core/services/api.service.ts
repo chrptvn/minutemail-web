@@ -35,11 +35,11 @@ export class ApiService {
       );
   }
 
-  createMailBox(): Observable<RegisterModel> {
+  createMailBox(domain = 'minutemail.co'): Observable<RegisterModel> {
     return defer(() => {
       const url = `${this.baseUrl}/mailbox`;
       const headers = this.getAuthHeaders();
-      return this.http.post<RegisterModel>(url,  {source: 'web'}, { headers })
+      return this.http.post<RegisterModel>(url, { domain }, { headers })
     }).pipe(catchError(this.handleError));
   }
 

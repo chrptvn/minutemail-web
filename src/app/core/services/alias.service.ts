@@ -15,13 +15,13 @@ export class AliasService {
   /**
    * Generate a new alias and register it with the API using session ID as password
    */
-  generateAndRegisterAlias(): Observable<{ alias?: string; expireAt?: Date }> {
+  generateAndRegisterAlias(domain = 'minutemail.co'): Observable<{ alias?: string; expireAt?: Date }> {
 
-    return this.apiService.createMailBox().pipe(
+    return this.apiService.createMailBox(domain).pipe(
       map(response => {
-        this.setCurrentAlias(`${response.name}@minutemail.co`);
+        this.setCurrentAlias(`${response.name}@${domain}`);
         return {
-          alias: `${response.name}@minutemail.co`,
+          alias: `${response.name}@${domain}`,
           ttl: response.ttl
         };
       })
