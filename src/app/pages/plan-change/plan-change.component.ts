@@ -211,7 +211,7 @@ export class PlanChangeComponent implements OnInit {
           // Plan change scheduled for end of billing cycle
           this.showToastMessage('success', this.getSuccessMessage());
           setTimeout(() => {
-            this.router.navigate(['/pricing']);
+            this.router.navigate(['/subscribe'], { queryParams: { status: 'success' } });
           }, 2000);
         }
         this.updating.set(false);
