@@ -70,16 +70,20 @@
               </ul>
               <div class="mt-auto">
                 @if (isAuthenticated()) {
-                  <div class="w-full py-2 px-4 bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-200 rounded-lg font-medium text-sm border border-green-200 dark:border-green-800">
-                    Current Plan
-                  </div>
+                  @if (isFree()) {
+                    <div class="pb-1">
+                      <span class="w-full py-2 px-4 bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-200 rounded-lg font-medium text-sm border border-green-200 dark:border-green-800">
+                        Current Plan
+                      </span>
+                    </div>
+                  } @else {
+                    <app-button variant="secondary" (onClick)="update('free')" class="w-full">
+                      Downgrade
+                    </app-button>
+                  }
                 } @else {
-                  <app-button
-                    variant="secondary"
-                    (onClick)="register()"
-                    class="w-full"
-                  >
-                    Get Started Free
+                  <app-button variant="primary" (onClick)="subscribe('team')" class="w-full">
+                    Subscribe
                   </app-button>
                 }
               </div>
@@ -114,13 +118,27 @@
                 </li>
               </ul>
               <div class="mt-auto">
-                <app-button
-                  variant="primary"
-                  (onClick)="subscribe('hobbyist')"
-                  class="w-full"
-                >
-                  Subscribe
-                </app-button>
+                @if (isAuthenticated()) {
+                  @if (isHobbyist()) {
+                  <div class="pb-1">
+                    <span class="w-full py-2 px-4 bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-200 rounded-lg font-medium text-sm border border-green-200 dark:border-green-800">
+                      Current Plan
+                    </span>
+                  </div>
+                  } @else if (isFree()) {
+                    <app-button variant="primary" (onClick)="update('hobbyist')" class="w-full">
+                      Upgrade
+                    </app-button>
+                  } @else {
+                    <app-button variant="secondary" (onClick)="update('hobbyist')" class="w-full">
+                      Downgrade
+                    </app-button>
+                  }
+                } @else {
+                  <app-button variant="primary" (onClick)="subscribe('hobbyist')" class="w-full">
+                    Subscribe
+                  </app-button>
+                }
               </div>
             </div>
           </div>
@@ -158,13 +176,27 @@
                 </li>
               </ul>
               <div class="mt-auto">
-                <app-button
-                  variant="primary"
-                  (onClick)="subscribe('pro')"
-                  class="w-full"
-                >
-                  Subscribe
-                </app-button>
+                @if (isAuthenticated()) {
+                  @if (isPro()) {
+                    <div class="pb-1">
+                      <span class="w-full py-2 px-4 bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-200 rounded-lg font-medium text-sm border border-green-200 dark:border-green-800">
+                        Current Plan
+                      </span>
+                    </div>
+                  } @else if (isFree() || isHobbyist()) {
+                    <app-button variant="primary" (onClick)="update('pro')" class="w-full">
+                      Upgrade
+                    </app-button>
+                  } @else {
+                    <app-button variant="secondary" (onClick)="update('pro')" class="w-full">
+                      Downgrade
+                    </app-button>
+                  }
+                } @else {
+                  <app-button variant="primary" (onClick)="subscribe('pro')" class="w-full">
+                    Subscribe
+                  </app-button>
+                }
               </div>
             </div>
           </div>
@@ -201,13 +233,23 @@
                 </li>
               </ul>
               <div class="mt-auto">
-                <app-button
-                  variant="primary"
-                  (onClick)="subscribe('team')"
-                  class="w-full"
-                >
-                  Subscribe
-                </app-button>
+                @if (isAuthenticated()) {
+                  @if (isTeam()) {
+                    <div class="pb-1">
+                      <span class="w-full py-2 px-4 bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-200 rounded-lg font-medium text-sm border border-green-200 dark:border-green-800">
+                        Current Plan
+                      </span>
+                    </div>
+                  } @else if (isFree() || isHobbyist() || isPro()) {
+                    <app-button variant="primary" (onClick)="update('team')" class="w-full">
+                      Upgrade
+                    </app-button>
+                  }
+                } @else {
+                  <app-button variant="primary" (onClick)="subscribe('team')" class="w-full">
+                    Subscribe
+                  </app-button>
+                }
               </div>
             </div>
           </div>

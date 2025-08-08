@@ -32,9 +32,17 @@ export class SubscriptionService {
     }).pipe(catchError(this.handleError));
   }
 
+  update(subscription: Subscription): Observable<SubscriptionResponse> {
+    return defer(() => {
+      const url = `${this.baseUrl}/membership/update`;
+      const headers = this.getAuthHeaders();
+      return this.http.post<SubscriptionResponse>(url,  subscription, { headers })
+    }).pipe(catchError(this.handleError));
+  }
+
   getMembership(): Observable<Membership> {
     return defer(() => {
-      const url = `${this.baseUrl}/membership`;
+      const url = `${this.baseUrl}/membership/current`;
       const headers = this.getAuthHeaders();
       return this.http.get<Membership>(url, { headers });
     }).pipe(catchError(this.handleError));

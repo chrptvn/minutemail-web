@@ -1,7 +1,6 @@
 import {Component, inject, signal} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TablerIconComponent } from '../../shared/components/icons/tabler-icons.component';
-import { ButtonComponent } from '../../shared/components/ui/button.component';
 import { SpinnerComponent } from '../../shared/components/ui/spinner.component';
 import {TopMenu} from "../../shared/components/top-menu/top-menu";
 import {FooterComponent} from '../../shared/components/footer/footer.component';
@@ -13,7 +12,7 @@ import Keycloak from 'keycloak-js';
 @Component({
   selector: 'app-subscribe',
   standalone: true,
-  imports: [CommonModule, TablerIconComponent, ButtonComponent, SpinnerComponent, TopMenu, FooterComponent],
+  imports: [CommonModule, TablerIconComponent, SpinnerComponent, TopMenu, FooterComponent],
   templateUrl: './subscribe.component.html',
   styleUrl: './subscribe.component.scss'
 })
@@ -25,7 +24,7 @@ export class SubscribeComponent {
 
   plan_name = signal('');
 
-  private membership = this.subscriptionService.getMembership();
+  private readonly membership = this.subscriptionService.getMembership();
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe(params => {
@@ -68,7 +67,7 @@ export class SubscribeComponent {
 
   getPlanFeatures(): string[] {
     const planName = this.plan_name().toLowerCase();
-    
+
     switch (planName) {
       case 'hobbyist':
         return [

@@ -1,4 +1,4 @@
-import { Component, signal, inject } from '@angular/core';
+import {Component, signal, inject, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { TablerIconComponent } from '../../shared/components/icons/tabler-icons.component';
@@ -7,6 +7,7 @@ import { ToastComponent } from '../../shared/components/ui/toast.component';
 import { TopMenu } from '../../shared/components/top-menu/top-menu';
 import { FooterComponent } from '../../shared/components/footer/footer.component';
 import Keycloak from 'keycloak-js';
+import {SubscriptionService} from '../../core/services/subscription.service';
 
 @Component({
   selector: 'app-pricing',
@@ -22,9 +23,17 @@ import Keycloak from 'keycloak-js';
   templateUrl: './pricing.component.html',
   styleUrl: './pricing.component.scss'
 })
-export class PricingComponent {
+export class PricingComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly keycloak = inject(Keycloak);
+  private readonly subscriptionService = inject(SubscriptionService);
+
+  isFree = signal(false);
+  isHobbyist = signal(false);
+  isPro = signal(false);
+  isTeam = signal(false);
+
+  private readonly membership = this.subscriptionService.getMembership();
 
   // Billing period state
   yearly = signal(false);
@@ -84,6 +93,18 @@ export class PricingComponent {
     }
   }
 
+  update(plan: string) {
+    this.subscriptionService.update({ plan, interval: this.yearly() ? 'yearly' : 'monthly' }).subscribe({
+      next: (response) => {
+        this.keycloak.login();
+      },
+      error: (error) => {
+        console.error('Upgrade failed:', error);
+        this.showToastMessage('error', 'Failed to upgrade. Please try again later.');
+      }
+    });
+  }
+
   toggleFaqItem(index: number) {
     if (this.expandedFaqItems.has(index)) {
       this.expandedFaqItems.delete(index);
@@ -137,5 +158,22 @@ export class PricingComponent {
 
   getBillingPeriodText(): string {
     return this.yearly() ? '/year' : '/month';
+  }
+
+  ngOnInit(): void {
+    if (this.isAuthenticated()) {
+      this.membership.subscribe({
+        next: (membership) => {
+          this.isFree.set(membership.plan_name === 'free');
+          this.isHobbyist.set(membership.plan_name === 'hobbyist');
+          this.isPro.set(membership.plan_name === 'pro');
+          this.isTeam.set(membership.plan_name === 'team');
+        },
+        error: (error) => {
+          console.error('Failed to fetch membership:', error);
+          this.showToastMessage('error', 'Failed to load membership details. Please try again later.');
+        }
+      });
+    }
   }
 }
