@@ -43,13 +43,11 @@
 
 .generate-button {
   background: linear-gradient(135deg, var(--primary-color) 0%, rgba(36, 200, 219, 0.9) 100%);
-  box-shadow: 0 4px 12px rgba(36, 200, 219, 0.3);
   transition: all 0.3s ease;
 }
 
 .generate-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(36, 200, 219, 0.4);
 }
 
 .action-buttons {
