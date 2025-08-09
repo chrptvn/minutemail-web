@@ -145,9 +145,7 @@ export class HomeComponent implements OnInit {
 
   viewInbox() {
     const fullEmail = this.currentAlias()!;
-    // URL encode the email to handle @ and other special characters
-    const encodedEmail = encodeURIComponent(fullEmail);
-    this.router.navigate([`/mailbox/${encodedEmail}`]);
+    this.router.navigate([`/mailbox/${fullEmail}`]);
   }
 
   onDomainChange(domain: string) {

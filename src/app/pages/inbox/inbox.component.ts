@@ -80,8 +80,7 @@ export class InboxComponent implements OnInit, OnDestroy {
         return;
       }
 
-      // Decode the email parameter
-      const fullEmail = decodeURIComponent(emailParam);
+      const fullEmail = emailParam;
       const aliasName = this.aliasService.extractAliasFromEmail(fullEmail);
       
       this.alias.set(aliasName);
