@@ -58,19 +58,19 @@
 
         @if (showDomainSelector) {
           <div class="flex items-center justify-center gap-2 sm:gap-3">
-            <app-button
+            <span><app-button
               variant="primary"
               size="lg"
               [loading]="generating"
-              (onClick)="generate()"
+              (onClick)="onGenerate.emit()"
               ariaLabel="Generate new email address"
-              class="generate-button"
+              class="generate-button w-full sm:w-auto"
               [dataEvent]="'Generate Email Address'"
               [dataProps]="{ 'generation': generation }"
             >
               <app-icon name="mail" [size]="18" class="mr-2 sm:w-5 sm:h-5"></app-icon>
               Generate Email Address
-            </app-button>
+            </app-button></span>
             <span class="text-lg sm:text-xl font-medium text-gray-600 dark:text-gray-400">@</span>
             <select
               [(ngModel)]="selectedDomain"
@@ -87,7 +87,7 @@
             variant="primary"
             size="lg"
             [loading]="generating"
-            (onClick)="generate()"
+            (onClick)="onGenerate.emit()"
             ariaLabel="Generate new email address"
             class="generate-button w-full sm:w-auto"
             [dataEvent]="'Generate Email Address'"
