@@ -93,7 +93,8 @@ export class HomeComponent implements OnInit {
   generateAlias(domain?: string) {
       this.generating.set(true);
 
-      const selectedDomain = domain || this.selectedDomain();
+      const selectedDomain = domain ?? this.selectedDomain();
+      console.log(selectedDomain)
 
       // Call the new method that registers the alias with the API
       this.aliasService.generateAndRegisterAlias(selectedDomain)

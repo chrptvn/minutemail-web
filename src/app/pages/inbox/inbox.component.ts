@@ -68,7 +68,6 @@ export class InboxComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    console.log(this.aliasService.getCurrentAlias())
     if (this.aliasService.getCurrentAlias() === null) {
       this.goHome();
     } else {
