@@ -56,6 +56,24 @@
 
 /* Mobile optimizations */
 @media (max-width: 640px) {
+  /* Domain selector layout adjustments for mobile */
+  .domain-selector-container {
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+  }
+  
+  .domain-selector-container .flex {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .domain-selector-container select {
+    max-width: 140px;
+  }
+  
   .email-display {
     padding: 0.375rem; /* Further reduced from 0.5rem */
   }
