@@ -45,11 +45,8 @@
           </div>
           <div class="text-left">
             <h3 class="text-xs sm:text-sm font-medium text-blue-900 dark:text-blue-100 mb-1">
-              Fully Secured
-            </h3>
-            <p class="text-xs text-blue-800 dark:text-blue-200 leading-relaxed">
               Your mailbox is fully secured and protected.
-            </p>
+            </h3>
           </div>
         </div>
       </div>
@@ -58,7 +55,7 @@
         <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400 mb-2">
           Generate a temporary email address to get started
         </p>
-        <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+
           @if (showDomainSelector) {
             <select
               [(ngModel)]="selectedDomain"
@@ -82,7 +79,7 @@
             <app-icon name="mail" [size]="18" class="mr-2 sm:w-5 sm:h-5"></app-icon>
             Generate Email Address
           </app-button>
-        </div>
+
       </div>
     }
 
