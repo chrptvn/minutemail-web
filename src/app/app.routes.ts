@@ -35,9 +35,9 @@ export const routes: Routes = [
     canActivate: [canActivateLogin]
   },
   {
-    path: 'mailbox/:email',
+    path: 'mailbox',
     loadComponent: () => import('./pages/inbox/inbox.component').then(m => m.InboxComponent),
-    title: 'Inbox - MinuteMail'
+    title: 'Mailbox - MinuteMail'
   },
   {
     path: 'manage-domain',

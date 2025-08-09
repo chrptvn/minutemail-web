@@ -1,28 +1,26 @@
 import { Injectable, inject } from '@angular/core';
-import { ApiService } from './api.service';
-import { SessionService } from './session.service';
-import { Observable, of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { MailBoxService } from './mail-box.service';
+import {Observable, tap} from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AliasService {
   private readonly STORAGE_KEY = 'minutemail_current_alias';
-  private readonly apiService = inject(ApiService);
-  private readonly sessionService = inject(SessionService);
+  private readonly apiService = inject(MailBoxService);
 
   /**
    * Generate a new alias and register it with the API using session ID as password
    */
-  generateAndRegisterAlias(domain = 'minutemail.co'): Observable<{ alias?: string; expireAt?: Date }> {
+  generateAndRegisterAlias(domain = 'minutemail.co'): Observable<{ alias: string; expireAt: Date }> {
 
     return this.apiService.createMailBox(domain).pipe(
+      tap(response => this.setCurrentAlias(`${response.email}`)),
       map(response => {
-        this.setCurrentAlias(`${response.name}@${domain}`);
         return {
-          alias: `${response.name}@${domain}`,
-          ttl: response.ttl
+          alias: response.email,
+          expireAt: new Date(response.expireAt)
         };
       })
     );

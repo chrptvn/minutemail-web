@@ -8,7 +8,7 @@ import { AddressCardComponent } from '../../shared/components/address-card/addre
 import { VpnBannerComponent } from '../../shared/components/vpn-banner/vpn-banner.component';
 import { FaqComponent } from '../../shared/components/faq/faq.component';
 import { ToastComponent } from '../../shared/components/ui/toast.component';
-import {ApiService} from '../../core/services/api.service';
+import {MailBoxService} from '../../core/services/mail-box.service';
 import {TopMenu} from '../../shared/components/top-menu/top-menu';
 import {FooterComponent} from '../../shared/components/footer/footer.component';
 import Keycloak from 'keycloak-js';
@@ -44,7 +44,7 @@ export class HomeComponent implements OnInit {
   constructor(
     private readonly router: Router,
     private readonly aliasService: AliasService,
-    private readonly apiService: ApiService,
+    private readonly apiService: MailBoxService,
     private readonly domainService: DomainService,
     private readonly clipboardService: ClipboardService,
     private readonly keycloak: Keycloak,
@@ -64,13 +64,12 @@ export class HomeComponent implements OnInit {
 
     const existingAlias = this.aliasService.getCurrentAlias();
     if (existingAlias) {
-      const aliasName = this.aliasService.extractAliasFromEmail(existingAlias);
-      this.apiService.getMails(aliasName).subscribe({
+      this.apiService.getMails(existingAlias).subscribe({
         next: (result) => {
+          this.currentAlias.set(existingAlias);
           const isExpired = result.expireAt && new Date(result.expireAt) < new Date();
           if (!isExpired) {
             this.expiresAt.set(result.expireAt ? new Date(result.expireAt).toISOString() : undefined);
-            this.currentAlias.set(existingAlias);
           }
         }
       })
@@ -102,6 +101,7 @@ export class HomeComponent implements OnInit {
           next: (result) => {
             this.currentAlias.set(result.alias);
             console.log('Generated alias:', result.alias);
+            console.log('Expiration time:', result.expireAt);
             // Set expiration time if provided by API
             if (result.expireAt) {
               this.expiresAt.set(result.expireAt.toISOString());
@@ -144,8 +144,7 @@ export class HomeComponent implements OnInit {
   }
 
   viewInbox() {
-    const fullEmail = this.currentAlias()!;
-    this.router.navigate([`/mailbox/${fullEmail}`]);
+    this.router.navigate([`/mailbox`]);
   }
 
   onDomainChange(domain: string) {

@@ -3,7 +3,7 @@ import { isPlatformBrowser, CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { timer, Subject, switchMap, takeUntil, catchError, of } from 'rxjs';
 
-import { ApiService } from '../../core/services/api.service';
+import { MailBoxService } from '../../core/services/mail-box.service';
 import { AliasService } from '../../core/services/alias.service';
 import { ClipboardService } from '../../core/services/clipboard.service';
 
@@ -40,8 +40,7 @@ import {TopMenu} from '../../shared/components/top-menu/top-menu';
   styleUrls: ['./inbox.component.scss']
 })
 export class InboxComponent implements OnInit, OnDestroy {
-  alias = signal<string>('');
-  fullAlias = signal<string>('');
+  email = signal<string>('');
   mails = signal<Mail[]>([]);
   selectedMail = signal<Mail | undefined>(undefined);
   isMailViewerOpen = signal(false);
@@ -62,34 +61,22 @@ export class InboxComponent implements OnInit, OnDestroy {
   private readonly POLL_INTERVAL = 5000;
 
   constructor(
-    @Inject(PLATFORM_ID) private readonly platformId: Object,
-    private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly apiService: ApiService,
+    private readonly apiService: MailBoxService,
     private readonly aliasService: AliasService,
     private readonly clipboardService: ClipboardService,
   ) {}
 
   ngOnInit() {
-    this.route.params.pipe(
-      takeUntil(this.destroy$),
-    ).subscribe(params => {
-      const emailParam = params['email'];
-      if (!emailParam) {
-        this.router.navigate(['/']);
-        return;
-      }
+    console.log(this.aliasService.getCurrentAlias())
+    if (this.aliasService.getCurrentAlias() === null) {
+      this.goHome();
+    } else {
+      this.email.set(<string>this.aliasService.getCurrentAlias());
+    }
 
-      const fullEmail = emailParam;
-      const aliasName = this.aliasService.extractAliasFromEmail(fullEmail);
-      
-      this.alias.set(aliasName);
-      this.fullAlias.set(fullEmail);
-      this.aliasService.setCurrentAlias(this.fullAlias());
-
-      this.loadMails(false);
-      this.startPolling();
-    });
+    this.loadMails(false);
+    this.startPolling();
   }
 
   ngOnDestroy() {
@@ -107,7 +94,7 @@ export class InboxComponent implements OnInit, OnDestroy {
 
     timer(this.POLL_INTERVAL, this.POLL_INTERVAL)
       .pipe(
-        switchMap(() => this.apiService.getMails(this.alias())),
+        switchMap(() => this.apiService.getMails(this.email())),
         takeUntil(this.destroy$),
         catchError(err => {
           console.error('Polling error:', err);
@@ -146,7 +133,7 @@ export class InboxComponent implements OnInit, OnDestroy {
     }
     this.error.set(null);
 
-    this.apiService.getMails(this.alias())
+    this.apiService.getMails(this.email())
       .subscribe({
         next: resp => {
           this.mails.set(resp.mails ?? []);
@@ -167,19 +154,14 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   refreshMails() {
-    if (isPlatformBrowser(this.platformId)) {
-      window.location.reload();
-    }
+    window.location.reload();
   }
 
   async copyEmailAddress() {
-    if (!isPlatformBrowser(this.platformId)) return;
-
-    const email = this.fullAlias();
     this.copying.set(true);
 
     try {
-      const success = await this.clipboardService.copyToClipboard(email);
+      const success = await this.clipboardService.copyToClipboard(this.email());
       this.copied.set(success);
 
       if (!success) {
@@ -218,13 +200,9 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   deleteMail(mail: Mail) {
-    if (!isPlatformBrowser(this.platformId) || this.deletingMailId()) {
-      return;
-    }
-
     this.deletingMailId.set(mail.id);
 
-    this.apiService.deleteMail(this.alias(), mail.id)
+    this.apiService.deleteMail(this.email(), mail.id)
       .subscribe({
         next: () => {
           this.mails.set(this.mails().filter(m => m.id !== mail.id));

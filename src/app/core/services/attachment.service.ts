@@ -18,7 +18,7 @@ export class AttachmentService {
    * Get file extension from filename
    */
   getFileExtension(filename: string): string {
-    return filename.split('.').pop()?.toLowerCase() || '';
+    return filename.split('.').pop()?.toLowerCase() ?? '';
   }
 
   /**

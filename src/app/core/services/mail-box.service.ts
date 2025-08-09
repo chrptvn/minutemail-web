@@ -6,17 +6,20 @@ import { environment } from '../../../environments/environment';
 import { MailResponse } from '../models/mail.model';
 import {RegisterModel} from '../models/register.model';
 import Keycloak from 'keycloak-js';
+import {SessionService} from './session.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ApiService {
+export class MailBoxService {
   private readonly keycloak: Keycloak = inject(Keycloak);
   private readonly baseUrl = environment.apiBase;
   private readonly http = inject(HttpClient);
+  private readonly sessionService = inject(SessionService);
 
   private getAuthHeaders(): HttpHeaders {
     let headers = new HttpHeaders();
+    headers = headers.set('X-Mailbox-Password', this.sessionService.getOrCreateSessionId());
     if (this.keycloak.authenticated) {
         headers = headers.set('Authorization', `Bearer ${this.keycloak.token}`);
     }

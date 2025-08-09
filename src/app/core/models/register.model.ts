@@ -1,5 +1,4 @@
 export interface RegisterModel {
-  message: string,
-  name: string,
-  ttl: number,
+  email: string,
+  expireAt: string,
 }
