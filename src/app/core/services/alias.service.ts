@@ -30,12 +30,7 @@ export class AliasService {
 
   getCurrentAlias(): string | null {
     if (typeof window !== 'undefined') {
-      const mail = sessionStorage.getItem(this.STORAGE_KEY);
-      if (mail) {
-        return mail.split('@')[0];
-      } else {
-        return null;
-      }
+      return sessionStorage.getItem(this.STORAGE_KEY);
     }
     return null;
   }
@@ -54,5 +49,22 @@ export class AliasService {
 
   extractAliasFromEmail(email: string): string {
     return email.split('@')[0];
+  }
+
+  /**
+   * Extract domain from email address
+   */
+  extractDomainFromEmail(email: string): string {
+    return email.split('@')[1] || 'minutemail.co';
+  }
+
+  /**
+   * Get full email address from current alias
+   */
+  getCurrentFullEmail(): string | null {
+    if (typeof window !== 'undefined') {
+      return sessionStorage.getItem(this.STORAGE_KEY);
+    }
+    return null;
   }
 }

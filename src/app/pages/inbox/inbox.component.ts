@@ -74,14 +74,18 @@ export class InboxComponent implements OnInit, OnDestroy {
     this.route.params.pipe(
       takeUntil(this.destroy$),
     ).subscribe(params => {
-      const alias = params['alias'];
-      if (!alias) {
+      const emailParam = params['email'];
+      if (!emailParam) {
         this.router.navigate(['/']);
         return;
       }
 
-      this.alias.set(alias);
-      this.fullAlias.set(`${alias}@minutemail.co`);
+      // Decode the email parameter
+      const fullEmail = decodeURIComponent(emailParam);
+      const aliasName = this.aliasService.extractAliasFromEmail(fullEmail);
+      
+      this.alias.set(aliasName);
+      this.fullAlias.set(fullEmail);
       this.aliasService.setCurrentAlias(this.fullAlias());
 
       this.loadMails(false);

@@ -64,12 +64,13 @@ export class HomeComponent implements OnInit {
 
     const existingAlias = this.aliasService.getCurrentAlias();
     if (existingAlias) {
-      this.apiService.getMails(existingAlias).subscribe({
+      const aliasName = this.aliasService.extractAliasFromEmail(existingAlias);
+      this.apiService.getMails(aliasName).subscribe({
         next: (result) => {
           const isExpired = result.expireAt && new Date(result.expireAt) < new Date();
           if (!isExpired) {
             this.expiresAt.set(result.expireAt ? new Date(result.expireAt).toISOString() : undefined);
-            this.currentAlias.set(existingAlias + '@minutemail.co');
+            this.currentAlias.set(existingAlias);
           }
         }
       })
@@ -143,8 +144,10 @@ export class HomeComponent implements OnInit {
   }
 
   viewInbox() {
-    const aliasName = this.aliasService.extractAliasFromEmail(this.currentAlias()!);
-    this.router.navigate([`/mailbox/${aliasName}`]);
+    const fullEmail = this.currentAlias()!;
+    // URL encode the email to handle @ and other special characters
+    const encodedEmail = encodeURIComponent(fullEmail);
+    this.router.navigate([`/mailbox/${encodedEmail}`]);
   }
 
   onDomainChange(domain: string) {
