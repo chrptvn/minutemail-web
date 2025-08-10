@@ -41,11 +41,11 @@
   position: relative;
 }
 
-.plan-menu-item:hover {
+.plan-menu-item button:hover {
   background: linear-gradient(135deg, rgba(36, 200, 219, 0.1) 0%, rgba(36, 200, 219, 0.05) 100%);
 }
 
-.dark .plan-menu-item:hover {
+.dark .plan-menu-item button:hover {
   background: linear-gradient(135deg, rgba(36, 200, 219, 0.15) 0%, rgba(36, 200, 219, 0.08) 100%);
 }
 

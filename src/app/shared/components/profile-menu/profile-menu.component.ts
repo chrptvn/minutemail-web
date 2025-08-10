@@ -35,12 +35,12 @@ export class ProfileMenuComponent implements OnInit{
     this.showUpgradeSubmenu.set(false);
   }
 
-  showPlanSubmenu() {
-    this.showUpgradeSubmenu.set(true);
+  togglePlanSubmenu() {
+    this.showUpgradeSubmenu.update(current => !current);
   }
 
-  hidePlanSubmenu() {
-    this.showUpgradeSubmenu.set(false);
+  closePlanSubmenu() {
+    this.showUpgradeSubmenu.set(true);
   }
   onFocusOut(event: FocusEvent) {
     const next = event.relatedTarget as HTMLElement | null;
