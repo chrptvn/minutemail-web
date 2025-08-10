@@ -13,7 +13,7 @@ import Keycloak from 'keycloak-js';
   templateUrl: './profile-menu.component.html',
   styleUrl: './profile-menu.component.scss'
 })
-export class ProfileMenuComponent implements OnInit{
+export class ProfileMenuComponent implements OnInit {
 
   @ViewChild('menu', { static: true }) menu!: ElementRef<HTMLElement>;
 
@@ -49,9 +49,6 @@ export class ProfileMenuComponent implements OnInit{
     this.showUpgradeSubmenu.set(false);
   }
 
-  hidePlanSubmenu() {
-    this.showUpgradeSubmenu.set(false);
-  }
   onFocusOut(event: FocusEvent) {
     const next = event.relatedTarget as HTMLElement | null;
     if (next && this.menu.nativeElement.contains(next)) {
