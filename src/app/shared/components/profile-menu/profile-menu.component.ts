@@ -20,7 +20,6 @@ export class ProfileMenuComponent implements OnInit {
   isOpen = signal(false);
   isAuthenticated = signal(false);
   currentPlan = signal<string>('free');
-  showUpgradeSubmenu = signal(false);
 
   private readonly router = inject(Router);
   private readonly keycloak = inject(Keycloak);
@@ -32,21 +31,6 @@ export class ProfileMenuComponent implements OnInit {
 
   closeMenu() {
     this.isOpen.set(false);
-    this.showUpgradeSubmenu.set(false);
-  }
-
-  togglePlanSubmenu() {
-    this.showUpgradeSubmenu.update(current => !current);
-  }
-
-  showPlanSubmenu() {
-    if (this.getAvailableUpgrades().length > 0) {
-      this.showUpgradeSubmenu.set(true);
-    }
-  }
-
-  hidePlanSubmenu() {
-    this.showUpgradeSubmenu.set(false);
   }
 
   onFocusOut(event: FocusEvent) {
@@ -81,6 +65,11 @@ export class ProfileMenuComponent implements OnInit {
     })
   }
 
+  goToPricing() {
+    this.router.navigate(['/pricing']);
+    this.closeMenu();
+  }
+
   hasRole(role: string): boolean {
     return this.keycloak.hasRealmRole(role)
   }
@@ -104,27 +93,6 @@ export class ProfileMenuComponent implements OnInit {
       case 'team': return 'Team';
       default: return 'Free Plan';
     }
-  }
-
-  getAvailableUpgrades(): Array<{key: string, name: string, price: number}> {
-    const current = this.currentPlan();
-    const plans = [
-      { key: 'hobbyist', name: 'Hobbyist', price: 5 },
-      { key: 'pro', name: 'Pro', price: 15 },
-      { key: 'team', name: 'Team', price: 50 }
-    ];
-
-    const planHierarchy = ['free', 'hobbyist', 'pro', 'team'];
-    const currentIndex = planHierarchy.indexOf(current);
-    
-    return plans.filter((_, index) => index > currentIndex);
-  }
-
-  upgradeToPlan(planKey: string) {
-    this.router.navigate(['/plan-change'], {
-      queryParams: { plan: planKey, interval: 'monthly' }
-    });
-    this.closeMenu();
   }
 
   ngOnInit(): void {

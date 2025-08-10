@@ -55,27 +55,6 @@
   cursor: pointer !important;
 }
 
-/* Upgrade submenu styles */
-.upgrade-submenu {
-  animation: slideInLeft 0.2s ease-out;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-}
-
-.dark .upgrade-submenu {
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-}
-
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
 /* Menu item hover effects */
 .menu-item {
   transition: all 0.15s ease;
