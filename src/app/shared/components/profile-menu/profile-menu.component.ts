@@ -39,8 +39,8 @@ export class ProfileMenuComponent implements OnInit{
     this.showUpgradeSubmenu.update(current => !current);
   }
 
-  closePlanSubmenu() {
-    this.showUpgradeSubmenu.set(true);
+  hidePlanSubmenu() {
+    this.showUpgradeSubmenu.set(false);
   }
   onFocusOut(event: FocusEvent) {
     const next = event.relatedTarget as HTMLElement | null;
