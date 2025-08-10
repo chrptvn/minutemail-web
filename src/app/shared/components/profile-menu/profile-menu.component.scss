@@ -39,16 +39,20 @@
 /* Plan menu item styles */
 .plan-menu-item {
   position: relative;
-  cursor: pointer;
 }
 
 .plan-menu-item button:hover {
   background: linear-gradient(135deg, rgba(36, 200, 219, 0.1) 0%, rgba(36, 200, 219, 0.05) 100%);
-  cursor: pointer;
+  cursor: pointer !important;
 }
 
 .dark .plan-menu-item button:hover {
   background: linear-gradient(135deg, rgba(36, 200, 219, 0.15) 0%, rgba(36, 200, 219, 0.08) 100%);
+}
+
+/* Ensure cursor pointer for plan button */
+.plan-menu-item button {
+  cursor: pointer !important;
 }
 
 /* Upgrade submenu styles */

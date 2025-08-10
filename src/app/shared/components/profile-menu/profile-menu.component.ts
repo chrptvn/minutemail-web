@@ -39,6 +39,16 @@ export class ProfileMenuComponent implements OnInit{
     this.showUpgradeSubmenu.update(current => !current);
   }
 
+  showPlanSubmenu() {
+    if (this.getAvailableUpgrades().length > 0) {
+      this.showUpgradeSubmenu.set(true);
+    }
+  }
+
+  hidePlanSubmenu() {
+    this.showUpgradeSubmenu.set(false);
+  }
+
   hidePlanSubmenu() {
     this.showUpgradeSubmenu.set(false);
   }
