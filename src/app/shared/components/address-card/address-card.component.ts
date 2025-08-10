@@ -36,8 +36,8 @@ export class AddressCardComponent {
     this.onGenerate.emit(this.selectedDomain);
   }
 
-  ngOnChanges() {
-    // Emit domain change when selectedDomain changes
-    this.onDomainChange.emit(this.selectedDomain);
+  onDomainSelectionChange(domain: string) {
+    this.selectedDomain = domain;
+    this.onDomainChange.emit(domain);
   }
 }

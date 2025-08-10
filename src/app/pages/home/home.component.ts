@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AliasService } from '../../core/services/alias.service';
 import { ClipboardService } from '../../core/services/clipboard.service';
 import { DomainService } from '../../core/services/domain.service';
+import { DomainPreferenceService } from '../../core/services/domain-preference.service';
 import { AddressCardComponent } from '../../shared/components/address-card/address-card.component';
 import { VpnBannerComponent } from '../../shared/components/vpn-banner/vpn-banner.component';
 import { FaqComponent } from '../../shared/components/faq/faq.component';
@@ -46,6 +47,7 @@ export class HomeComponent implements OnInit {
     private readonly aliasService: AliasService,
     private readonly apiService: MailBoxService,
     private readonly domainService: DomainService,
+    private readonly domainPreferenceService: DomainPreferenceService,
     private readonly clipboardService: ClipboardService,
     private readonly keycloak: Keycloak,
     @Inject(PLATFORM_ID) private readonly platformId: Object
@@ -60,6 +62,10 @@ export class HomeComponent implements OnInit {
     if (this.keycloak.authenticated && this.keycloak.hasRealmRole('manage_domains')) {
       this.showDomainSelector.set(true);
       this.loadUserDomains();
+    } else {
+      // For non-authenticated users, still load the preferred domain
+      const preferredDomain = this.domainPreferenceService.getPreferredDomain();
+      this.selectedDomain.set(preferredDomain);
     }
 
     const existingAlias = this.aliasService.getCurrentAlias();
@@ -80,12 +86,18 @@ export class HomeComponent implements OnInit {
     this.domainService.getDomains().subscribe({
       next: (domains) => {
         const userDomains = domains.map(d => d.name);
-        this.availableDomains.set(['minutemail.co', ...userDomains]);
+        const allDomains = ['minutemail.co', ...userDomains];
+        this.availableDomains.set(allDomains);
+        
+        // Set preferred domain from storage, ensuring it's valid
+        const validPreferredDomain = this.domainPreferenceService.getValidPreferredDomain(allDomains);
+        this.selectedDomain.set(validPreferredDomain);
       },
       error: (error) => {
         console.error('Error loading domains:', error);
         // Keep minutemail.co as fallback
         this.availableDomains.set(['minutemail.co']);
+        this.selectedDomain.set('minutemail.co');
       }
     });
   }
@@ -150,6 +162,11 @@ export class HomeComponent implements OnInit {
 
   onDomainChange(domain: string) {
     this.selectedDomain.set(domain);
+    
+    // Save domain preference to local storage if user is authenticated
+    if (this.keycloak.authenticated) {
+      this.domainPreferenceService.setPreferredDomain(domain);
+    }
   }
 
   private showToastMessage(type: 'success' | 'error' | 'warning' | 'info', message: string) {
