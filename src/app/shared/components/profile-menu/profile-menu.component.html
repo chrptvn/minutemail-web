@@ -24,6 +24,40 @@
       @if (isAuthenticated()) {
         <!-- Profile Actions -->
         <div class="py-1">
+          <!-- Plan Display with Upgrade Submenu -->
+          <div class="relative plan-menu-item" (mouseenter)="showPlanSubmenu()" (mouseleave)="hidePlanSubmenu()">
+            <div class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 border-b border-gray-100 dark:border-dark-800">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                  <app-icon name="price-tag" [size]="16" class="text-gray-500 dark:text-gray-400"></app-icon>
+                  <span class="font-medium">{{ getCurrentPlanDisplayName() }}</span>
+                </div>
+                @if (getAvailableUpgrades().length > 0) {
+                  <app-icon name="chevron-right" [size]="14" class="text-gray-400"></app-icon>
+                }
+              </div>
+            </div>
+
+            <!-- Upgrade Submenu -->
+            @if (showUpgradeSubmenu() && getAvailableUpgrades().length > 0) {
+              <div class="absolute left-full top-0 ml-1 w-40 bg-white dark:bg-dark-900 rounded-lg shadow-lg border border-gray-200 dark:border-dark-700 py-1 z-60 animate-fade-in">
+                <div class="px-3 py-2 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-100 dark:border-dark-800">
+                  Upgrade to
+                </div>
+                @for (plan of getAvailableUpgrades(); track plan.key) {
+                  <button
+                    type="button"
+                    class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-800 flex items-center justify-between transition-colors"
+                    (click)="upgradeToPlan(plan.key)"
+                  >
+                    <span>{{ plan.name }}</span>
+                    <span class="text-xs text-gray-500 dark:text-gray-400">${{ plan.price }}/mo</span>
+                  </button>
+                }
+              </div>
+            }
+          </div>
+
           @if (hasRole('use_api')) {
             <button
               type="button"

@@ -36,6 +36,39 @@
   }
 }
 
+/* Plan menu item styles */
+.plan-menu-item {
+  position: relative;
+}
+
+.plan-menu-item:hover {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.1) 0%, rgba(36, 200, 219, 0.05) 100%);
+}
+
+.dark .plan-menu-item:hover {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.15) 0%, rgba(36, 200, 219, 0.08) 100%);
+}
+
+/* Upgrade submenu styles */
+.upgrade-submenu {
+  animation: slideInLeft 0.2s ease-out;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.dark .upgrade-submenu {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
 /* Menu item hover effects */
 .menu-item {
   transition: all 0.15s ease;
@@ -49,6 +82,20 @@
   background: linear-gradient(135deg, rgba(36, 200, 219, 0.15) 0%, rgba(36, 200, 219, 0.08) 100%);
 }
 
+/* Plan upgrade button styles */
+.upgrade-button {
+  transition: all 0.15s ease;
+}
+
+.upgrade-button:hover {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%);
+  color: rgb(34, 197, 94);
+}
+
+.dark .upgrade-button:hover {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.08) 100%);
+  color: rgb(34, 197, 94);
+}
 /* User info section */
 .user-info {
   background: linear-gradient(135deg, rgba(36, 200, 219, 0.05) 0%, rgba(36, 200, 219, 0.02) 100%);
@@ -63,6 +110,16 @@
   .profile-dropdown {
     width: 12rem; /* Slightly smaller on mobile */
     right: -0.5rem; /* Adjust positioning */
+  }
+  
+  /* Hide submenu on mobile to prevent overflow */
+  .upgrade-submenu {
+    display: none;
+  }
+  
+  /* Make plan item clickable on mobile */
+  .plan-menu-item {
+    cursor: pointer;
   }
   
   .user-info {
@@ -80,12 +137,19 @@
   z-index: 1000;
 }
 
+.upgrade-submenu {
+  z-index: 1001;
+}
 /* Focus styles for accessibility */
 .menu-item:focus {
   outline: 2px solid var(--primary-color);
   outline-offset: -2px;
 }
 
+.upgrade-button:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: -2px;
+}
 /* Loading state for avatar */
 .avatar-loading {
   background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
