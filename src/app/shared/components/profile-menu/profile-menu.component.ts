@@ -21,6 +21,7 @@ export class ProfileMenuComponent implements OnInit{
   isAuthenticated = signal(false);
   currentPlan = signal<string>('free');
   showUpgradeSubmenu = signal(false);
+  showUpgradeSubmenu = signal(false);
 
   private readonly router = inject(Router);
   private readonly keycloak = inject(Keycloak);
@@ -32,6 +33,15 @@ export class ProfileMenuComponent implements OnInit{
 
   closeMenu() {
     this.isOpen.set(false);
+    this.showUpgradeSubmenu.set(false);
+  }
+
+  showPlanSubmenu() {
+    this.showUpgradeSubmenu.set(true);
+  }
+
+  hidePlanSubmenu() {
+    this.showUpgradeSubmenu.set(false);
     this.showUpgradeSubmenu.set(false);
   }
 
