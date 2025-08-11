@@ -21,11 +21,11 @@
     <div class="absolute right-0 mt-2 w-48 bg-white dark:bg-dark-900 rounded-lg shadow-lg border border-gray-200 dark:border-dark-700 py-1 z-50 animate-fade-in">
       @if (isAuthenticated()) {
         <!-- Profile Actions -->
-        <div class="py-1">
+        <div>
           <!-- Premium Plan Display -->
           <button
             type="button"
-            class="w-full text-left px-4 py-3 premium-plan-button border-b border-gray-100 dark:border-dark-800"
+            class="w-full text-left px-4 py-1 premium-plan-button border-b border-gray-100 dark:border-dark-800"
             (click)="goToPricing(); $event.stopPropagation()"
           >
             <div class="text-center">
