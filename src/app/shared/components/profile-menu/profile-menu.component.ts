@@ -89,11 +89,6 @@ export class ProfileMenuComponent implements OnInit {
     this.closeMenu();
   }
 
-  manageMembers() {
-    this.router.navigate(['/members']);
-    this.closeMenu();
-  }
-
   manageBilling() {
     this.subscriptionService.getBillingPortal().subscribe({
       next: (response) => {
@@ -131,9 +126,4 @@ export class ProfileMenuComponent implements OnInit {
         },
         error: (error) => {
           console.error('Failed to fetch membership:', error);
-          this.currentPlan.set('free');
-        }
-      });
-    }
-  }
 }
