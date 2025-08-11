@@ -126,4 +126,9 @@ export class ProfileMenuComponent implements OnInit {
         },
         error: (error) => {
           console.error('Failed to fetch membership:', error);
+        }
+      }
+      )
+    }
+  }
 }
