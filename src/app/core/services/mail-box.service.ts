@@ -38,7 +38,7 @@ export class MailBoxService {
       );
   }
 
-  createMailBox(domain = 'minutemail.co'): Observable<RegisterModel> {
+  createMailBox(domain = 'minutemail.cc'): Observable<RegisterModel> {
     return defer(() => {
       const url = `${this.baseUrl}/mailbox`;
       const headers = this.getAuthHeaders();

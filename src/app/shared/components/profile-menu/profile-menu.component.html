@@ -38,16 +38,29 @@
             </div>
           </button>
 
-          @if (hasRole('use_api')) {
-            <button
-              type="button"
-              class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-800 flex items-center space-x-2 transition-colors"
-              (click)="manageBilling()"
-            >
-              <app-icon name="credit-card" [size]="16" class="text-gray-500 dark:text-gray-400"></app-icon>
-              <span>Billing</span>
-            </button>
+          @if (hasRole('manage_billing')) {
+          <button
+            type="button"
+            class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-800 flex items-center space-x-2 transition-colors"
+            (click)="manageBilling()"
+          >
+            <app-icon name="credit-card" [size]="16" class="text-gray-500 dark:text-gray-400"></app-icon>
+            <span>Billing</span>
+          </button>
+          }
 
+          @if (hasRole('invite')) {
+          <button
+            type="button"
+            class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-800 flex items-center space-x-2 transition-colors"
+            (click)="manageMembers()"
+          >
+            <app-icon name="users" [size]="16" class="text-gray-500 dark:text-gray-400"></app-icon>
+            <span>Members</span>
+          </button>
+          }
+
+          @if (hasRole('use_api')) {
             <button
               type="button"
               class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-800 flex items-center space-x-2 transition-colors"
@@ -90,6 +103,15 @@
             <span>Sign in</span>
           </button>
 
+          <button
+            type="button"
+            class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-800 flex items-center space-x-2"
+            (click)="register()"
+          >
+            <app-icon name="user-plus" [size]="16" class="text-gray-500 dark:text-gray-400"></app-icon>
+            <span>{{ 'Sign up' }}</span>
+          </button>
+
           @if (hasRole('manage_billing')) {
             <button
               type="button"
@@ -101,17 +123,6 @@
             </button>
           }
         </div>
-          @if (hasRole('invite')) {
-            <button
-              type="button"
-              class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-800 flex items-center space-x-2 transition-colors"
-              (click)="manageMembers()"
-            >
-              <app-icon name="users" [size]="16" class="text-gray-500 dark:text-gray-400"></app-icon>
-              <span>Members</span>
-            </button>
-          }
-
       }
     </div>
   }

@@ -7,8 +7,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class DomainPreferenceService {
   private readonly STORAGE_KEY = 'minutemail_preferred_domain';
-  private readonly DEFAULT_DOMAIN = 'minutemail.co';
-  
+  private readonly DEFAULT_DOMAIN = 'minutemail.cc';
+
   private preferredDomain$ = new BehaviorSubject<string>(this.DEFAULT_DOMAIN);
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
@@ -67,11 +67,11 @@ export class DomainPreferenceService {
    */
   getValidPreferredDomain(availableDomains: string[]): string {
     const preferred = this.getPreferredDomain();
-    
+
     if (this.isValidDomain(preferred, availableDomains)) {
       return preferred;
     }
-    
+
     // Fallback to first available domain
     return availableDomains[0] || this.DEFAULT_DOMAIN;
   }

@@ -13,7 +13,7 @@ export class AliasService {
   /**
    * Generate a new alias and register it with the API using session ID as password
    */
-  generateAndRegisterAlias(domain = 'minutemail.co'): Observable<{ alias: string; expireAt: Date }> {
+  generateAndRegisterAlias(domain = 'minutemail.cc'): Observable<{ alias: string; expireAt: Date }> {
 
     return this.apiService.createMailBox(domain).pipe(
       tap(response => this.setCurrentAlias(`${response.email}`)),
@@ -53,7 +53,7 @@ export class AliasService {
    * Extract domain from email address
    */
   extractDomainFromEmail(email: string): string {
-    return email.split('@')[1] || 'minutemail.co';
+    return email.split('@')[1] || 'minutemail.cc';
   }
 
   /**
