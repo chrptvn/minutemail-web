@@ -376,6 +376,13 @@ import { Component, Input } from '@angular/core';
             <path d="M19 12l-7 7-7-7"/>
           </g>
         }
+
+        @case('credit-card') {
+          <g>
+            <rect width="20" height="14" x="2" y="5" rx="2"/>
+            <line x1="2" x2="22" y1="10" y2="10"/>
+          </g>
+        }
       }
     </svg>
   `

@@ -48,6 +48,14 @@ export class SubscriptionService {
     }).pipe(catchError(this.handleError));
   }
 
+  getBillingPortal(): Observable<{ url: string }> {
+    return defer(() => {
+      const url = `${this.baseUrl}/billing`;
+      const headers = this.getAuthHeaders();
+      return this.http.post<{ url: string }>(url, {}, { headers });
+    }).pipe(catchError(this.handleError));
+  }
+
   private handleError = (error: HttpErrorResponse): Observable<never> => {
     let errorMessage = 'An error occurred';
 

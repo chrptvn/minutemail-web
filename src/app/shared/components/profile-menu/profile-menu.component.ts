@@ -84,6 +84,21 @@ export class ProfileMenuComponent implements OnInit {
     this.closeMenu();
   }
 
+  manageBilling() {
+    this.subscriptionService.getBillingPortal().subscribe({
+      next: (response) => {
+        if (response?.url) {
+          window.open(response.url, '_blank');
+        }
+        this.closeMenu();
+      },
+      error: (error) => {
+        console.error('Failed to open billing portal:', error);
+        this.closeMenu();
+      }
+    });
+  }
+
   getCurrentPlanDisplayName(): string {
     const plan = this.currentPlan();
     switch (plan) {
