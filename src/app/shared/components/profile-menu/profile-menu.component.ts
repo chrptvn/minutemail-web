@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { TablerIconComponent } from '../icons/tabler-icons.component';
 import { ButtonComponent } from '../ui/button.component';
 import { SubscriptionService } from '../../../core/services/subscription.service';
+import { AliasService } from '../../../core/services/alias.service';
+import { DomainPreferenceService } from '../../../core/services/domain-preference.service';
 import Keycloak from 'keycloak-js';
 
 @Component({
@@ -24,6 +26,8 @@ export class ProfileMenuComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly keycloak = inject(Keycloak);
   private readonly subscriptionService = inject(SubscriptionService);
+  private readonly aliasService = inject(AliasService);
+  private readonly domainPreferenceService = inject(DomainPreferenceService);
 
   toggleMenu() {
     this.isOpen.update(current => !current);
@@ -44,6 +48,9 @@ export class ProfileMenuComponent implements OnInit {
   async login() {
     this.keycloak.login().then(() => {
       this.isAuthenticated.set(!!this.keycloak.authenticated);
+      // Clear current alias and domain preferences on login
+      this.aliasService.clearCurrentAlias();
+      this.domainPreferenceService.clearPreferredDomain();
       this.closeMenu();
     }).then(() => {
       this.closeMenu();
@@ -59,6 +66,9 @@ export class ProfileMenuComponent implements OnInit {
   async logout() {
     this.keycloak.logout().then(() => {
       this.isAuthenticated.set(!!this.keycloak.authenticated);
+      // Clear current alias and domain preferences on logout
+      this.aliasService.clearCurrentAlias();
+      this.domainPreferenceService.clearPreferredDomain();
       this.router.navigate(['/']);
     }).then(() => {
       this.closeMenu();
