@@ -43,6 +43,13 @@
           <div class="flex-shrink-0">
             <app-icon name="shield" [size]="16" class="text-blue-600 dark:text-blue-400 sm:w-5 sm:h-5"></app-icon>
           </div>
+          @if (isAuthenticated) {
+            <div class="text-left">
+              <h3 class="text-xs sm:text-sm font-medium text-blue-900 dark:text-blue-100 mb-1">
+                This mailbox is fully protected
+              </h3>
+            </div>
+          } @else {
           <div class="text-left">
             <h3 class="text-xs sm:text-sm font-medium text-blue-900 dark:text-blue-100 mb-1">
               Session Protected
@@ -51,6 +58,7 @@
               This mailbox is secured with a unique session password and can only be accessed from your current browser session.  <a href="/pricing">Explore our plans</a> for enhanced protection, API access, and custom domain support.
             </p>
           </div>
+          }
         </div>
       </div>
     } @else {

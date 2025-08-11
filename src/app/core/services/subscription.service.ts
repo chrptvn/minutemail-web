@@ -50,7 +50,7 @@ export class SubscriptionService {
 
   getBillingPortal(): Observable<{ url: string }> {
     return defer(() => {
-      const url = `${this.baseUrl}/billing`;
+      const url = `${this.baseUrl}/membership/billing`;
       const headers = this.getAuthHeaders();
       return this.http.post<{ url: string }>(url, {}, { headers });
     }).pipe(catchError(this.handleError));
