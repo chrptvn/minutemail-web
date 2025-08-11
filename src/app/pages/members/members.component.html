@@ -1,0 +1,247 @@
+<!-- src/app/pages/members/members.component.html -->
+<div class="min-h-screen bg-gray-50 dark:bg-dark-950 mobile-scroll-container">
+  <!-- Header -->
+  <header class="bg-white dark:bg-dark-900 border-b border-gray-200 dark:border-dark-700">
+    <app-top-menu></app-top-menu>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12 mobile-scroll-content">
+    <div class="bg-white dark:bg-dark-900 rounded-xl border border-gray-200 dark:border-dark-700 shadow-sm mobile-scroll-card">
+      <div class="px-6 py-8 sm:px-8 sm:py-12 mobile-scroll-inner">
+        <!-- Header -->
+        <div class="text-center mb-8 sm:mb-12">
+          <div class="w-16 h-16 mx-auto bg-primary-100 dark:bg-primary-900 rounded-xl flex items-center justify-center mb-4">
+            <app-icon name="users" [size]="32" class="text-primary-600 dark:text-primary-400"></app-icon>
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+            Team Members
+          </h1>
+          <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">
+            Invite team members and manage access to your MinuteMail organization
+          </p>
+        </div>
+
+        <!-- Invitation Section -->
+        <div class="mb-8">
+          <div class="bg-gray-50 dark:bg-dark-800 rounded-lg p-6 border border-gray-200 dark:border-dark-700">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+              Invite New Member
+            </h2>
+
+            <!-- Email Invitation Form -->
+            <form (ngSubmit)="sendInvitation()" #inviteForm="ngForm" class="space-y-4 mb-6">
+              <div>
+                <label for="memberEmail" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Email Address
+                </label>
+                <div class="flex space-x-3">
+                  <input
+                    type="email"
+                    id="memberEmail"
+                    name="memberEmail"
+                    [(ngModel)]="newMemberEmail"
+                    placeholder="colleague@company.com"
+                    class="flex-1 px-3 py-2 border border-gray-300 dark:border-dark-600 rounded-lg bg-white dark:bg-dark-900 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    required
+                  />
+                  <app-button
+                    type="submit"
+                    variant="primary"
+                    [disabled]="!newMemberEmail || inviting()"
+                    [loading]="inviting()"
+                    ariaLabel="Send invitation"
+                  >
+                    <app-icon name="send" [size]="16" class="mr-2"></app-icon>
+                    Send Invite
+                  </app-button>
+                </div>
+              </div>
+            </form>
+
+            <!-- Shareable Invitation Link -->
+            <div class="border-t border-gray-200 dark:border-dark-700 pt-4">
+              <h3 class="text-sm font-medium text-gray-900 dark:text-gray-100 mb-3">
+                Or share this invitation link:
+              </h3>
+              <div class="bg-white dark:bg-dark-900 rounded-lg p-3 border border-gray-200 dark:border-dark-600">
+                <div class="flex items-center justify-between">
+                  <code class="text-sm font-mono text-gray-900 dark:text-gray-100 break-all flex-1 mr-3">
+                    {{ invitationLink }}
+                  </code>
+                  <app-button
+                    variant="ghost"
+                    size="sm"
+                    [loading]="copying()['invitation']"
+                    (onClick)="copyInvitationLink()"
+                    ariaLabel="Copy invitation link"
+                    class="flex-shrink-0"
+                  >
+                    @if (copied()['invitation']) {
+                      <app-icon name="check" [size]="16" class="text-green-500"></app-icon>
+                    } @else {
+                      <app-icon name="link" [size]="14"></app-icon>
+                    }
+                  </app-button>
+                </div>
+              </div>
+              <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                Anyone with this link can join your team. Keep it secure!
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Team Statistics -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+          <div class="bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-800/20 rounded-lg p-4 border border-primary-200 dark:border-primary-800">
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 bg-primary-500 rounded-lg flex items-center justify-center">
+                <app-icon name="users" [size]="20" class="text-white"></app-icon>
+              </div>
+              <div>
+                <div class="text-2xl font-bold text-gray-900 dark:text-gray-100">{{ getActiveMembers().length }}</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">Active Members</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 rounded-lg p-4 border border-yellow-200 dark:border-yellow-800">
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center">
+                <app-icon name="clock" [size]="20" class="text-white"></app-icon>
+              </div>
+              <div>
+                <div class="text-2xl font-bold text-gray-900 dark:text-gray-100">{{ getPendingInvitations().length }}</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">Pending Invites</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-lg p-4 border border-green-200 dark:border-green-800">
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
+                <app-icon name="crown" [size]="20" class="text-white"></app-icon>
+              </div>
+              <div>
+                <div class="text-2xl font-bold text-gray-900 dark:text-gray-100">{{ members().length }}</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">Total Team Size</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Members List -->
+        <div class="space-y-4">
+          <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+            Team Members ({{ members().length }})
+          </h2>
+
+          @if (loading()) {
+            <div class="text-center py-8">
+              <app-spinner size="lg" text="Loading team members..."></app-spinner>
+            </div>
+          } @else if (members().length === 0) {
+            <div class="text-center py-12 bg-gray-50 dark:bg-dark-800 rounded-lg border border-gray-200 dark:border-dark-700">
+              <div class="w-16 h-16 mx-auto bg-gray-100 dark:bg-dark-700 rounded-full flex items-center justify-center mb-4">
+                <app-icon name="users" [size]="24" class="text-gray-400 dark:text-gray-500"></app-icon>
+              </div>
+              <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                No team members yet
+              </h3>
+              <p class="text-gray-600 dark:text-gray-400">
+                Invite your first team member using the form above.
+              </p>
+            </div>
+          } @else {
+            <div class="space-y-3">
+              @for (member of members(); track member.id) {
+                <div class="bg-white dark:bg-dark-800 border border-gray-200 dark:border-dark-700 rounded-lg p-4 sm:p-6">
+                  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
+                    <div class="flex-1">
+                      <div class="flex items-center space-x-3">
+                        <!-- Status Icon -->
+                        <div class="flex-shrink-0">
+                          @if (member.status === 'member') {
+                            <div class="w-10 h-10 bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900 dark:to-primary-800 rounded-full flex items-center justify-center">
+                              <span class="text-sm font-semibold text-primary-700 dark:text-primary-300">
+                                {{ member.username.charAt(0).toUpperCase() }}
+                              </span>
+                            </div>
+                          } @else {
+                            <div class="w-10 h-10 bg-gradient-to-br from-yellow-100 to-yellow-200 dark:from-yellow-900 dark:to-yellow-800 rounded-full flex items-center justify-center">
+                              <app-icon name="clock" [size]="20" class="text-yellow-600 dark:text-yellow-400"></app-icon>
+                            </div>
+                          }
+                        </div>
+
+                        <div>
+                          <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                            {{ member.username }}
+                          </h3>
+                          <p class="text-sm text-gray-600 dark:text-gray-400">
+                            {{ member.email }}
+                          </p>
+                          <div class="flex items-center space-x-2 mt-1">
+                            @if (member.status === 'member') {
+                              <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-200">
+                                <app-icon name="check-circle" [size]="12" class="mr-1"></app-icon>
+                                Active Member
+                              </span>
+                              @if (member.joinedAt) {
+                                <span class="text-xs text-gray-500 dark:text-gray-400">
+                                  Joined {{ formatDate(member.joinedAt) }}
+                                </span>
+                              }
+                            } @else {
+                              <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200">
+                                <app-icon name="clock" [size]="12" class="mr-1"></app-icon>
+                                Invitation Sent
+                              </span>
+                              @if (member.invitedAt) {
+                                <span class="text-xs text-gray-500 dark:text-gray-400">
+                                  Invited {{ formatDate(member.invitedAt) }}
+                                </span>
+                              }
+                            }
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="flex items-center space-x-2 sm:space-x-3">
+                      <app-button
+                        variant="danger"
+                        size="sm"
+                        [loading]="removing()[member.id]"
+                        (onClick)="removeMember(member)"
+                        [ariaLabel]="member.status === 'member' ? 'Remove ' + member.username : 'Cancel invitation for ' + member.username"
+                        class="w-full sm:w-auto"
+                      >
+                        <app-icon name="trash" [size]="14" class="mr-2"></app-icon>
+                        {{ member.status === 'member' ? 'Remove' : 'Cancel' }}
+                      </app-button>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+
+        <app-footer></app-footer>
+      </div>
+    </div>
+  </main>
+
+  <!-- Toast Notifications -->
+  @if (showToast()) {
+    <div class="fixed bottom-4 right-4 left-4 sm:left-auto z-50">
+      <app-toast
+        [type]="toastType()"
+        [message]="toastMessage()"
+        (onClose)="hideToast()"
+      ></app-toast>
+    </div>
+  }
+</div>

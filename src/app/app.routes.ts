@@ -63,6 +63,15 @@ export const routes: Routes = [
     }
   },
   {
+    path: 'members',
+    loadComponent: () => import('./pages/members/members.component').then(m => m.MembersComponent),
+    title: 'Team Members - MinuteMail',
+    canActivate: [canActivateAuthRole],
+    data: {
+      role: 'invite'
+    }
+  },
+  {
     path: '**',
     redirectTo: ''
   }

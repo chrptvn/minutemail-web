@@ -84,6 +84,16 @@ export class ProfileMenuComponent implements OnInit {
     this.closeMenu();
   }
 
+  manageMembers() {
+    this.router.navigate(['/members']);
+    this.closeMenu();
+  }
+
+  manageMembers() {
+    this.router.navigate(['/members']);
+    this.closeMenu();
+  }
+
   manageBilling() {
     this.subscriptionService.getBillingPortal().subscribe({
       next: (response) => {

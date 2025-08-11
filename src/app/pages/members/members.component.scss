@@ -1,0 +1,247 @@
+/* Members page specific styles */
+
+/* Team statistics cards */
+.stats-card {
+  transition: all 0.3s ease;
+}
+
+.stats-card:hover {
+  transform: translateY(-2px);
+}
+
+.stats-primary {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.1) 0%, rgba(36, 200, 219, 0.05) 100%);
+  border: 1px solid rgba(36, 200, 219, 0.2);
+}
+
+.stats-warning {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.stats-success {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.dark .stats-primary {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.15) 0%, rgba(36, 200, 219, 0.08) 100%);
+  border: 1px solid rgba(36, 200, 219, 0.3);
+}
+
+.dark .stats-warning {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(245, 158, 11, 0.08) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.dark .stats-success {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.08) 100%);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+/* Member cards */
+.member-card {
+  transition: all 0.2s ease-in-out;
+}
+
+.member-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(36, 200, 219, 0.1);
+}
+
+.dark .member-card:hover {
+  box-shadow: 0 4px 12px rgba(36, 200, 219, 0.2);
+}
+
+/* Member avatar styles */
+.member-avatar {
+  background: linear-gradient(135deg, var(--primary-color) 0%, rgba(36, 200, 219, 0.8) 100%);
+  box-shadow: 0 2px 4px rgba(36, 200, 219, 0.2);
+}
+
+.pending-avatar {
+  background: linear-gradient(135deg, #f59e0b 0%, rgba(245, 158, 11, 0.8) 100%);
+  box-shadow: 0 2px 4px rgba(245, 158, 11, 0.2);
+}
+
+/* Status badges */
+.status-active {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.status-pending {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.dark .status-active {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.08) 100%);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.dark .status-pending {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(245, 158, 11, 0.08) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+/* Invitation form styling */
+.invitation-form {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.05) 0%, rgba(36, 200, 219, 0.02) 100%);
+}
+
+.dark .invitation-form {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.1) 0%, rgba(36, 200, 219, 0.05) 100%);
+}
+
+/* Invitation link display */
+.invitation-link {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.05) 0%, rgba(36, 200, 219, 0.02) 100%);
+  border: 1px solid rgba(36, 200, 219, 0.1);
+}
+
+.dark .invitation-link {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.1) 0%, rgba(36, 200, 219, 0.05) 100%);
+  border: 1px solid rgba(36, 200, 219, 0.2);
+}
+
+/* Empty state styling */
+.empty-state {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.05) 0%, rgba(36, 200, 219, 0.02) 100%);
+}
+
+.dark .empty-state {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.1) 0%, rgba(36, 200, 219, 0.05) 100%);
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .member-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .member-actions button {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .member-card {
+    padding: 1rem;
+  }
+  
+  .invitation-form {
+    padding: 1rem;
+  }
+  
+  .invitation-form .flex {
+    flex-direction: column;
+    space-y: 3;
+  }
+  
+  .invitation-form input {
+    margin-bottom: 0.75rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .stats-card {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .member-header {
+    text-align: center;
+  }
+  
+  .member-info {
+    text-align: center;
+  }
+  
+  .member-info h3 {
+    font-size: 1rem;
+  }
+  
+  .member-info p {
+    font-size: 0.875rem;
+  }
+
+  .invitation-link {
+    padding: 0.75rem;
+  }
+
+  .invitation-link code {
+    font-size: 0.75rem;
+    word-break: break-all;
+  }
+}
+
+/* Button loading states */
+.btn-loading {
+  position: relative;
+}
+
+.btn-loading::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  margin: auto;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Copy button animation */
+.copy-success {
+  animation: copySuccess 0.3s ease-out;
+}
+
+@keyframes copySuccess {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Accessibility improvements */
+.member-card:focus-within {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Smooth transitions */
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+/* Enhanced hover effects for interactive elements */
+.invitation-form input:focus {
+  box-shadow: 0 0 0 3px rgba(36, 200, 219, 0.1);
+}
+
+/* Team role indicators */
+.role-owner {
+  background: linear-gradient(135deg, rgba(147, 51, 234, 0.1) 0%, rgba(147, 51, 234, 0.05) 100%);
+  border: 1px solid rgba(147, 51, 234, 0.2);
+}
+
+.dark .role-owner {
+  background: linear-gradient(135deg, rgba(147, 51, 234, 0.15) 0%, rgba(147, 51, 234, 0.08) 100%);
+  border: 1px solid rgba(147, 51, 234, 0.3);
+}
