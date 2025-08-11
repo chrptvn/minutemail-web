@@ -22,26 +22,26 @@
       @if (isAuthenticated()) {
         <!-- Profile Actions -->
         <div class="py-1">
-          <!-- Plan Display with Upgrade Submenu -->
-          <div class="relative plan-menu-item">
-            <button
-              type="button"
-                  <div class="plan-badge">
-                    {{ getCurrentPlanDisplayName() }}
-                  </div>
-                  <div class="plan-subtitle">
-                    Current Plan
-                  </div>
-                </div>
-                <app-icon name="chevron-right" [size]="14" class="text-gray-400"></app-icon>
+          <!-- Premium Plan Display -->
+          <button
+            type="button"
+            class="w-full text-left px-4 py-3 premium-plan-button border-b border-gray-100 dark:border-dark-800"
+            (click)="goToPricing(); $event.stopPropagation()"
+          >
+            <div class="text-center">
+              <div class="plan-badge">
+                {{ getCurrentPlanDisplayName() }}
               </div>
-            </button>
-          </div>
+              <div class="plan-subtitle">
+                Current Plan
+              </div>
+            </div>
+          </button>
 
           @if (hasRole('use_api')) {
             <button
               type="button"
-              class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-800 flex items-center space-x-2"
+              class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-800 flex items-center space-x-2 transition-colors"
               (click)="manageApiKeys()"
             >
               <app-icon name="code" [size]="16" class="text-gray-500 dark:text-gray-400"></app-icon>
@@ -52,7 +52,7 @@
           @if (hasRole('manage_domains')) {
             <button
               type="button"
-              class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-800 flex items-center space-x-2"
+              class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-800 flex items-center space-x-2 transition-colors"
               (click)="manageDomain()"
             >
               <app-icon name="globe" [size]="16" class="text-gray-500 dark:text-gray-400"></app-icon>
@@ -62,7 +62,7 @@
 
           <button
             type="button"
-            class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-800 flex items-center space-x-2"
+            class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-800 flex items-center space-x-2 transition-colors"
             (click)="logout()"
           >
             <app-icon name="logout" [size]="16" class="text-gray-500 dark:text-gray-400"></app-icon>
@@ -74,20 +74,20 @@
         <div class="py-1">
           <button
             type="button"
-            class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-800 flex items-center space-x-2"
+            class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-800 flex items-center space-x-2 transition-colors"
             (click)="login()"
           >
             <app-icon name="login" [size]="16" class="text-gray-500 dark:text-gray-400"></app-icon>
-            <span>{{ 'Sign in' }}</span>
+            <span>Sign in</span>
           </button>
 
           <button
             type="button"
-            class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-800 flex items-center space-x-2"
+            class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-800 flex items-center space-x-2 transition-colors"
             (click)="register()"
           >
             <app-icon name="user-plus" [size]="16" class="text-gray-500 dark:text-gray-400"></app-icon>
-            <span>{{ 'Sign up' }}</span>
+            <span>Sign up</span>
           </button>
         </div>
       }
