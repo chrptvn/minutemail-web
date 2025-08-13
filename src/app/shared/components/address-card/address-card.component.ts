@@ -20,8 +20,8 @@ export class AddressCardComponent {
   @Input() copying = false;
   @Input() copied = false;
   @Input() showDomainSelector = false;
-  @Input() availableDomains: string[] = ['minutemail.co'];
-  @Input() selectedDomain = 'minutemail.co';
+  @Input() availableDomains: string[] = ['minutemail.cc'];
+  @Input() selectedDomain = 'minutemail.cc';
   @Input() isAuthenticated = false;
 
   @Output() onGenerate = new EventEmitter<string>();

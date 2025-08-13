@@ -36,8 +36,8 @@ export class HomeComponent implements OnInit {
   copied = signal(false);
   expiresAt = signal<string | undefined>(undefined);
   showDomainSelector = signal(false);
-  availableDomains = signal<string[]>(['minutemail.co']);
-  selectedDomain = signal('minutemail.co');
+  availableDomains = signal<string[]>(['minutemail.cc']);
+  selectedDomain = signal('minutemail.cc');
   showToast = signal(false);
   toastType = signal<'success' | 'error' | 'warning' | 'info'>('info');
   toastMessage = signal('');
@@ -86,9 +86,9 @@ export class HomeComponent implements OnInit {
     this.domainService.getDomains().subscribe({
       next: (domains) => {
         const userDomains = domains.map(d => d.name);
-        const allDomains = ['minutemail.co', ...userDomains];
+        const allDomains = ['minutemail.cc', ...userDomains];
         this.availableDomains.set(allDomains);
-        
+
         // Set preferred domain from storage, ensuring it's valid
         const validPreferredDomain = this.domainPreferenceService.getValidPreferredDomain(allDomains);
         this.selectedDomain.set(validPreferredDomain);
@@ -96,8 +96,8 @@ export class HomeComponent implements OnInit {
       error: (error) => {
         console.error('Error loading domains:', error);
         // Keep minutemail.co as fallback
-        this.availableDomains.set(['minutemail.co']);
-        this.selectedDomain.set('minutemail.co');
+        this.availableDomains.set(['minutemail.cc']);
+        this.selectedDomain.set('minutemail.cc');
       }
     });
   }
@@ -162,7 +162,7 @@ export class HomeComponent implements OnInit {
 
   onDomainChange(domain: string) {
     this.selectedDomain.set(domain);
-    
+
     // Save domain preference to local storage if user is authenticated
     if (this.keycloak.authenticated) {
       this.domainPreferenceService.setPreferredDomain(domain);

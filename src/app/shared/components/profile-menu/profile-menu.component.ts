@@ -59,6 +59,10 @@ export class ProfileMenuComponent implements OnInit {
 
   async register() {
     this.keycloak.register().then(() => {
+      this.isAuthenticated.set(!!this.keycloak.authenticated);
+      // Clear current alias and domain preferences on registration
+      this.aliasService.clearCurrentAlias();
+      this.domainPreferenceService.clearPreferredDomain();
       this.closeMenu();
     })
   }
@@ -127,7 +131,7 @@ export class ProfileMenuComponent implements OnInit {
 
   ngOnInit(): void {
     this.isAuthenticated.set(!!this.keycloak.authenticated);
-    
+
     // Load current plan if authenticated
     if (this.keycloak.authenticated) {
       this.subscriptionService.getMembership().subscribe({

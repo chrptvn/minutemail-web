@@ -100,7 +100,6 @@ export class ManageDomainComponent implements OnInit, OnDestroy {
 
     const request: AddDomainRequest = {
       name: this.newDomain.trim(),
-      mailbox_ttl: 3600
     };
 
     this.domainService.addDomain(request).subscribe({

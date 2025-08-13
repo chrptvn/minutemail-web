@@ -33,7 +33,7 @@ import { FooterComponent } from '../../shared/components/footer/footer.component
 export class ApiKeysComponent implements OnInit {
   apiKeys = signal<ApiKey[]>([]);
   domains = signal<Domain[]>([]);
-  availableHosts = signal<string[]>(['minutemail.co']);
+  availableHosts = signal<string[]>(['minutemail.cc']);
   loading = signal(false);
   creating = signal(false);
   deleting = signal<{ [key: string]: boolean }>({});
@@ -44,7 +44,7 @@ export class ApiKeysComponent implements OnInit {
   newApiKey: CreateApiKeyRequest = {
     name: '',
     ttl: 0,
-    hosts: ['minutemail.co']
+    hosts: ['minutemail.cc']
   };
 
   selectedHostToAdd = '';
@@ -70,8 +70,8 @@ export class ApiKeysComponent implements OnInit {
     // Leave expiry date empty by default (infinite)
     this.expiryDate = '';
 
-    // Set default host to minutemail.co
-    this.newApiKey.hosts = ['minutemail.co'];
+    // Set default host to minutemail.cc
+    this.newApiKey.hosts = ['minutemail.cc'];
   }
 
   ngOnInit() {
@@ -98,14 +98,14 @@ export class ApiKeysComponent implements OnInit {
     this.domainService.getDomains().subscribe({
       next: (domains) => {
         this.domains.set(domains || []);
-        // Update available hosts: minutemail.co + user domains
+        // Update available hosts: minutemail.cc + user domains
         const userDomains = domains.map(d => d.name);
-        this.availableHosts.set(['minutemail.co', ...userDomains]);
+        this.availableHosts.set(['minutemail.cc', ...userDomains]);
       },
       error: (error) => {
         console.error('Error loading domains:', error);
-        // Keep minutemail.co as fallback
-        this.availableHosts.set(['minutemail.co']);
+        // Keep minutemail.cc as fallback
+        this.availableHosts.set(['minutemail.cc']);
       }
     });
   }
