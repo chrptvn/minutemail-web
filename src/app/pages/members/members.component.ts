@@ -3,21 +3,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ClipboardService } from '../../core/services/clipboard.service';
+import { TeamService } from '../../core/services/team.service';
+import { TeamMember, InviteRequest } from '../../core/models/team.model';
 import { ButtonComponent } from '../../shared/components/ui/button.component';
 import { TablerIconComponent } from '../../shared/components/icons/tabler-icons.component';
 import { ToastComponent } from '../../shared/components/ui/toast.component';
 import { SpinnerComponent } from '../../shared/components/ui/spinner.component';
 import { TopMenu } from '../../shared/components/top-menu/top-menu';
 import { FooterComponent } from '../../shared/components/footer/footer.component';
-
-interface TeamMember {
-  id: string;
-  username: string;
-  email: string;
-  status: 'member' | 'invitation_sent';
-  joinedAt?: string;
-  invitedAt?: string;
-}
 
 @Component({
   selector: 'app-members',
@@ -53,7 +46,8 @@ export class MembersComponent implements OnInit {
 
   constructor(
     private readonly router: Router,
-    private readonly clipboardService: ClipboardService
+    private readonly clipboardService: ClipboardService,
+    private readonly teamService: TeamService
   ) {}
 
   ngOnInit() {
@@ -63,35 +57,17 @@ export class MembersComponent implements OnInit {
   loadMembers() {
     this.loading.set(true);
     
-    // Mock data - replace with actual API call
-    setTimeout(() => {
-      const mockMembers: TeamMember[] = [
-        {
-          id: '1',
-          username: 'john.doe',
-          email: 'john.doe@company.com',
-          status: 'member',
-          joinedAt: '2024-01-15T10:30:00Z'
-        },
-        {
-          id: '2',
-          username: 'jane.smith',
-          email: 'jane.smith@company.com',
-          status: 'member',
-          joinedAt: '2024-02-20T14:15:00Z'
-        },
-        {
-          id: '3',
-          username: 'bob.wilson',
-          email: 'bob.wilson@company.com',
-          status: 'invitation_sent',
-          invitedAt: '2024-12-01T09:45:00Z'
-        }
-      ];
-      
-      this.members.set(mockMembers);
-      this.loading.set(false);
-    }, 1000);
+    this.teamService.getTeamMembers().subscribe({
+      next: (members) => {
+        this.members.set(members || []);
+        this.loading.set(false);
+      },
+      error: (error) => {
+        console.error('Error loading team members:', error);
+        this.showToastMessage('error', error.message);
+        this.loading.set(false);
+      }
+    });
   }
 
   sendInvitation() {
@@ -108,21 +84,33 @@ export class MembersComponent implements OnInit {
 
     this.inviting.set(true);
 
-    // Mock invitation - replace with actual API call
-    setTimeout(() => {
-      const newMember: TeamMember = {
-        id: Date.now().toString(),
-        username: this.newMemberEmail.split('@')[0],
-        email: this.newMemberEmail.trim(),
-        status: 'invitation_sent',
-        invitedAt: new Date().toISOString()
-      };
 
-      this.members.update(members => [...members, newMember]);
-      this.newMemberEmail = '';
-      this.inviting.set(false);
-      this.showToastMessage('success', `Invitation sent to ${newMember.email}`);
-    }, 1500);
+    const request: InviteRequest = {
+      email: this.newMemberEmail.trim()
+    };
+
+    this.teamService.sendInvitation(request).subscribe({
+      next: (response) => {
+        // Create a new member object based on the response
+        const newMember: TeamMember = {
+          id: Date.now().toString(), // Use timestamp as temporary ID
+          username: response.email.split('@')[0],
+          email: response.email,
+          status: response.status.toLowerCase() === 'pending' ? 'invitation_sent' : 'member',
+          invitedAt: new Date().toISOString()
+        };
+
+        this.members.update(members => [...members, newMember]);
+        this.newMemberEmail = '';
+        this.inviting.set(false);
+        this.showToastMessage('success', `Invitation sent to ${response.email}`);
+      },
+      error: (error) => {
+        console.error('Error sending invitation:', error);
+        this.showToastMessage('error', error.message);
+        this.inviting.set(false);
+      }
+    });
   }
 
   removeMember(member: TeamMember) {
@@ -133,18 +121,28 @@ export class MembersComponent implements OnInit {
 
     this.removing.update(state => ({ ...state, [member.id]: true }));
 
-    // Mock removal - replace with actual API call
-    setTimeout(() => {
-      this.members.update(members => members.filter(m => m.id !== member.id));
-      this.removing.update(state => {
-        const newState = { ...state };
-        delete newState[member.id];
-        return newState;
-      });
-      
-      const actionText = member.status === 'member' ? 'removed' : 'invitation cancelled';
-      this.showToastMessage('success', `${member.username} ${actionText} successfully`);
-    }, 1000);
+    this.teamService.removeMember(member.id).subscribe({
+      next: () => {
+        this.members.update(members => members.filter(m => m.id !== member.id));
+        this.removing.update(state => {
+          const newState = { ...state };
+          delete newState[member.id];
+          return newState;
+        });
+        
+        const actionText = member.status === 'member' ? 'removed' : 'invitation cancelled';
+        this.showToastMessage('success', `${member.username} ${actionText} successfully`);
+      },
+      error: (error) => {
+        console.error('Error removing member:', error);
+        this.showToastMessage('error', error.message);
+        this.removing.update(state => {
+          const newState = { ...state };
+          delete newState[member.id];
+          return newState;
+        });
+      }
+    });
   }
 
   async copyInvitationLink() {
