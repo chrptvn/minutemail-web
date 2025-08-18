@@ -112,14 +112,14 @@ export class MembersComponent implements OnInit {
       return;
     }
 
-    this.removing.update(state => ({ ...state, [member.email]: true }));
+    this.removing.update(state => ({ ...state, [member.user_id]: true }));
 
-    this.teamService.removeMember(member.email).subscribe({
+    this.teamService.removeMember(member.user_id).subscribe({
       next: () => {
-        this.members.update(members => members.filter(m => m.email !== member.email));
+        this.members.update(members => members.filter(m => m.user_id !== member.user_id));
         this.removing.update(state => {
           const newState = { ...state };
-          delete newState[member.email];
+          delete newState[member.user_id];
           return newState;
         });
         
@@ -131,7 +131,7 @@ export class MembersComponent implements OnInit {
         this.showToastMessage('error', error.message);
         this.removing.update(state => {
           const newState = { ...state };
-          delete newState[member.email];
+          delete newState[member.user_id];
           return newState;
         });
       }
