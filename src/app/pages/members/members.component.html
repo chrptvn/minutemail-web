@@ -134,7 +134,7 @@
                           @if (member.status === 'member') {
                             <div class="w-10 h-10 bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900 dark:to-primary-800 rounded-full flex items-center justify-center">
                               <span class="text-sm font-semibold text-primary-700 dark:text-primary-300">
-                                {{ member.username.charAt(0).toUpperCase() }}
+                                {{ getDisplayName(member).charAt(0).toUpperCase() }}
                               </span>
                             </div>
                           } @else {
@@ -146,32 +146,22 @@
 
                         <div>
                           <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                            {{ member.username }}
+                            {{ getDisplayName(member) }}
                           </h3>
                           <p class="text-sm text-gray-600 dark:text-gray-400">
                             {{ member.email }}
                           </p>
                           <div class="flex items-center space-x-2 mt-1">
-                            @if (member.status === 'member') {
+                            @if (member.status === 'ACTIVE') {
                               <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-200">
                                 <app-icon name="check-circle" [size]="12" class="mr-1"></app-icon>
                                 Active Member
                               </span>
-                              @if (member.joinedAt) {
-                                <span class="text-xs text-gray-500 dark:text-gray-400">
-                                  Joined {{ formatDate(member.joinedAt) }}
-                                </span>
-                              }
                             } @else {
                               <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200">
                                 <app-icon name="clock" [size]="12" class="mr-1"></app-icon>
                                 Invitation Sent
                               </span>
-                              @if (member.invitedAt) {
-                                <span class="text-xs text-gray-500 dark:text-gray-400">
-                                  Invited {{ formatDate(member.invitedAt) }}
-                                </span>
-                              }
                             }
                           </div>
                         </div>
@@ -182,13 +172,13 @@
                       <app-button
                         variant="danger"
                         size="sm"
-                        [loading]="removing()[member.id]"
+                        [loading]="removing()[member.email]"
                         (onClick)="removeMember(member)"
-                        [ariaLabel]="member.status === 'member' ? 'Remove ' + member.username : 'Cancel invitation for ' + member.username"
+                        [ariaLabel]="member.status === 'ACTIVE' ? 'Remove ' + getDisplayName(member) : 'Cancel invitation for ' + getDisplayName(member)"
                         class="w-full sm:w-auto"
                       >
                         <app-icon name="trash" [size]="14" class="mr-2"></app-icon>
-                        {{ member.status === 'member' ? 'Remove' : 'Cancel' }}
+                        {{ member.status === 'ACTIVE' ? 'Remove' : 'Cancel' }}
                       </app-button>
                     </div>
                   </div>
