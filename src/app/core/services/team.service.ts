@@ -45,7 +45,7 @@ export class TeamService {
   }
 
   removeMember(memberEmail: string): Observable<{ message: string }> {
-    const url = `${this.baseUrl}/team/members/${encodeURIComponent(memberUserId)}`;
+    const url = `${this.baseUrl}/team/members/${encodeURIComponent(memberEmail)}`;
     const headers = this.getAuthHeaders();
 
     return this.http
