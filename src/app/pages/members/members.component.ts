@@ -91,16 +91,8 @@ export class MembersComponent implements OnInit {
 
     this.teamService.sendInvitation(request).subscribe({
       next: (response) => {
-        // Create a new member object based on the response
-        const newMember: TeamMember = {
-          id: Date.now().toString(), // Use timestamp as temporary ID
-          username: response.email.split('@')[0],
-          email: response.email,
-          status: response.status.toLowerCase() === 'pending' ? 'invitation_sent' : 'member',
-          invitedAt: new Date().toISOString()
-        };
-
-        this.members.update(members => [...members, newMember]);
+        // Add the new member to the list
+        this.members.update(members => [...members, response]);
         this.newMemberEmail = '';
         this.inviting.set(false);
         this.showToastMessage('success', `Invitation sent to ${response.email}`);
@@ -114,31 +106,32 @@ export class MembersComponent implements OnInit {
   }
 
   removeMember(member: TeamMember) {
-    const action = member.status === 'member' ? 'remove' : 'cancel invitation for';
-    if (!confirm(`Are you sure you want to ${action} ${member.username}? This action cannot be undone.`)) {
+    const action = member.status === 'ACTIVE' ? 'remove' : 'cancel invitation for';
+    const displayName = this.getDisplayName(member);
+    if (!confirm(`Are you sure you want to ${action} ${displayName}? This action cannot be undone.`)) {
       return;
     }
 
-    this.removing.update(state => ({ ...state, [member.id]: true }));
+    this.removing.update(state => ({ ...state, [member.email]: true }));
 
-    this.teamService.removeMember(member.id).subscribe({
+    this.teamService.removeMember(member.email).subscribe({
       next: () => {
-        this.members.update(members => members.filter(m => m.id !== member.id));
+        this.members.update(members => members.filter(m => m.email !== member.email));
         this.removing.update(state => {
           const newState = { ...state };
-          delete newState[member.id];
+          delete newState[member.email];
           return newState;
         });
         
-        const actionText = member.status === 'member' ? 'removed' : 'invitation cancelled';
-        this.showToastMessage('success', `${member.username} ${actionText} successfully`);
+        const actionText = member.status === 'ACTIVE' ? 'removed' : 'invitation cancelled';
+        this.showToastMessage('success', `${displayName} ${actionText} successfully`);
       },
       error: (error) => {
         console.error('Error removing member:', error);
         this.showToastMessage('error', error.message);
         this.removing.update(state => {
           const newState = { ...state };
-          delete newState[member.id];
+          delete newState[member.email];
           return newState;
         });
       }
@@ -167,6 +160,10 @@ export class MembersComponent implements OnInit {
     }
   }
 
+  getDisplayName(member: TeamMember): string {
+    return member.email.split('@')[0];
+  }
+
   formatDate(dateString: string): string {
     const date = new Date(dateString);
     const now = new Date();
@@ -189,11 +186,11 @@ export class MembersComponent implements OnInit {
   }
 
   getActiveMembers(): TeamMember[] {
-    return this.members().filter(m => m.status === 'member');
+    return this.members().filter(m => m.status === 'ACTIVE');
   }
 
   getPendingInvitations(): TeamMember[] {
-    return this.members().filter(m => m.status === 'invitation_sent');
+    return this.members().filter(m => m.status === 'PENDING');
   }
 
   private showToastMessage(type: 'success' | 'error' | 'warning' | 'info', message: string) {
