@@ -55,6 +55,18 @@ export class TeamService {
       );
   }
 
+  acceptInvitation(uid: string): Observable<{ message: string }> {
+    const url = `${this.baseUrl}/team/accept`;
+    const headers = this.getAuthHeaders();
+    const body = { uid };
+
+    return this.http
+      .post<{ message: string }>(url, body, { headers })
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
   private handleError = (error: HttpErrorResponse): Observable<never> => {
     let errorMessage = 'An error occurred';
 

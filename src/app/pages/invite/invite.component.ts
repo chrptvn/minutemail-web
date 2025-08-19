@@ -1,8 +1,9 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TopMenu } from '../../shared/components/top-menu/top-menu';
 import { FooterComponent } from '../../shared/components/footer/footer.component';
+import { TeamService } from '../../core/services/team.service';
 import Keycloak from 'keycloak-js';
 
 @Component({
@@ -14,6 +15,8 @@ import Keycloak from 'keycloak-js';
 })
 export class InviteComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly teamService = inject(TeamService);
   private readonly keycloak = inject(Keycloak);
 
   ngOnInit() {
@@ -27,9 +30,38 @@ export class InviteComponent implements OnInit {
       // Check authentication status and log
       if (this.keycloak.authenticated) {
         console.log('connected');
+        // Call accept endpoint and redirect to home
+        this.acceptInvitation(uid);
       } else {
-        console.log('not connected');
+        // Register user and redirect back to this page with uid
+        this.registerUser(uid);
       }
+    });
+  }
+
+  private acceptInvitation(uid: string) {
+    if (!uid) {
+      console.error('No uid provided');
+      this.router.navigate(['/']);
+      return;
+    }
+
+    this.teamService.acceptInvitation(uid).subscribe({
+      next: () => {
+        console.log('Invitation accepted successfully');
+        this.router.navigate(['/']);
+      },
+      error: (error) => {
+        console.error('Failed to accept invitation:', error);
+        this.router.navigate(['/']);
+      }
+    });
+  }
+
+  private registerUser(uid: string) {
+    const currentUrl = window.location.href;
+    this.keycloak.register({
+      redirectUri: currentUrl
     });
   }
 }
