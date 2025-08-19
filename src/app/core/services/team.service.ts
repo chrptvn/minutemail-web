@@ -23,7 +23,7 @@ export class TeamService {
   }
 
   sendInvitation(request: InviteRequest): Observable<InviteResponse> {
-    const url = `${this.baseUrl}/team/invite`;
+    const url = `${this.baseUrl}/team/members`;
     const headers = this.getAuthHeaders();
 
     return this.http
