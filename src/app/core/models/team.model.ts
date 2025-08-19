@@ -1,7 +1,7 @@
 export interface TeamMember {
   user_id: string;
   email: string;
-  status: 'PENDING' | 'ACTIVE';
+  status: 'PENDING' | 'ACTIVE' | 'CURRENT_USER';
 }
 
 export interface InviteRequest {

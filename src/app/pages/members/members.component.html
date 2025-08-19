@@ -136,6 +136,11 @@
                               <span class="text-sm font-semibold text-primary-700 dark:text-primary-300">
                                 {{ getDisplayName(member).charAt(0).toUpperCase() }}
                               </span>
+                          } @else if (member.status === 'CURRENT_USER') {
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200">
+                              <app-icon name="user" [size]="12" class="mr-1"></app-icon>
+                              You
+                            </span>
                             </div>
                           } @else {
                             <div class="w-10 h-10 bg-gradient-to-br from-yellow-100 to-yellow-200 dark:from-yellow-900 dark:to-yellow-800 rounded-full flex items-center justify-center">
@@ -169,17 +174,23 @@
                     </div>
 
                     <div class="flex items-center space-x-2 sm:space-x-3">
-                      <app-button
-                        variant="danger"
-                        size="sm"
-                        [loading]="removing()[member.email]"
-                        (onClick)="removeMember(member)"
-                        [ariaLabel]="member.status === 'ACTIVE' ? 'Remove ' + getDisplayName(member) : 'Cancel invitation for ' + getDisplayName(member)"
-                        class="w-full sm:w-auto"
-                      >
-                        <app-icon name="trash" [size]="14" class="mr-2"></app-icon>
-                        {{ member.status === 'ACTIVE' ? 'Remove' : 'Cancel' }}
-                      </app-button>
+                      @if (member.status !== 'CURRENT_USER') {
+                        <app-button
+                          variant="danger"
+                          size="sm"
+                          [loading]="removing()[member.email]"
+                          (onClick)="removeMember(member)"
+                          [ariaLabel]="member.status === 'ACTIVE' ? 'Remove ' + getDisplayName(member) : 'Cancel invitation for ' + getDisplayName(member)"
+                          class="w-full sm:w-auto"
+                        >
+                          <app-icon name="trash" [size]="14" class="mr-2"></app-icon>
+                          {{ member.status === 'ACTIVE' ? 'Remove' : 'Cancel' }}
+                        </app-button>
+                      } @else {
+                        <span class="text-xs text-gray-500 dark:text-gray-400 italic px-3 py-2">
+                          Cannot remove yourself
+                        </span>
+                      }
                     </div>
                   </div>
                 </div>

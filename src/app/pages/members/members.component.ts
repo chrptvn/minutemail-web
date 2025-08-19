@@ -186,7 +186,7 @@ export class MembersComponent implements OnInit {
   }
 
   getActiveMembers(): TeamMember[] {
-    return this.members().filter(m => m.status === 'ACTIVE');
+    return this.members().filter(m => m.status === 'ACTIVE' || m.status === 'CURRENT_USER');
   }
 
   getPendingInvitations(): TeamMember[] {
