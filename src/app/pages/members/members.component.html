@@ -136,12 +136,12 @@
                               <span class="text-sm font-semibold text-primary-700 dark:text-primary-300">
                                 {{ getDisplayName(member).charAt(0).toUpperCase() }}
                               </span>
+                            </div>
                           } @else if (member.status === 'CURRENT_USER') {
                             <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200">
                               <app-icon name="user" [size]="12" class="mr-1"></app-icon>
                               You
                             </span>
-                            </div>
                           } @else {
                             <div class="w-10 h-10 bg-gradient-to-br from-yellow-100 to-yellow-200 dark:from-yellow-900 dark:to-yellow-800 rounded-full flex items-center justify-center">
                               <app-icon name="clock" [size]="20" class="text-yellow-600 dark:text-yellow-400"></app-icon>
