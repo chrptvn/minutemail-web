@@ -1,0 +1,11 @@
+/* Invite page specific styles */
+.invite-content {
+  line-height: 1.7;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .invite-content {
+    font-size: 0.875rem;
+  }
+}

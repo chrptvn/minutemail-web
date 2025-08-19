@@ -72,6 +72,11 @@ export const routes: Routes = [
     }
   },
   {
+    path: 'invite',
+    loadComponent: () => import('./pages/invite/invite.component').then(m => m.InviteComponent),
+    title: 'Team Invitation - MinuteMail'
+  },
+  {
     path: '**',
     redirectTo: ''
   }
