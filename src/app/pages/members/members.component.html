@@ -157,16 +157,18 @@
                             {{ member.email }}
                           </p>
                           <div class="flex items-center space-x-2 mt-1">
-                            @if (member.status === 'ACTIVE') {
-                              <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-200">
-                                <app-icon name="check-circle" [size]="12" class="mr-1"></app-icon>
-                                Active Member
-                              </span>
-                            } @else {
-                              <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200">
-                                <app-icon name="clock" [size]="12" class="mr-1"></app-icon>
-                                Invitation Sent
-                              </span>
+                            @if (member.status !== 'CURRENT_USER') {
+                              @if (member.status === 'ACTIVE') {
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-200">
+                                  <app-icon name="check-circle" [size]="12" class="mr-1"></app-icon>
+                                  Active Member
+                                </span>
+                              } @else {
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200">
+                                  <app-icon name="clock" [size]="12" class="mr-1"></app-icon>
+                                  Invitation Sent
+                                </span>
+                              }
                             }
                           </div>
                         </div>
@@ -186,10 +188,6 @@
                           <app-icon name="trash" [size]="14" class="mr-2"></app-icon>
                           {{ member.status === 'ACTIVE' ? 'Remove' : 'Cancel' }}
                         </app-button>
-                      } @else {
-                        <span class="text-xs text-gray-500 dark:text-gray-400 italic px-3 py-2">
-                          Cannot remove yourself
-                        </span>
                       }
                     </div>
                   </div>
