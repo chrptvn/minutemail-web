@@ -55,10 +55,10 @@ export class TeamService {
       );
   }
 
-  acceptInvitation(uid: string): Observable<{ message: string }> {
+  acceptInvitation(key: string): Observable<{ message: string }> {
     const url = `${this.baseUrl}/team/accept`;
     const headers = this.getAuthHeaders();
-    const body = { uid };
+    const body = { key };
 
     return this.http
       .post<{ message: string }>(url, body, { headers })

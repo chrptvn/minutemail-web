@@ -22,31 +22,28 @@ export class InviteComponent implements OnInit {
   ngOnInit() {
     // Get uid parameter from query string
     this.route.queryParams.subscribe(params => {
-      const uid = params['uid'];
-      
+      const key = params['uid'];
+
       // Log uid
-      console.log('uid:', uid);
-      
+      console.log('uid:', key);
+
       // Check authentication status and log
       if (this.keycloak.authenticated) {
         console.log('connected');
         // Call accept endpoint and redirect to home
-        this.acceptInvitation(uid);
-      } else {
-        // Register user and redirect back to this page with uid
-        this.registerUser(uid);
+        this.acceptInvitation(key);
       }
     });
   }
 
-  private acceptInvitation(uid: string) {
-    if (!uid) {
+  private acceptInvitation(key: string) {
+    if (!key) {
       console.error('No uid provided');
       this.router.navigate(['/']);
       return;
     }
 
-    this.teamService.acceptInvitation(uid).subscribe({
+    this.teamService.acceptInvitation(key).subscribe({
       next: () => {
         console.log('Invitation accepted successfully');
         this.router.navigate(['/']);
