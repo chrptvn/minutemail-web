@@ -21,7 +21,6 @@ export class ProfileMenuComponent implements OnInit {
 
   isOpen = signal(false);
   isAuthenticated = signal(false);
-  currentPlan = signal<string>('free');
 
   private readonly router = inject(Router);
   private readonly keycloak = inject(Keycloak);
@@ -119,30 +118,20 @@ export class ProfileMenuComponent implements OnInit {
   }
 
   getCurrentPlanDisplayName(): string {
-    const plan = this.currentPlan();
-    switch (plan) {
-      case 'free': return 'Free Plan';
-      case 'hobbyist': return 'Hobbyist';
-      case 'pro': return 'Pro';
-      case 'team': return 'Team';
-      default: return 'Free Plan';
+    if (this.keycloak.hasRealmRole("hobbyist")) {
+      return 'Hobbyist';
     }
+    if (this.keycloak.hasRealmRole("pro")) {
+      return 'Pro';
+    }
+    if (this.keycloak.hasRealmRole("team")) {
+      return 'Team';
+    }
+
+    return 'Free Plan';
   }
 
   ngOnInit(): void {
     this.isAuthenticated.set(!!this.keycloak.authenticated);
-
-    // Load current plan if authenticated
-    if (this.keycloak.authenticated) {
-      this.subscriptionService.getMembership().subscribe({
-        next: (membership) => {
-          this.currentPlan.set(membership.plan_name || 'free');
-        },
-        error: (error) => {
-          console.error('Failed to fetch membership:', error);
-        }
-      }
-      )
-    }
   }
 }

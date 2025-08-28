@@ -8,6 +8,7 @@ import { TablerIconComponent } from '../../shared/components/icons/tabler-icons.
 import { ToastComponent } from '../../shared/components/ui/toast.component';
 import { TopMenu } from '../../shared/components/top-menu/top-menu';
 import { FooterComponent } from '../../shared/components/footer/footer.component';
+import Keycloak from 'keycloak-js';
 
 @Component({
   selector: 'app-plan-change',
@@ -28,8 +29,8 @@ export class PlanChangeComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly subscriptionService = inject(SubscriptionService);
+  private readonly keycloak = inject(Keycloak);
 
-  currentPlan = signal<string>('');
   targetPlan = signal<string>('');
   interval = signal<string>('monthly');
   accepted = false;
@@ -45,7 +46,7 @@ export class PlanChangeComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       const target = params['plan'];
       const billingInterval = params['interval'] || 'monthly';
-      
+
       if (!target) {
         this.router.navigate(['/pricing']);
         return;
@@ -54,18 +55,21 @@ export class PlanChangeComponent implements OnInit {
       this.targetPlan.set(target);
       this.interval.set(billingInterval);
     });
+  }
 
-    // Get current plan from membership
-    this.subscriptionService.getMembership().subscribe({
-      next: (membership) => {
-        this.currentPlan.set(membership.plan_name || 'free');
-      },
-      error: (error) => {
-        console.error('Failed to fetch membership:', error);
-        this.showToastMessage('error', 'Failed to load current plan information');
-        this.router.navigate(['/pricing']);
+  currentPlan(): string {
+    if (this.keycloak.authenticated) {
+      if (this.keycloak.hasRealmRole('team')) {
+        return 'team';
       }
-    });
+      if (this.keycloak.hasRealmRole('pro')) {
+        return 'pro';
+      }
+      if (this.keycloak.hasRealmRole('hobbyist')) {
+        return 'hobbyist';
+      }
+    }
+    return 'free';
   }
 
   isUpgrade(): boolean {
@@ -170,7 +174,7 @@ export class PlanChangeComponent implements OnInit {
 
   getConditionsCardClass(): string {
     const baseClasses = 'p-6 rounded-lg border';
-    
+
     if (this.isUpgrade()) {
       return `${baseClasses} conditions-upgrade`;
     } else if (this.targetPlan() === 'free') {
@@ -202,18 +206,14 @@ export class PlanChangeComponent implements OnInit {
       interval: this.interval()
     };
 
-    this.subscriptionService.update(subscription).subscribe({
+    this.subscriptionService.subscribe(subscription).subscribe({
       next: (response) => {
-        if (response?.url) {
-          // Redirect to payment processor for immediate changes
-          window.location.href = response.url;
-        } else {
-          // Plan change scheduled for end of billing cycle
-          this.showToastMessage('success', this.getSuccessMessage());
-          setTimeout(() => {
-            this.router.navigate(['/subscribe'], { queryParams: { status: 'success' } });
-          }, 2000);
-        }
+        // Plan change scheduled for end of billing cycle
+        this.showToastMessage('success', this.getSuccessMessage());
+        setTimeout(() => {
+          this.router.navigate(['/subscribe'], { queryParams: { status: 'success' } });
+        }, 2000);
+
         this.updating.set(false);
       },
       error: (error) => {

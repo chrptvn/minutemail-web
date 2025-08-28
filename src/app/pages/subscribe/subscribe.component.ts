@@ -22,10 +22,6 @@ export class SubscribeComponent {
   private readonly subscriptionService = inject(SubscriptionService);
   private readonly keycloak = inject(Keycloak);
 
-  plan_name = signal('');
-
-  private readonly membership = this.subscriptionService.getMembership();
-
   ngOnInit(): void {
     this.route.queryParamMap.subscribe(params => {
       let plan = params.get('plan');
@@ -33,36 +29,41 @@ export class SubscribeComponent {
       if (plan && interval) {
         this.subscriptionService.subscribe({ plan, interval }).subscribe({
           next: (response) => {
-            if (!response?.url) {
-              console.error('Invalid response from subscription service');
-              this.router.navigate(['/subscribe?status=error']);
-              return;
+            if (response?.checkout_url) {
+              window.location.href = response.checkout_url;
+            } else {
+              this.router.navigate(["/subscribe?status=error"])
             }
-            window.location.href = response.url;
           },
           error: (error) => {
             this.router.navigate(["/subscribe?status=error"])
           }
         })
       }
-
-      this.membership.pipe(
-        map(m => {
-          switch (m?.plan_name) {
-            case 'hobbyist': return 'Hobbyist';
-            case 'pro': return 'Pro';
-            case 'team': return 'Team';
-            default: return '';
-          }
-        })
-      ).subscribe(plan => {
-        this.plan_name.set(plan ?? '')
-      })
     });
   }
 
   isSuccess(): boolean {
     return this.route.snapshot.queryParamMap.get('status') === 'success';
+  }
+
+  plan_name(): string {
+    if (this.keycloak.authenticated) {
+      if (this.keycloak.hasRealmRole("free")) {
+        return "free";
+      }
+      if (this.keycloak.hasRealmRole("hobbyist")) {
+        return "hobbyist";
+      }
+      if (this.keycloak.hasRealmRole("pro")) {
+        return "pro";
+      }
+      if (this.keycloak.hasRealmRole("team")) {
+        return "team";
+      }
+    }
+
+    return ""
   }
 
   getPlanFeatures(): string[] {

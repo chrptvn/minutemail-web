@@ -1,4 +1,4 @@
-import {Component, signal, inject, OnInit} from '@angular/core';
+import {Component, signal, inject} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { TablerIconComponent } from '../../shared/components/icons/tabler-icons.component';
@@ -7,7 +7,6 @@ import { ToastComponent } from '../../shared/components/ui/toast.component';
 import { TopMenu } from '../../shared/components/top-menu/top-menu';
 import { FooterComponent } from '../../shared/components/footer/footer.component';
 import Keycloak from 'keycloak-js';
-import {SubscriptionService} from '../../core/services/subscription.service';
 
 @Component({
   selector: 'app-pricing',
@@ -23,17 +22,9 @@ import {SubscriptionService} from '../../core/services/subscription.service';
   templateUrl: './pricing.component.html',
   styleUrl: './pricing.component.scss'
 })
-export class PricingComponent implements OnInit {
+export class PricingComponent {
   private readonly router = inject(Router);
   private readonly keycloak = inject(Keycloak);
-  private readonly subscriptionService = inject(SubscriptionService);
-
-  isFree = signal(false);
-  isHobbyist = signal(false);
-  isPro = signal(false);
-  isTeam = signal(false);
-
-  private readonly membership = this.subscriptionService.getMembership();
 
   // Billing period state
   yearly = signal(false);
@@ -80,25 +71,33 @@ export class PricingComponent implements OnInit {
   }
 
   subscribe(plan: string) {
-    if (!this.isAuthenticated()) {
-      let redirectUri = window.location.origin + this.router.url;
-      let interval = this.yearly() ? 'yearly' : 'monthly';
-      if (plan !== 'free') {
-        redirectUri = `${window.location.origin}/subscribe?plan=${plan}&interval=${interval}`;
-      }
+    let interval = this.yearly() ? 'yearly' : 'monthly';
 
+    if (!this.isAuthenticated()) {
       this.keycloak.register({
-        redirectUri: redirectUri
+        redirectUri: `${window.location.origin}/subscribe?plan=${plan}&interval=${interval}`
+      });
+    } else {
+      this.router.navigate(['/plan-change'], {
+        queryParams: { plan, interval }
       });
     }
   }
 
-  update(plan: string) {
-    // Navigate to plan change confirmation page
-    const interval = this.yearly() ? 'yearly' : 'monthly';
-    this.router.navigate(['/plan-change'], {
-      queryParams: { plan, interval }
-    });
+  isFree() {
+    return this.keycloak.hasRealmRole('free');
+  }
+
+  isHobbyist() {
+    return this.keycloak.hasRealmRole('hobbyist');
+  }
+
+  isPro() {
+    return this.keycloak.hasRealmRole('pro');
+  }
+
+  isTeam() {
+    return this.keycloak.hasRealmRole('team');
   }
 
   toggleFaqItem(index: number) {
@@ -154,22 +153,5 @@ export class PricingComponent implements OnInit {
 
   getBillingPeriodText(): string {
     return this.yearly() ? '/year' : '/month';
-  }
-
-  ngOnInit(): void {
-    if (this.isAuthenticated()) {
-      this.membership.subscribe({
-        next: (membership) => {
-          this.isFree.set(membership.plan_name === 'free');
-          this.isHobbyist.set(membership.plan_name === 'hobbyist');
-          this.isPro.set(membership.plan_name === 'pro');
-          this.isTeam.set(membership.plan_name === 'team');
-        },
-        error: (error) => {
-          console.error('Failed to fetch membership:', error);
-          this.showToastMessage('error', 'Failed to load membership details. Please try again later.');
-        }
-      });
-    }
   }
 }

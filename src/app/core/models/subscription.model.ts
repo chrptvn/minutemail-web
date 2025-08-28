@@ -4,5 +4,6 @@ export interface Subscription {
 }
 
 export interface SubscriptionResponse {
-  url: string;
+  message: string;
+  checkout_url?: string;
 }

@@ -77,7 +77,7 @@
                       </span>
                     </div>
                   } @else {
-                    <app-button variant="secondary" (onClick)="update('free')" class="w-full">
+                    <app-button variant="secondary" (onClick)="subscribe('free')" class="w-full">
                       Downgrade
                     </app-button>
                   }
@@ -126,11 +126,11 @@
                     </span>
                   </div>
                   } @else if (isFree()) {
-                    <app-button variant="primary" (onClick)="update('hobbyist')" class="w-full">
+                    <app-button variant="primary" (onClick)="subscribe('hobbyist')" class="w-full">
                       Upgrade
                     </app-button>
                   } @else {
-                    <app-button variant="secondary" (onClick)="update('hobbyist')" class="w-full">
+                    <app-button variant="secondary" (onClick)="subscribe('hobbyist')" class="w-full">
                       Downgrade
                     </app-button>
                   }
@@ -184,11 +184,11 @@
                       </span>
                     </div>
                   } @else if (isFree() || isHobbyist()) {
-                    <app-button variant="primary" (onClick)="update('pro')" class="w-full">
+                    <app-button variant="primary" (onClick)="subscribe('pro')" class="w-full">
                       Upgrade
                     </app-button>
                   } @else {
-                    <app-button variant="secondary" (onClick)="update('pro')" class="w-full">
+                    <app-button variant="secondary" (onClick)="subscribe('pro')" class="w-full">
                       Downgrade
                     </app-button>
                   }
@@ -241,7 +241,7 @@
                       </span>
                     </div>
                   } @else if (isFree() || isHobbyist() || isPro()) {
-                    <app-button variant="primary" (onClick)="update('team')" class="w-full">
+                    <app-button variant="primary" (onClick)="subscribe('team')" class="w-full">
                       Upgrade
                     </app-button>
                   }
