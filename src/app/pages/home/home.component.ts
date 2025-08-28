@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AliasService } from '../../core/services/alias.service';
 import { ClipboardService } from '../../core/services/clipboard.service';
 import { DomainService } from '../../core/services/domain.service';
+import { AuthService } from '../../core/services/auth.service';
 import { DomainPreferenceService } from '../../core/services/domain-preference.service';
 import { AddressCardComponent } from '../../shared/components/address-card/address-card.component';
 import { VpnBannerComponent } from '../../shared/components/vpn-banner/vpn-banner.component';
@@ -46,6 +47,7 @@ export class HomeComponent implements OnInit {
     private readonly router: Router,
     private readonly aliasService: AliasService,
     private readonly apiService: MailBoxService,
+    private readonly authService: AuthService,
     private readonly domainService: DomainService,
     private readonly domainPreferenceService: DomainPreferenceService,
     private readonly clipboardService: ClipboardService,
@@ -54,12 +56,25 @@ export class HomeComponent implements OnInit {
   ) {}
 
   isAuthenticated(): boolean {
-    return !!this.keycloak.authenticated;
+    return this.authService.isAuthenticated();
   }
 
   ngOnInit() {
+    // Subscribe to auth status changes
+    this.authService.getAuthStatus().subscribe(authenticated => {
+      // Reload user domains if authentication status changes
+      if (authenticated && this.keycloak.hasRealmRole('manage_domains')) {
+        this.showDomainSelector.set(true);
+        this.loadUserDomains();
+      } else {
+        this.showDomainSelector.set(false);
+        const preferredDomain = this.domainPreferenceService.getPreferredDomain();
+        this.selectedDomain.set(preferredDomain);
+      }
+    });
+
     // Check if user can manage domains and load their domains
-    if (this.keycloak.authenticated && this.keycloak.hasRealmRole('manage_domains')) {
+    if (this.authService.isAuthenticated() && this.keycloak.hasRealmRole('manage_domains')) {
       this.showDomainSelector.set(true);
       this.loadUserDomains();
     } else {
@@ -164,7 +179,7 @@ export class HomeComponent implements OnInit {
     this.selectedDomain.set(domain);
 
     // Save domain preference to local storage if user is authenticated
-    if (this.keycloak.authenticated) {
+    if (this.authService.isAuthenticated()) {
       this.domainPreferenceService.setPreferredDomain(domain);
     }
   }

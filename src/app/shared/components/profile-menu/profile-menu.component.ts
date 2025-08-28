@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { TablerIconComponent } from '../icons/tabler-icons.component';
 import { ButtonComponent } from '../ui/button.component';
 import { SubscriptionService } from '../../../core/services/subscription.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { AliasService } from '../../../core/services/alias.service';
 import { DomainPreferenceService } from '../../../core/services/domain-preference.service';
 import Keycloak from 'keycloak-js';
@@ -24,6 +25,7 @@ export class ProfileMenuComponent implements OnInit {
 
   private readonly router = inject(Router);
   private readonly keycloak = inject(Keycloak);
+  private readonly authService = inject(AuthService);
   private readonly subscriptionService = inject(SubscriptionService);
   private readonly aliasService = inject(AliasService);
   private readonly domainPreferenceService = inject(DomainPreferenceService);
@@ -45,37 +47,46 @@ export class ProfileMenuComponent implements OnInit {
   }
 
   async login() {
-    this.keycloak.login().then(() => {
-      this.isAuthenticated.set(!!this.keycloak.authenticated);
+    try {
+      await this.authService.login();
+      this.isAuthenticated.set(this.authService.isAuthenticated());
       // Clear current alias and domain preferences on login
       this.aliasService.clearCurrentAlias();
       this.domainPreferenceService.clearPreferredDomain();
       this.closeMenu();
-    }).then(() => {
+    } catch (error) {
+      console.error('Login failed:', error);
       this.closeMenu();
-    })
+    }
   }
 
   async register() {
-    this.keycloak.register().then(() => {
-      this.isAuthenticated.set(!!this.keycloak.authenticated);
+    try {
+      await this.authService.register();
+      this.isAuthenticated.set(this.authService.isAuthenticated());
       // Clear current alias and domain preferences on registration
       this.aliasService.clearCurrentAlias();
       this.domainPreferenceService.clearPreferredDomain();
       this.closeMenu();
-    })
+    } catch (error) {
+      console.error('Registration failed:', error);
+      this.closeMenu();
+    }
   }
 
   async logout() {
-    this.keycloak.logout().then(() => {
-      this.isAuthenticated.set(!!this.keycloak.authenticated);
+    try {
+      await this.authService.logout();
+      this.isAuthenticated.set(false);
       // Clear current alias and domain preferences on logout
       this.aliasService.clearCurrentAlias();
       this.domainPreferenceService.clearPreferredDomain();
       this.router.navigate(['/']);
-    }).then(() => {
       this.closeMenu();
-    })
+    } catch (error) {
+      console.error('Logout failed:', error);
+      this.closeMenu();
+    }
   }
 
   goToPricing() {
@@ -132,6 +143,11 @@ export class ProfileMenuComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isAuthenticated.set(!!this.keycloak.authenticated);
+    this.isAuthenticated.set(this.authService.isAuthenticated());
+    
+    // Subscribe to auth status changes
+    this.authService.getAuthStatus().subscribe(authenticated => {
+      this.isAuthenticated.set(authenticated);
+    });
   }
 }

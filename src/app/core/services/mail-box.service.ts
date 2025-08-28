@@ -20,7 +20,7 @@ export class MailBoxService {
   private getAuthHeaders(): HttpHeaders {
     let headers = new HttpHeaders();
     headers = headers.set('X-Mailbox-Password', this.sessionService.getOrCreateSessionId());
-    if (this.keycloak.authenticated) {
+    if (this.keycloak.authenticated && this.keycloak.token) {
         headers = headers.set('Authorization', `Bearer ${this.keycloak.token}`);
     }
 

@@ -16,7 +16,7 @@ export class DomainService {
 
   private getAuthHeaders(): HttpHeaders {
     let headers = new HttpHeaders();
-    if (this.keycloak.authenticated) {
+    if (this.keycloak.authenticated && this.keycloak.token) {
       headers = headers.set('Authorization', `Bearer ${this.keycloak.token}`);
     }
 

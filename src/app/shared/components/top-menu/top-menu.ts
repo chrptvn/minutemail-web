@@ -4,6 +4,7 @@ import {ButtonComponent} from '../ui/button.component';
 import {TablerIconComponent} from '../icons/tabler-icons.component';
 import {ProfileMenuComponent} from '../profile-menu/profile-menu.component';
 import {DocsMenuComponent} from '../docs-menu/docs-menu.component';
+import {TokenStatusComponent} from '../ui/token-status.component';
 
 @Component({
   selector: 'app-top-menu',
@@ -12,7 +13,8 @@ import {DocsMenuComponent} from '../docs-menu/docs-menu.component';
     ButtonComponent,
     TablerIconComponent,
     ProfileMenuComponent,
-    DocsMenuComponent
+    DocsMenuComponent,
+    TokenStatusComponent
   ],
   templateUrl: './top-menu.html',
   styleUrl: './top-menu.scss'
