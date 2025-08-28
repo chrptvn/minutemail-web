@@ -1,6 +1,6 @@
 import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { catchError, switchMap, throwError } from 'rxjs';
+import { catchError, switchMap, throwError, from } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import Keycloak from 'keycloak-js';
 
@@ -25,27 +25,31 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       if (error.status === 401 && keycloak.authenticated) {
         console.log('Received 401, attempting token refresh...');
         
-        return authService.refreshToken().then(refreshed => {
-          if (refreshed && keycloak.token) {
-            // Retry the request with new token
-            const retryReq = req.clone({
-              setHeaders: {
-                Authorization: `Bearer ${keycloak.token}`
-              }
-            });
-            return next(retryReq);
-          } else {
+        // Convert the promise to observable and handle the retry
+        return from(authService.refreshToken()).pipe(
+          switchMap((refreshed) => {
+            if (refreshed && keycloak.token) {
+              // Retry the request with new token
+              const retryReq = req.clone({
+                setHeaders: {
+                  Authorization: `Bearer ${keycloak.token}`
+                }
+              });
+              return next(retryReq);
+            } else {
+              // Refresh failed, redirect to login
+              console.warn('Token refresh failed, redirecting to login');
+              keycloak.login();
+              return throwError(() => error);
+            }
+          }),
+          catchError(() => {
             // Refresh failed, redirect to login
             console.warn('Token refresh failed, redirecting to login');
             keycloak.login();
             return throwError(() => error);
-          }
-        }).catch(() => {
-          // Refresh failed, redirect to login
-          console.warn('Token refresh failed, redirecting to login');
-          keycloak.login();
-          return throwError(() => error);
-        });
+          })
+        );
       }
 
       return throwError(() => error);
