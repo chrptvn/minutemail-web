@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import {canActivateAuthRole, canActivateLogin} from './core/gards/authgard';
+import {canActivateAuthRole, canActivateLogin, canActivateForceLogin} from './core/gards/authgard';
 
 export const routes: Routes = [
   {
@@ -75,7 +75,7 @@ export const routes: Routes = [
     path: 'invite',
     loadComponent: () => import('./pages/invite/invite.component').then(m => m.InviteComponent),
     title: 'Team Invitation - MinuteMail',
-    canActivate: [canActivateLogin]
+    canActivate: [canActivateForceLogin]
   },
   {
     path: '**',
