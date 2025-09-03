@@ -268,6 +268,11 @@ export class MembersComponent implements OnInit {
     this.showToast.set(false);
   }
 
+  addMoreSlots() {
+    // TODO: Implement add more slots functionality
+    this.showToastMessage('info', 'Add more slots functionality coming soon!');
+  }
+
   goHome() {
     this.router.navigate(['/']);
   }

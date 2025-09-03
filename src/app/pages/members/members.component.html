@@ -90,9 +90,6 @@
               <div>
                 <div class="text-2xl font-bold text-gray-900 dark:text-gray-100">
                   {{ team()?.current_members || getActiveMembers().length }}
-                  @if (team()?.max_members) {
-                    <span class="text-sm font-normal text-gray-600 dark:text-gray-400">/ {{ team()?.max_members }}</span>
-                  }
                 </div>
                 <div class="text-sm text-gray-600 dark:text-gray-400">Active Members</div>
               </div>
@@ -118,11 +115,25 @@
               </div>
               <div>
                 <div class="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                  {{ getRemainingSlots() }}
+                  {{ getRemainingSlots() }}{{ team()?.max_members ? '/' + team()?.max_members : '' }}
                 </div>
-                <div class="text-sm text-gray-600 dark:text-gray-400">{{ getRemainingSlots() === 1 ? 'Slot Available' : 'Slots Available' }}</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">Slots Available</div>
               </div>
             </div>
+            @if (team()?.max_members) {
+              <div class="mt-3 pt-3 border-t border-gray-200 dark:border-dark-700">
+                <app-button
+                  variant="ghost"
+                  size="sm"
+                  (onClick)="addMoreSlots()"
+                  ariaLabel="Add more team slots"
+                  class="w-full text-xs"
+                >
+                  <app-icon name="plus" [size]="14" class="mr-2"></app-icon>
+                  Add More Slots
+                </app-button>
+              </div>
+            }
           </div>
         </div>
 
