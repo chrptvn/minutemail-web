@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ClipboardService } from '../../core/services/clipboard.service';
 import { TeamService } from '../../core/services/team.service';
-import { TeamMember, InviteRequest } from '../../core/models/team.model';
+import {TeamMember, InviteRequest, Team} from '../../core/models/team.model';
 import { ButtonComponent } from '../../shared/components/ui/button.component';
 import { TablerIconComponent } from '../../shared/components/icons/tabler-icons.component';
 import { ToastComponent } from '../../shared/components/ui/toast.component';
@@ -37,7 +37,7 @@ export class MembersComponent implements OnInit {
   copied = signal<{ [key: string]: boolean }>({});
 
   newMemberEmail = '';
-  invitationLink = 'https://minutemail.co/invite/abc123def456ghi789';
+  invitationLink = '';
 
   // Toast notifications
   showToast = signal(false);
@@ -56,10 +56,10 @@ export class MembersComponent implements OnInit {
 
   loadMembers() {
     this.loading.set(true);
-    
-    this.teamService.getTeamMembers().subscribe({
-      next: (members) => {
-        this.members.set(members || []);
+
+    this.teamService.getTeam().subscribe({
+      next: (team) => {
+        this.members.set(team.members || []);
         this.loading.set(false);
       },
       error: (error) => {
@@ -122,7 +122,7 @@ export class MembersComponent implements OnInit {
           delete newState[member.user_id];
           return newState;
         });
-        
+
         const actionText = member.status === 'ACTIVE' ? 'removed' : 'invitation cancelled';
         this.showToastMessage('success', `${displayName} ${actionText} successfully`);
       },

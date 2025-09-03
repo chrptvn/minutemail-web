@@ -22,10 +22,10 @@ export class InviteComponent implements OnInit {
   ngOnInit() {
     // Get uid parameter from query string
     this.route.queryParams.subscribe(params => {
-      const key = params['uid'];
+      const key = params['key'];
 
       // Log uid
-      console.log('uid:', key);
+      console.log('key:', key);
 
       // Check authentication status and log
       if (this.keycloak.authenticated) {

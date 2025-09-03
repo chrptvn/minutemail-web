@@ -1,9 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import {catchError} from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { InviteRequest, InviteResponse, TeamMember } from '../models/team.model';
+import {InviteRequest, InviteResponse, Team} from '../models/team.model';
 import Keycloak from 'keycloak-js';
 
 @Injectable({
@@ -33,12 +33,12 @@ export class TeamService {
       );
   }
 
-  getTeamMembers(): Observable<TeamMember[]> {
-    const url = `${this.baseUrl}/team/members`;
+  getTeam(): Observable<Team> {
+    const url = `${this.baseUrl}/team`;
     const headers = this.getAuthHeaders();
 
     return this.http
-      .get<TeamMember[]>(url, { headers })
+      .get<Team>(url, { headers })
       .pipe(
         catchError(this.handleError)
       );
