@@ -29,6 +29,24 @@
               Invite New Member
             </h2>
 
+            <!-- Team Limit Warning -->
+            @if (isAtMemberLimit()) {
+              <div class="mb-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+                <div class="flex items-start space-x-3">
+                  <app-icon name="alert-triangle" [size]="20" class="text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5"></app-icon>
+                  <div>
+                    <h4 class="text-sm font-semibold text-yellow-800 dark:text-yellow-200 mb-1">
+                      Team Member Limit Reached
+                    </h4>
+                    <p class="text-sm text-yellow-700 dark:text-yellow-300">
+                      You've reached the maximum of {{ team()?.max_members }} members for your current plan. 
+                      <a href="/pricing" class="underline hover:no-underline">Upgrade your plan</a> to invite more team members.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            }
+
             <!-- Email Invitation Form -->
             <form (ngSubmit)="sendInvitation()" #inviteForm="ngForm" class="space-y-4 mb-6">
               <div>
@@ -42,13 +60,14 @@
                     name="memberEmail"
                     [(ngModel)]="newMemberEmail"
                     placeholder="colleague@company.com"
+                    [disabled]="isAtMemberLimit()"
                     class="flex-1 px-3 py-2 border border-gray-300 dark:border-dark-600 rounded-lg bg-white dark:bg-dark-900 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                     required
                   />
                   <app-button
                     type="submit"
                     variant="primary"
-                    [disabled]="!newMemberEmail || inviting()"
+                    [disabled]="!newMemberEmail || inviting() || isAtMemberLimit()"
                     [loading]="inviting()"
                     ariaLabel="Send invitation"
                   >
@@ -69,7 +88,12 @@
                 <app-icon name="users" [size]="20" class="text-white"></app-icon>
               </div>
               <div>
-                <div class="text-2xl font-bold text-gray-900 dark:text-gray-100">{{ getActiveMembers().length }}</div>
+                <div class="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  {{ team()?.current_members || getActiveMembers().length }}
+                  @if (team()?.max_members) {
+                    <span class="text-sm font-normal text-gray-600 dark:text-gray-400">/ {{ team()?.max_members }}</span>
+                  }
+                </div>
                 <div class="text-sm text-gray-600 dark:text-gray-400">Active Members</div>
               </div>
             </div>
@@ -87,14 +111,16 @@
             </div>
           </div>
 
-          <div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-lg p-4 border border-green-200 dark:border-green-800">
+          <div [class]="getMemberLimitCardClass()">
             <div class="flex items-center space-x-3">
-              <div class="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
-                <app-icon name="crown" [size]="20" class="text-white"></app-icon>
+              <div [class]="getMemberLimitIconClass()">
+                <app-icon [name]="getMemberLimitIcon()" [size]="20" class="text-white"></app-icon>
               </div>
               <div>
-                <div class="text-2xl font-bold text-gray-900 dark:text-gray-100">{{ members().length }}</div>
-                <div class="text-sm text-gray-600 dark:text-gray-400">Total Team Size</div>
+                <div class="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  {{ getRemainingSlots() }}
+                </div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">{{ getRemainingSlots() === 1 ? 'Slot Available' : 'Slots Available' }}</div>
               </div>
             </div>
           </div>
@@ -103,7 +129,7 @@
         <!-- Members List -->
         <div class="space-y-4">
           <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
-            Team Members ({{ members().length }})
+            Team Members ({{ team()?.current_members || members().length }}{{ team()?.max_members ? ' / ' + team()?.max_members : '' }})
           </h2>
 
           @if (loading()) {

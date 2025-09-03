@@ -30,6 +30,7 @@ import { FooterComponent } from '../../shared/components/footer/footer.component
 })
 export class MembersComponent implements OnInit {
   members = signal<TeamMember[]>([]);
+  team = signal<Team | null>(null);
   loading = signal(false);
   inviting = signal(false);
   removing = signal<{ [key: string]: boolean }>({});
@@ -59,6 +60,7 @@ export class MembersComponent implements OnInit {
 
     this.teamService.getTeam().subscribe({
       next: (team) => {
+        this.team.set(team);
         this.members.set(team.members || []);
         this.loading.set(false);
       },
@@ -73,6 +75,12 @@ export class MembersComponent implements OnInit {
   sendInvitation() {
     if (!this.newMemberEmail.trim()) {
       this.showToastMessage('error', 'Please enter a valid email address');
+      return;
+    }
+
+    // Check if at member limit
+    if (this.isAtMemberLimit()) {
+      this.showToastMessage('error', 'You have reached the maximum number of team members for your current plan');
       return;
     }
 
@@ -93,6 +101,8 @@ export class MembersComponent implements OnInit {
       next: (response) => {
         // Add the new member to the list
         this.members.update(members => [...members, response]);
+        // Update team current_members count
+        this.team.update(team => team ? { ...team, current_members: team.current_members + 1 } : null);
         this.newMemberEmail = '';
         this.inviting.set(false);
         this.showToastMessage('success', `Invitation sent to ${response.email}`);
@@ -117,6 +127,8 @@ export class MembersComponent implements OnInit {
     this.teamService.removeMember(member.user_id).subscribe({
       next: () => {
         this.members.update(members => members.filter(m => m.user_id !== member.user_id));
+        // Update team current_members count
+        this.team.update(team => team ? { ...team, current_members: team.current_members - 1 } : null);
         this.removing.update(state => {
           const newState = { ...state };
           delete newState[member.user_id];
@@ -191,6 +203,54 @@ export class MembersComponent implements OnInit {
 
   getPendingInvitations(): TeamMember[] {
     return this.members().filter(m => m.status === 'PENDING');
+  }
+
+  isAtMemberLimit(): boolean {
+    const teamData = this.team();
+    if (!teamData || !teamData.max_members) {
+      return false; // No limit if max_members is not set
+    }
+    return teamData.current_members >= teamData.max_members;
+  }
+
+  getRemainingSlots(): number {
+    const teamData = this.team();
+    if (!teamData || !teamData.max_members) {
+      return 999; // Show unlimited if no limit
+    }
+    return Math.max(0, teamData.max_members - teamData.current_members);
+  }
+
+  getMemberLimitCardClass(): string {
+    const baseClasses = "rounded-lg p-4 border";
+    
+    if (this.isAtMemberLimit()) {
+      return `${baseClasses} bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 border-red-200 dark:border-red-800`;
+    } else if (this.getRemainingSlots() <= 2) {
+      return `${baseClasses} bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 border-yellow-200 dark:border-yellow-800`;
+    } else {
+      return `${baseClasses} bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border-green-200 dark:border-green-800`;
+    }
+  }
+
+  getMemberLimitIconClass(): string {
+    if (this.isAtMemberLimit()) {
+      return "w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center";
+    } else if (this.getRemainingSlots() <= 2) {
+      return "w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center";
+    } else {
+      return "w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center";
+    }
+  }
+
+  getMemberLimitIcon(): string {
+    if (this.isAtMemberLimit()) {
+      return "alert-triangle";
+    } else if (this.getRemainingSlots() <= 2) {
+      return "alert-triangle";
+    } else {
+      return "check-circle";
+    }
   }
 
   private showToastMessage(type: 'success' | 'error' | 'warning' | 'info', message: string) {
