@@ -230,6 +230,52 @@
   transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
+/* Slots modal specific styles */
+.slots-counter {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.05) 0%, rgba(36, 200, 219, 0.02) 100%);
+}
+
+.dark .slots-counter {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.1) 0%, rgba(36, 200, 219, 0.05) 100%);
+}
+
+.slots-button {
+  transition: all 0.2s ease;
+}
+
+.slots-button:hover:not(:disabled) {
+  transform: scale(1.05);
+}
+
+.slots-button:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+/* Pricing display */
+.pricing-breakdown {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.05) 0%, rgba(36, 200, 219, 0.02) 100%);
+}
+
+.dark .pricing-breakdown {
+  background: linear-gradient(135deg, rgba(36, 200, 219, 0.1) 0%, rgba(36, 200, 219, 0.05) 100%);
+}
+
+/* Change summary animations */
+.change-summary {
+  animation: slideInUp 0.3s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Enhanced hover effects for interactive elements */
 .invitation-form input:focus {
   box-shadow: 0 0 0 3px rgba(36, 200, 219, 0.1);

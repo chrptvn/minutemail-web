@@ -125,7 +125,7 @@
                 <app-button
                   variant="ghost"
                   size="sm"
-                  (onClick)="addMoreSlots()"
+                  (onClick)="openSlotsModal()"
                   ariaLabel="Add more team slots"
                   class="w-full text-xs"
                 >
@@ -238,6 +238,131 @@
       </div>
     </div>
   </main>
+
+  <!-- Slots Management Modal -->
+  <app-modal
+    [isOpen]="showSlotsModal()"
+    [title]="'Manage Team Slots'"
+    [modalId]="'slots-modal'"
+    (onClose)="closeSlotsModal()"
+  >
+    <div class="space-y-6">
+      <!-- Current Plan Info -->
+      <div class="text-center">
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+          Current Plan: <span class="font-semibold text-gray-900 dark:text-gray-100">Team</span>
+        </p>
+        <p class="text-xs text-gray-500 dark:text-gray-500">
+          Base plan includes 5 seats. Additional seats are $5/month each.
+        </p>
+      </div>
+
+      <!-- Slots Counter -->
+      <div class="bg-gray-50 dark:bg-dark-800 rounded-lg p-6 border border-gray-200 dark:border-dark-700">
+        <div class="text-center mb-4">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-1">
+            Total Team Slots
+          </h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400">
+            Adjust the number of available team member slots
+          </p>
+        </div>
+
+        <div class="flex items-center justify-center space-x-4">
+          <app-button
+            variant="secondary"
+            size="sm"
+            [disabled]="targetSlots() <= 5"
+            (onClick)="decrementSlots()"
+            ariaLabel="Decrease slots"
+            class="w-10 h-10 p-0 flex items-center justify-center"
+          >
+            <app-icon name="minus" [size]="16"></app-icon>
+          </app-button>
+
+          <div class="text-center min-w-[4rem]">
+            <div class="text-3xl font-bold text-gray-900 dark:text-gray-100">
+              {{ targetSlots() }}
+            </div>
+            <div class="text-xs text-gray-500 dark:text-gray-500">
+              slots
+            </div>
+          </div>
+
+          <app-button
+            variant="secondary"
+            size="sm"
+            [disabled]="targetSlots() >= 50"
+            (onClick)="incrementSlots()"
+            ariaLabel="Increase slots"
+            class="w-10 h-10 p-0 flex items-center justify-center"
+          >
+            <app-icon name="plus" [size]="16"></app-icon>
+          </app-button>
+        </div>
+
+        <!-- Pricing Info -->
+        <div class="mt-4 text-center">
+          @if (getAdditionalSlots() > 0) {
+            <div class="space-y-1">
+              <p class="text-sm text-gray-700 dark:text-gray-300">
+                Base plan (5 slots): <span class="font-semibold">$50/month</span>
+              </p>
+              <p class="text-sm text-gray-700 dark:text-gray-300">
+                Additional slots ({{ getAdditionalSlots() }}): <span class="font-semibold">${{ getAdditionalSlots() * 5 }}/month</span>
+              </p>
+              <div class="pt-2 border-t border-gray-200 dark:border-dark-700">
+                <p class="text-base font-bold text-gray-900 dark:text-gray-100">
+                  Total: ${{ getTotalPrice() }}/month
+                </p>
+              </div>
+            </div>
+          } @else {
+            <p class="text-sm text-gray-700 dark:text-gray-300">
+              Base plan: <span class="font-semibold">$50/month</span>
+            </p>
+          }
+        </div>
+      </div>
+
+      <!-- Change Summary -->
+      @if (hasChanges()) {
+        <div [class]="getChangeSummaryClass()">
+          <div class="flex items-start space-x-3">
+            <app-icon [name]="getChangeIcon()" [size]="20" [class]="getChangeIconClass()"></app-icon>
+            <div>
+              <h4 class="text-sm font-semibold mb-1">
+                {{ getChangeTitle() }}
+              </h4>
+              <p class="text-sm">
+                {{ getChangeDescription() }}
+              </p>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Action Buttons -->
+      <div class="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3">
+        <app-button
+          variant="secondary"
+          (onClick)="closeSlotsModal()"
+          class="w-full sm:w-auto"
+        >
+          Cancel
+        </app-button>
+        <app-button
+          variant="primary"
+          [disabled]="!hasChanges()"
+          (onClick)="confirmSlotChange()"
+          class="w-full sm:w-auto"
+        >
+          <app-icon [name]="isIncreasing() ? 'arrow-up' : 'arrow-down'" [size]="16" class="mr-2"></app-icon>
+          {{ getConfirmButtonText() }}
+        </app-button>
+      </div>
+    </div>
+  </app-modal>
 
   <!-- Toast Notifications -->
   @if (showToast()) {

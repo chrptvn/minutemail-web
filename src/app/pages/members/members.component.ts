@@ -11,6 +11,7 @@ import { ToastComponent } from '../../shared/components/ui/toast.component';
 import { SpinnerComponent } from '../../shared/components/ui/spinner.component';
 import { TopMenu } from '../../shared/components/top-menu/top-menu';
 import { FooterComponent } from '../../shared/components/footer/footer.component';
+import { ModalComponent } from '../../shared/components/ui/modal.component';
 
 @Component({
   selector: 'app-members',
@@ -23,7 +24,8 @@ import { FooterComponent } from '../../shared/components/footer/footer.component
     ToastComponent,
     SpinnerComponent,
     TopMenu,
-    FooterComponent
+    FooterComponent,
+    ModalComponent
   ],
   templateUrl: './members.component.html',
   styleUrl: './members.component.scss'
@@ -36,6 +38,10 @@ export class MembersComponent implements OnInit {
   removing = signal<{ [key: string]: boolean }>({});
   copying = signal<{ [key: string]: boolean }>({});
   copied = signal<{ [key: string]: boolean }>({});
+
+  // Slots modal state
+  showSlotsModal = signal(false);
+  targetSlots = signal(5);
 
   newMemberEmail = '';
   invitationLink = '';
@@ -53,6 +59,11 @@ export class MembersComponent implements OnInit {
 
   ngOnInit() {
     this.loadMembers();
+    // Initialize target slots with current max_members
+    const teamData = this.team();
+    if (teamData?.max_members) {
+      this.targetSlots.set(teamData.max_members);
+    }
   }
 
   loadMembers() {
@@ -62,6 +73,10 @@ export class MembersComponent implements OnInit {
       next: (team) => {
         this.team.set(team);
         this.members.set(team.members || []);
+        // Update target slots when team data loads
+        if (team.max_members) {
+          this.targetSlots.set(team.max_members);
+        }
         this.loading.set(false);
       },
       error: (error) => {
@@ -253,6 +268,106 @@ export class MembersComponent implements OnInit {
     }
   }
 
+  openSlotsModal() {
+    // Reset target slots to current value
+    const teamData = this.team();
+    if (teamData?.max_members) {
+      this.targetSlots.set(teamData.max_members);
+    }
+    this.showSlotsModal.set(true);
+  }
+
+  closeSlotsModal() {
+    this.showSlotsModal.set(false);
+  }
+
+  incrementSlots() {
+    if (this.targetSlots() < 50) {
+      this.targetSlots.update(current => current + 1);
+    }
+  }
+
+  decrementSlots() {
+    if (this.targetSlots() > 5) {
+      this.targetSlots.update(current => current - 1);
+    }
+  }
+
+  getAdditionalSlots(): number {
+    return Math.max(0, this.targetSlots() - 5);
+  }
+
+  getTotalPrice(): number {
+    return 50 + (this.getAdditionalSlots() * 5);
+  }
+
+  hasChanges(): boolean {
+    const teamData = this.team();
+    return teamData?.max_members !== this.targetSlots();
+  }
+
+  isIncreasing(): boolean {
+    const teamData = this.team();
+    return this.targetSlots() > (teamData?.max_members || 5);
+  }
+
+  getChangeTitle(): string {
+    return this.isIncreasing() ? 'Increase Team Slots' : 'Decrease Team Slots';
+  }
+
+  getChangeDescription(): string {
+    const teamData = this.team();
+    const currentSlots = teamData?.max_members || 5;
+    const difference = Math.abs(this.targetSlots() - currentSlots);
+    
+    if (this.isIncreasing()) {
+      return `Adding ${difference} slot${difference === 1 ? '' : 's'} will cost an additional $${difference * 5}/month.`;
+    } else {
+      return `Removing ${difference} slot${difference === 1 ? '' : 's'} will save $${difference * 5}/month.`;
+    }
+  }
+
+  getChangeIcon(): string {
+    return this.isIncreasing() ? 'arrow-up' : 'arrow-down';
+  }
+
+  getChangeIconClass(): string {
+    return this.isIncreasing() 
+      ? 'text-green-600 dark:text-green-400' 
+      : 'text-blue-600 dark:text-blue-400';
+  }
+
+  getChangeSummaryClass(): string {
+    const baseClasses = 'p-4 rounded-lg border';
+    
+    if (this.isIncreasing()) {
+      return `${baseClasses} bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800 text-green-800 dark:text-green-200`;
+    } else {
+      return `${baseClasses} bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-200`;
+    }
+  }
+
+  getConfirmButtonText(): string {
+    return this.isIncreasing() ? 'Add Slots' : 'Remove Slots';
+  }
+
+  confirmSlotChange() {
+    if (!this.hasChanges()) {
+      return;
+    }
+
+    // Navigate to plan change page with slot information
+    this.router.navigate(['/plan-change'], {
+      queryParams: { 
+        plan: 'team',
+        interval: 'monthly',
+        slots: this.targetSlots()
+      }
+    });
+    
+    this.closeSlotsModal();
+  }
+
   private showToastMessage(type: 'success' | 'error' | 'warning' | 'info', message: string) {
     this.toastType.set(type);
     this.toastMessage.set(message);
@@ -266,11 +381,6 @@ export class MembersComponent implements OnInit {
 
   hideToast() {
     this.showToast.set(false);
-  }
-
-  addMoreSlots() {
-    // TODO: Implement add more slots functionality
-    this.showToastMessage('info', 'Add more slots functionality coming soon!');
   }
 
   goHome() {

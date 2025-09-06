@@ -423,6 +423,12 @@ import { Component, Input } from '@angular/core';
             <path d="M6 21V10l6 2 6-2v11"/>
           </g>
         }
+
+        @case('minus') {
+          <g>
+            <line x1="5" x2="19" y1="12" y2="12"/>
+          </g>
+        }
       }
     </svg>
   `
