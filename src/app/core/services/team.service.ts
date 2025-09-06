@@ -67,6 +67,18 @@ export class TeamService {
       );
   }
 
+  updateSeats(seats: number): Observable<{ message: string }> {
+    const url = `${this.baseUrl}/team/seats`;
+    const headers = this.getAuthHeaders();
+    const body = { seats };
+
+    return this.http
+      .post<{ message: string }>(url, body, { headers })
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
   private handleError = (error: HttpErrorResponse): Observable<never> => {
     let errorMessage = 'An error occurred';
 

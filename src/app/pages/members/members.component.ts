@@ -42,6 +42,8 @@ export class MembersComponent implements OnInit {
   // Slots modal state
   showSlotsModal = signal(false);
   targetSlots = signal(5);
+  slotsAccepted = false;
+  updatingSlots = signal(false);
 
   newMemberEmail = '';
   invitationLink = '';
@@ -274,10 +276,12 @@ export class MembersComponent implements OnInit {
     if (teamData?.max_members) {
       this.targetSlots.set(teamData.max_members);
     }
+    this.slotsAccepted = false;
     this.showSlotsModal.set(true);
   }
 
   closeSlotsModal() {
+    this.slotsAccepted = false;
     this.showSlotsModal.set(false);
   }
 
@@ -352,20 +356,26 @@ export class MembersComponent implements OnInit {
   }
 
   confirmSlotChange() {
-    if (!this.hasChanges()) {
+    if (!this.hasChanges() || !this.slotsAccepted || this.updatingSlots()) {
       return;
     }
 
-    // Navigate to plan change page with slot information
-    this.router.navigate(['/plan-change'], {
-      queryParams: { 
-        plan: 'team',
-        interval: 'monthly',
-        slots: this.targetSlots()
+    this.updatingSlots.set(true);
+
+    this.teamService.updateSeats(this.targetSlots()).subscribe({
+      next: (response) => {
+        // Update the team data with new max_members
+        this.team.update(team => team ? { ...team, max_members: this.targetSlots() } : null);
+        this.updatingSlots.set(false);
+        this.closeSlotsModal();
+        this.showToastMessage('success', `Team slots updated to ${this.targetSlots()} successfully`);
+      },
+      error: (error) => {
+        console.error('Error updating slots:', error);
+        this.showToastMessage('error', error.message);
+        this.updatingSlots.set(false);
       }
     });
-    
-    this.closeSlotsModal();
   }
 
   private showToastMessage(type: 'success' | 'error' | 'warning' | 'info', message: string) {

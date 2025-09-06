@@ -342,6 +342,27 @@
         </div>
       }
 
+      <!-- Confirmation Checkbox -->
+      @if (hasChanges()) {
+        <div class="space-y-4">
+          <label class="flex items-start space-x-3 cursor-pointer">
+            <input
+              type="checkbox"
+              [(ngModel)]="slotsAccepted"
+              class="mt-1 h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 dark:border-dark-600 rounded"
+            />
+            <span class="text-sm text-gray-700 dark:text-gray-300">
+              I understand and accept the billing changes for this slot adjustment.
+              @if (isIncreasing()) {
+                I acknowledge that I will be charged immediately for the additional slots.
+              } @else {
+                I acknowledge that I will receive a credit for the removed slots.
+              }
+            </span>
+          </label>
+        </div>
+      }
+
       <!-- Action Buttons -->
       <div class="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3">
         <app-button
@@ -353,7 +374,8 @@
         </app-button>
         <app-button
           variant="primary"
-          [disabled]="!hasChanges()"
+          [disabled]="!hasChanges() || !slotsAccepted || updatingSlots()"
+          [loading]="updatingSlots()"
           (onClick)="confirmSlotChange()"
           class="w-full sm:w-auto"
         >
